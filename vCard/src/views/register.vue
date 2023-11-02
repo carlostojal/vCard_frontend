@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import axios from 'axios'
+import Menu from '../components/menu.vue'
 
 const email = ref('')
 const password = ref('')
@@ -62,6 +63,7 @@ const register = async () => {
 
 
 <template>
+    <Menu> </Menu>
     <form>
         <div class="form-wrapper">
 
@@ -104,10 +106,12 @@ const register = async () => {
 
 
 <style scoped>
-
 .form-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 400px; /* Set the maximum width here */
+  margin: 0 auto; /* Center the form horizontally */
+  margin: 100px auto 0;
 }
 </style>
