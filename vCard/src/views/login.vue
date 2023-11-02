@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
@@ -7,19 +8,34 @@ const password = ref('')
 const msgInvalid = ref('')
 const flag_msgInvalid = ref(false)
 
-const login = () => {
+const login = async () => {
     console.log(email.value, password.value)
 
     if(email.value != '' || password.value != ''){
         flag_msgInvalid.value = false
-        //validar login
-        //routing
-        return
-    }
 
-    flag_msgInvalid.value = true
-    msgInvalid.value = 'Please fill in all fields'
-    
+        //validar login
+        const response = await axios.post('http://localhost:80/api/login',
+        {
+            email: email.value,
+            password: password.value
+        })
+
+        console.log(response.data.status)
+        if(response.data.status == "sucess"){ // login valido
+          flag_msgInvalid.value = false
+          //routing -> pagina inicial com os dados do user (USAR PINIA)
+          console.log(response.data)
+        }else{ // login invalido
+        msgInvalid.value = 'Invalid credentials'
+        flag_msgInvalid.value = true
+        }
+
+    }else{
+      flag_msgInvalid.value = true
+      msgInvalid.value = 'Please fill in all fields'
+    }
+    return
 }
 
 </script>

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
@@ -23,17 +24,33 @@ const validateFields = () => {
     
 }
 
-const register = () => {
+const register = async () => {
 
     if(pin.value != ''){    
           
         flag_msgInvalid.value = false
 
         //validar pin
-        /*if(){ 
-            //routing
-        }*/
-        return //enquanto nao tiver a verificação feita
+
+        //if(){   ->    Se o pin for valido
+
+            const response = await axios.post('http://localhost:80/api/users',
+            {
+                name: name.value,
+                email: email.value,
+                password: password.value
+            })
+
+            console.log(response.data.status)
+            if(response.data.menssage == "sucess"){
+                console.log(response.data)
+            }else{
+                console.log(response.data)
+            }
+
+            //routing -> login page 
+        //}
+        return
     }
     
     flag_msgInvalid.value = true
