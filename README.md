@@ -11,4 +11,6 @@
 - Run the command `npm run dev` to start the project.
 
 ### Docker
-TODO...
+The Docker image is intended to be used as a production environment. The Vue app is built and then served using NGINX.
+- Run the command `docker build -t vcard_frontend .`.
+- Run the docker `docker run -p 80:80 vcard_frontend`.
