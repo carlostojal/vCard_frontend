@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import axios from 'axios'
 import Menu from '../components/menu.vue'
+import ConfigUtil from '../utils/ConfigUtil';
 
 const email = ref('')
 const password = ref('')
@@ -15,8 +16,10 @@ const login = async () => {
     if(email.value != '' || password.value != ''){
         flag_msgInvalid.value = false
 
+        console.log(`${ConfigUtil.getApiUrl()}/login`);
+
         //validar login
-        const response = await axios.post('http://localhost:80/api/login',
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/login`,
         {
             email: email.value,
             password: password.value
