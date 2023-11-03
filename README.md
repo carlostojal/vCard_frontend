@@ -5,6 +5,11 @@
 
 ## Running
 
+First, take a look at the configurations. Configurations like the backend API URL are defined in the `.env` file.
+
+By default, you probably don't have a `.env` file. However, you have a `.env.example` file. Make a copy of this file, in the same location, named `.env` and update any values you need to change.
+
+
 ### Development environment
 - Navigate to the `vCard` directory (`cd vCard`).
 - Run the command `npm install` to install all dependencies.
