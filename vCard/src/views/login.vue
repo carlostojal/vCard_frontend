@@ -6,12 +6,12 @@ import ConfigUtil from '../utils/ConfigUtil';
 
 const email = ref('')
 const password = ref('')
+const url_home = ref('./home')
 
 const msgInvalid = ref('')
 const flag_msgInvalid = ref(false)
 
 const login = async () => {
-    console.log(email.value, password.value)
 
     if(email.value != '' || password.value != ''){
         flag_msgInvalid.value = false
@@ -28,11 +28,10 @@ const login = async () => {
         console.log(response.data.status)
         if(response.data.status == "sucess"){ // login valido
           flag_msgInvalid.value = false
-          //routing -> pagina inicial com os dados do user (USAR PINIA)
-          console.log(response.data)
+          window.location.href = url_home.value  // -> com os dados do user (USAR PINIA)
         }else{ // login invalido
-        msgInvalid.value = 'Invalid credentials'
-        flag_msgInvalid.value = true
+          msgInvalid.value = 'Invalid credentials'
+          flag_msgInvalid.value = true
         }
 
     }else{
@@ -69,10 +68,10 @@ const login = async () => {
           <input v-model="password" style="border-width: 2px; border-color: black;" type="password" id="form2Example2" class="form-control" />
         </div>
 
-        <button @click="login" type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+        <button @click.prevent="login" type="button" class="btn btn-primary btn-block mb-4">Log in</button>
 
         <div class="text-center">
-          <p>Not a member? <a href="#!">Register</a></p> <!-- ROUTING -> to: /register -->
+          <p>Not a member? <a href="./register">Register</a></p> <!-- ROUTING -> to: /register -->
         </div>
       </div>
     </form>

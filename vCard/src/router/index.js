@@ -2,13 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/login.vue'
 import Register from '../views/register.vue'
 import vCard from '../views/createVCard.vue'
+import Home from '../views/home.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'base',
       component: Login
     },
     {
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/vcard',
       name: 'vcard',
       component: vCard
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home
     }
   ]
 })

@@ -7,6 +7,7 @@ import ConfigUtil from '../utils/ConfigUtil';
 const email = ref('')
 const password = ref('')
 const name = ref('')
+const url_login = ref('./login')
 
 const msgInvalid = ref('')
 const flag_msgInvalid = ref(false)
@@ -22,21 +23,18 @@ const register = async () => {
             email: email.value,
             password: password.value
         })
-
-        console.log(response.data.status)
-        if(response.data.menssage == "sucess"){
-            console.log(response.data)
+        if(response.data.status == "sucess"){
+            window.location.href = url_login.value
         }else{
-            console.log(response.data)
+            flag_msgInvalid.value = true
+            msgInvalid.value = response.data.message
         }
-
-        //routing -> login page 
-
-        return
+    }else{
+        flag_msgInvalid.value = true
+        msgInvalid.value = 'Please fill in all fields'
     }
-    flag_msgInvalid.value = true
-    msgInvalid.value = 'Please fill in all fields'
     
+    return
 }
 
 </script>
@@ -68,7 +66,8 @@ const register = async () => {
                 <input v-model="password" style="border-width: 2px; border-color: black;" type="password" class="form-control" />
             </div>
 
-            <button @:click="register" type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+            <button @click.prevent="register" type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+            <button href="./login" type="button" class="btn btn-outline-secondary">Go to Login</button>
         </div>
     </form>
 </template>
