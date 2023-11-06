@@ -1,53 +1,53 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import Menu from '../components/menu.vue'
+import axios from 'axios'
+import ConfigUtil from '../utils/ConfigUtil';
 
 const flag_msgInvalid = ref(false)
 const msgInvalid = ref('')
-const flag_ValidateEmail = ref(false)
 const vcard = ref({
     name: '',
     email: '',
-    phone: '',
-    photo: '',
+    phone_number: '',
+    photo_url: '',
     password: '',
-    pin: ''
+    confirmation_code: ''
 })
 
 
-const validate_fields = () => {
+const validate_fields = async () => {
 
-    if(vcard.value.name != '' && vcard.value.email != '' && vcard.value.phone != '' && vcard.value.password != ''){
-        flag_ValidateEmail.value = true
+    if(vcard.value.name != '' && vcard.value.email != '' && vcard.value.phone_number != '' && vcard.value.password != '' && vcard.value.confirmation_code != ''){
         flag_msgInvalid.value = false
-        return true
-    }
-
-    msgInvalid.value = 'Please fill in all fields'
-    flag_msgInvalid.value = true
-    return false
-}
-
-const validate_email = () => {
-
-    if(validate_fields() && vcard.value.pin != ''){
         
-        //post para validar email no server e se sim criar vcard
-
+        console.log(vcard.value)
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`,
+        {
+            vcard
+        })
+            
+        
     }else{
         msgInvalid.value = 'Please fill in all fields'
         flag_msgInvalid.value = true
-    }
+    }  
+    return 
 }
+
 
 function handlePhotoUpload(event) {
     const selectedFile = event.target.files[0];
-    if (selectedFile && selectedFile.type.match('image/*')) {
+
+    if (!selectedFile){ //Se n houver ficheiro selecionado
+        vcard.value.photo_url = null
+    }else if(selectedFile.type.match('image/*')){ //Se o ficheiro selecionado for uma imagem
         vcard.value.photo = selectedFile;
-        return 
+    }else{
+        msgInvalid.value = 'Please select a valid photo'
+        flag_msgInvalid.value = true
     }
-    msgInvalid.value = 'Please select a valid photo'
-    flag_msgInvalid.value = true
+    return 
 }
 
 </script>
@@ -77,7 +77,7 @@ function handlePhotoUpload(event) {
             </div>
             <div class="mb-3">
                 <label class="form-label">Phone Number</label>
-                <input v-model="vcard.phone" type="text" class="form-control" placeholder="Enter your Phone Number">
+                <input v-model="vcard.phone_number" type="text" class="form-control" placeholder="Enter your Phone Number">
             </div>
             <div class="mb-3">
                 <label class="form-label">Photo</label>
@@ -88,17 +88,14 @@ function handlePhotoUpload(event) {
                 <label class="form-label">Password</label>
                 <input v-model="vcard.password" type="password" class="form-control" placeholder="Enter your password">
             </div>
+            <div class="mb-3">
+                <label class="form-label">Pin to VCard</label>
+                <input v-model="vcard.confirmation_code" type="text" class="form-control" placeholder="Enter your pin">
+            </div>
 
             <button @:click="validate_fields" type="button" class="btn btn-primary">Create</button>
 
-            <div style="margin-top: 50px;" v-if="flag_ValidateEmail">
-                <h4 class="mb-4">Validate e-mail</h4>
-                <div class="form-outline mb-4">
-                    <label class="form-label">PIN</label>
-                    <input v-model="vcard.pin" style="border-width: 2px; border-color: black;" class="form-control" />
-                </div>
-                <button @:click="validate_email" type="button" class="btn btn-primary btn-block mb-4">Validate</button>
-            </div>
+            
         </form>
     </div>
 
