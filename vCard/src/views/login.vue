@@ -19,20 +19,26 @@ const login = async () => {
         console.log(`${ConfigUtil.getApiUrl()}/login`);
 
         //validar login
-        const response = await axios.post(`${ConfigUtil.getApiUrl()}/login`,
-        {
-            email: email.value,
-            password: password.value
-        })
+        try {
+            const response = await axios.post(`${ConfigUtil.getApiUrl()}/login`,
+            {
+                email: email.value,
+                password: password.value
+            })
 
-        console.log(response.data.status)
-        if(response.data.status == "sucess"){ // login valido
-          flag_msgInvalid.value = false
-          //routing -> pagina inicial com os dados do user (USAR PINIA)
-          console.log(response.data)
-        }else{ // login invalido
-        msgInvalid.value = 'Invalid credentials'
-        flag_msgInvalid.value = true
+            console.log(response.data.status)
+            if(response.data.status == "success"){ // login valido
+              flag_msgInvalid.value = false
+              //routing -> pagina inicial com os dados do user (USAR PINIA)
+              console.log(response.data)
+            }else{ // login invalido
+                msgInvalid.value = 'Invalid credentials, '+response.data.message
+                flag_msgInvalid.value = true
+            }
+        }catch(error) {
+            console.log(error)
+            msgInvalid.value = 'Invalid credentials, '+response.data.message
+            flag_msgInvalid.value = true
         }
 
     }else{
