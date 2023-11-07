@@ -12,22 +12,29 @@ const vcard = ref({
     phone_number: '',
     photo_url: '',
     password: '',
-    confirmation_code: ''
+    confirmation_code: '',
+    max_debit: ''
 })
 
 
 const validate_fields = async () => {
 
-    if(vcard.value.name != '' && vcard.value.email != '' && vcard.value.phone_number != '' && vcard.value.password != '' && vcard.value.confirmation_code != ''){
+    const allFieldsFilled = Object.values(vcard.value).every(value => value !== '');
+    if(!allFieldsFilled){
         flag_msgInvalid.value = false
         
-        console.log(vcard.value)
         const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`,
         {
-            vcard
+            name: vcard.value.name,
+            email: vcard.value.email,
+            phone_number: vcard.value.phone_number,
+            //photo_url: vcard.value.photo_url,
+            password: vcard.value.password,
+            confirmation_code: vcard.value.confirmation_code,
+            max_debit: vcard.value.max_debit
         })
             
-        
+        console.log(response.data)
     }else{
         msgInvalid.value = 'Please fill in all fields'
         flag_msgInvalid.value = true
@@ -89,11 +96,15 @@ function handlePhotoUpload(event) {
                 <input v-model="vcard.password" type="password" class="form-control" placeholder="Enter your password">
             </div>
             <div class="mb-3">
+                <label class="form-label">Max. Debit</label>
+                <input v-model="vcard.max_debit" type="text" class="form-control" placeholder="Enter your max debit">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Pin to VCard</label>
                 <input v-model="vcard.confirmation_code" type="text" class="form-control" placeholder="Enter your pin">
             </div>
 
-            <button @:click="validate_fields" type="button" class="btn btn-primary">Create</button>
+            <button @:click.prevent="validate_fields" type="button" class="btn btn-primary">Create</button>
 
             
         </form>
