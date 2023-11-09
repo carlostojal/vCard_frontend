@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from 'vue'
 import axios from 'axios'
 import Menu from '../components/menu.vue'
 import ConfigUtil from '../utils/ConfigUtil';
+import router from '../router';
 
 const email = ref('')
 const password = ref('')
@@ -27,10 +28,11 @@ const login = async () => {
             })
 
             console.log(response.data.status)
-            if(response.data.status == "success"){ // login valido
+            if(response.data.status == "sucess"){ // login valido
               flag_msgInvalid.value = false
               //routing -> pagina inicial com os dados do user (USAR PINIA)
               console.log(response.data)
+              router.replace("/home");
             }else{ // login invalido
                 msgInvalid.value = 'Invalid credentials, '+response.data.message
                 flag_msgInvalid.value = true
