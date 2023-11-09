@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref } from 'vue'
 import Menu from '../components/menu.vue'
 import axios from 'axios'
 import ConfigUtil from '../utils/ConfigUtil';
@@ -13,7 +13,6 @@ const vcard = ref({
     photo_url: '',
     password: '',
     confirmation_code: '',
-    max_debit: ''
 })
 
 
@@ -22,24 +21,45 @@ const validate_fields = async () => {
     const allFieldsFilled = Object.values(vcard.value).every(value => value !== '');
     if(!allFieldsFilled){
         flag_msgInvalid.value = false
+
+        //Se o pin != 4 digitos
+        if(vcard.value.confirmation_code.length != 4){
+            msgInvalid.value = 'The pin must have 4 digits'
+            flag_msgInvalid.value = true
+            return
+        }
+
+        //se o email nao for valido
+        if(vcard.value.email.indexOf('@') == -1){
+            msgInvalid.value = 'Invalid email'
+            flag_msgInvalid.value = true
+            return
+        }
         
-        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`,
-        {
+        console.log(vcard.value.photo.name)
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`,{ 
             name: vcard.value.name,
             email: vcard.value.email,
             phone_number: vcard.value.phone_number,
-            //photo_url: vcard.value.photo_url,
+            photo_url: vcard.value.photo_url,
             password: vcard.value.password,
-            confirmation_code: vcard.value.confirmation_code,
-            max_debit: vcard.value.max_debit
-        })
-            
+            confirmation_code: vcard.value.confirmation_code
+         })
+
         console.log(response.data)
+
+        if(response.data.status == "sucess"){
+            flag_msgInvalid.value = false
+            //routing -> pagina inicial com os dados do user (USAR PINIA)
+        }else if(response.data.status == "error"){
+            msgInvalid.value = response.data.message
+            flag_msgInvalid.value = true 
+        }
+
     }else{
         msgInvalid.value = 'Please fill in all fields'
         flag_msgInvalid.value = true
     }  
-    return 
 }
 
 
@@ -94,10 +114,6 @@ function handlePhotoUpload(event) {
             <div class="mb-3">
                 <label class="form-label">Password</label>
                 <input v-model="vcard.password" type="password" class="form-control" placeholder="Enter your password">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Max. Debit</label>
-                <input v-model="vcard.max_debit" type="text" class="form-control" placeholder="Enter your max debit">
             </div>
             <div class="mb-3">
                 <label class="form-label">Pin to VCard</label>

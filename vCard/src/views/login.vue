@@ -32,7 +32,7 @@ const login = async () => {
               flag_msgInvalid.value = false
               //routing -> pagina inicial com os dados do user (USAR PINIA)
               console.log(response.data)
-              router.replace("/home");
+              router.replace(url_home);
             }else{ // login invalido
                 msgInvalid.value = 'Invalid credentials, '+response.data.message
                 flag_msgInvalid.value = true
