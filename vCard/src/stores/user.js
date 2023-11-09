@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
     state: () => ({
         name: 'John Doe',
-        balance: 0
+        balance: 0,
+        phone: 9999999999
     }),
     actions: {
         addBalance(amount) {
