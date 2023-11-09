@@ -11,7 +11,9 @@ const user = useUserStore();
 
     <Menu />
 
-    <h1>Hello, {{ user.name }}</h1>
+    <div class="container">
+        <h1>Hello, {{ user.name }}</h1>
+    </div>
 
 </template>
 
