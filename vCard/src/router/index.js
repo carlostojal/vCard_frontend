@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/login.vue'
+import LoginVcard from '../views/loginVcard.vue'
 import Register from '../views/register.vue'
 import vCard from '../views/createVCard.vue'
 import Home from '../views/home.vue'
@@ -16,6 +17,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/loginVcard',
+      name: 'loginVcard',
+      component: LoginVcard 
     },
     {
       path: '/register',
