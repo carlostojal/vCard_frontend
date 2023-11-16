@@ -38,12 +38,9 @@ onMounted(() => {
         if (response.data.status == 'success') {
           // login valido
           flag_msgInvalid.value = false
-          //routing -> pagina inicial com os dados do user (USAR PINIA)
-          console.log(response.data)
-          userStore.name = 'Fred'
-          // userStore.init("fake", 100, phone_number, response.data.access_token);
-          // console.log(response.data[0].access_token)
-          // router.go(url_home);
+
+          userStore.setToken(response.data.data.access_token)
+
           router.replace(url_home.value)
         } else {
           // login invalido
