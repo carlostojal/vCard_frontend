@@ -35,15 +35,15 @@ const props = defineProps({
 
 .vcard {
     padding: 1.3rem;
-    background-color: black;
-    background-image: linear-gradient(45deg, black, #636363);
+    background-image: linear-gradient(45deg, black, #636363be);
     color: white;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16/10;
     height: 20rem;
     transition: 0.3s;
+    cursor: default;
 }
 
 .vcard:hover {
