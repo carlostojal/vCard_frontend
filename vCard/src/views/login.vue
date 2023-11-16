@@ -21,7 +21,7 @@ const login = async () => {
 
         //validar login
         try {
-            const response = await axios.post(`${ConfigUtil.getApiUrl()}/login`,
+            const response = await axios.post(`${ConfigUtil.getApiUrl()}/users/login`,
             {
                 email: email.value,
                 password: password.value
