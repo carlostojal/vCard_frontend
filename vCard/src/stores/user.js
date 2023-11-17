@@ -4,7 +4,7 @@ import ConfigUtil from '../utils/ConfigUtil';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        name: 'John Doe',
+        name: '...',
         balance: 0,
         phone: 9999999999,
         email: 'email@mail.com',
@@ -18,20 +18,6 @@ export const useUserStore = defineStore('user', {
             this.email = email;
             this.token = token;
         },
-        async fetch() {
-            this.token = sessionStorage.getItem('token');
-            const userData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/profile`, {
-                headers: {
-                    Authorization: `Bearer ${this.token}`
-                }
-            });
-            this.name = userData.data.data.name;
-            this.balance = userData.data.data.balance;
-            this.email = userData.data.data.email;
-            this.phone = userData.data.data.phone_number;
-        }
-    },
-    mutations: {
         setName(name) {
             this.name = name;
         },
@@ -47,6 +33,21 @@ export const useUserStore = defineStore('user', {
         setToken(token) {
             this.token = token;
             sessionStorage.setItem('token', token);
+        },
+        async fetch() {
+            this.token = sessionStorage.getItem('token');
+            const userData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/profile`, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+            });
+            this.name = userData.data.data.name;
+            this.balance = parseFloat(userData.data.data.balance);
+            this.email = userData.data.data.email;
+            this.phone = parseInt(userData.data.data.phone_number);
         }
+    },
+    mutations: {
+        
     }
 });
