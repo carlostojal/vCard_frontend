@@ -1,5 +1,7 @@
 <script setup>
 
+import FormatUtil from '../utils/FormatUtil'
+
 const props = defineProps({
     balance: {
         type: Number,
@@ -20,7 +22,7 @@ const props = defineProps({
 <template>
 
     <div class="vcard">
-        <h2 class="vcard-title balance"> €{{ props.balance.toFixed(2) }} </h2>
+        <h2 class="vcard-title balance"> {{ FormatUtil.formatBalance(props.balance) }} </h2>
         <div class="holder">
             <p class="phone">{{ props.phone }}</p>
             <p class="name">{{ props.name }}</p>
