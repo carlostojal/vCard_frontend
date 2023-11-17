@@ -18,21 +18,6 @@ export const useUserStore = defineStore('user', {
             this.email = email;
             this.token = token;
         },
-        addBalance(amount) {
-            if(amount > 0)
-                this.balance += amount;
-        },
-        removeBalance(amount) {
-            if(amount > 0)
-                this.balance -= amount;
-        },
-        updateName(name) {
-            this.name = name;
-        },
-        setToken(token) {
-            this.token = token;
-            sessionStorage.setItem('token', token);
-        },
         async fetch() {
             this.token = sessionStorage.getItem('token');
             const userData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/profile`, {
@@ -44,6 +29,24 @@ export const useUserStore = defineStore('user', {
             this.balance = userData.data.data.balance;
             this.email = userData.data.data.email;
             this.phone = userData.data.data.phone_number;
+        }
+    },
+    mutations: {
+        setName(name) {
+            this.name = name;
+        },
+        setBalance(balance) {
+            this.balance = balance;
+        },
+        setPhone(phone) {
+            this.phone = phone;
+        },
+        setEmail(email) {
+            this.email = email;
+        },
+        setToken(token) {
+            this.token = token;
+            sessionStorage.setItem('token', token);
         }
     }
 });
