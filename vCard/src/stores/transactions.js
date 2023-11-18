@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil';
+import FormatUtil from '../utils/FormatUtil';
 
 import { useUserStore } from './user';
+import { useNotificationsStore } from './notifications';
 
 export const useTransactionsStore = defineStore('transactions', {
     state: () => ({
         userStore: useUserStore(),
-        transactions: null,
-        ws: new WebSocket(ConfigUtil.getNotificationUrl())
+        notificationsStore: useNotificationsStore(),
+        transactions: null
     }),
     actions: {
         getAll() {
@@ -36,17 +38,9 @@ export const useTransactionsStore = defineStore('transactions', {
                 }
             });
 
-            if(this.ws == null) {
-                // initialize the websocket
-                this.ws = new WebSocket(ConfigUtil.getNotificationUrl());
-            }
+            const notifMessage = `${this.userStore.getName()} sent you ${FormatUtil.formatBalance(parseFloat(amount))}`
 
-            // send a notification
-            this.ws.send(JSON.stringify({
-                _destination: phone_number,
-                _type: "credit_in",
-                _message: `${this.userStore.getName()} sent you ${amount}`
-            }));
+            this.notificationsStore.sendNotification(phone_number, notifMessage);
 
             // decrement the user balance
             userStore.decrementBalance(amount);
