@@ -16,4 +16,21 @@ export default class FormatUtil {
         const firstName = nameArray[0];
         return firstName;
     }
+
+    static formatDate(date) {
+        // get the month name
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const month = monthNames[date.getMonth()];
+
+        // get the week day name
+        const weekDayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const weekDay = weekDayNames[date.getDay()];
+
+        // get the day and year
+        const day = date.getDate();
+        const year = date.getFullYear();
+
+        return `${weekDay}, ${day} ${month} ${year}`;
+    }
 }
