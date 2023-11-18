@@ -3,12 +3,16 @@
 import FormatUtil from '../utils/FormatUtil';
 
 const props = defineProps({
-    originName: {
+    entityName: {
         type: String,
         required: false
     },
     value: {
         type: Number,
+        required: true
+    },
+    date: {
+        type: Date,
         required: true
     },
     type: { // "C" for credit, "D" for debit
@@ -21,10 +25,45 @@ const props = defineProps({
 <template>
 
     <div class="transaction">
-        <i class="transaction-icon {{ props.type == 'C' ? 'arrow-bar-down' : 'arrow-bar-up' }}"></i>
-        <div class="transaction-title">
-            <p class="transaction-origin">{{ props.originName }}</p>
-            <p class="transaction-value">{{ FormatUtil.formatBalance(props.value) }}</p>
+        <div class="transaction-header">
+            <img v-if="props.type == 'D'" class="transaction-icon" src="icons/arrow-bar-up.svg" />
+            <img v-else class="transaction-icon" src="icons/arrow-bar-down.svg" />
+            <p class="transaction-entity">{{ props.entityName }}</p>
         </div>
+        <p class="transaction-value"><b>{{ FormatUtil.formatBalance(props.value) }}</b></p>
+        <p class="transaction-date">{{ FormatUtil.formatDate(props.date) }}</p>
     </div>
 </template>
+
+<style scoped>
+
+.transaction {
+    padding: 0.6rem;
+    border-color: rgb(204, 204, 204);
+    border-style: solid;
+    border-width: 0.1rem;
+    border-radius: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.transaction .transaction-header {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+}
+
+.transaction .transaction-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-right: 0.5rem;
+}
+
+.transaction .transaction-date {
+    color: rgb(92, 92, 92);
+}
+
+.transaction .transaction-value {
+    font-size: 2rem;
+}
+
+</style>
