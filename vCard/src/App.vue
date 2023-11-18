@@ -1,6 +1,12 @@
 <script setup>
+import { ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import 'vue-toastification/dist/index.css' 
+
+import ConfigUtil from './utils/ConfigUtil';
+import { useNotificationsStore } from '@/stores/notifications';
+
+const notifications = useNotificationsStore();
+notifications.init();
 
 </script>
 
