@@ -8,6 +8,7 @@ export const useTransactionsStore = defineStore('transactions', {
     }),
     actions: {
         getAll() {
+            // lazy initialization
             if(!this.transactions) {
                 this.fetch();
             }
@@ -25,14 +26,13 @@ export const useTransactionsStore = defineStore('transactions', {
                 }
             });
 
-            this.transactions = transactions.data;
+            this.transactions = transactions.data.data;
 
-            // convert all values to float
+            // convert all values to float. convert dates to Date objects
             this.transactions.forEach(transaction => {
                 transaction.value = parseFloat(transaction.value);
+                transaction.date = new Date(transaction.datetime);
             });
-
-            console.log(this.transactions)
         }
     }
 });
