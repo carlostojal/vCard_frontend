@@ -18,11 +18,23 @@ export const useUserStore = defineStore('user', {
             this.email = email;
             this.token = token;
         },
+        getName() {
+            return this.name;
+        },
         setName(name) {
             this.name = name;
         },
         setBalance(balance) {
             this.balance = balance;
+        },
+        decrementBalance(amount) {
+            this.balance -= amount;
+        },
+        incrementBalance(amount) {
+            this.balance += amount;
+        },
+        getPhone() {
+            return this.phone;
         },
         setPhone(phone) {
             this.phone = phone;
