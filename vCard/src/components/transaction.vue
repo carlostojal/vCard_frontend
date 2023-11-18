@@ -18,6 +18,10 @@ const props = defineProps({
     type: { // "C" for credit, "D" for debit
         type: String,
         required: true
+    },
+    paymentType: { // "IBAN" or "VCARD"
+        type: String,
+        required: true
     }
 });
 
@@ -28,6 +32,11 @@ const props = defineProps({
         <div class="transaction-header">
             <img v-if="props.type == 'D'" class="transaction-icon" src="icons/arrow-bar-up.svg" />
             <img v-else class="transaction-icon" src="icons/arrow-bar-down.svg" />
+
+            <img v-if="props.paymentType == 'VCARD'" class="transaction-icon" src="icons/phone.svg" />
+            <img v-if="props.paymentType == 'IBAN'" class="transaction-icon" src="icons/bank.svg" />
+            <img v-if="props.paymentType == 'VISA'" class="transaction-icon" src="icons/credit-card.svg" />
+            <img v-if="props.paymentType == 'MB'" class="transaction-icon" src="icons/credit-card.svg" />
             <p class="transaction-entity">{{ props.entityName }}</p>
         </div>
         <p class="transaction-value"><b>{{ FormatUtil.formatBalance(props.value) }}</b></p>

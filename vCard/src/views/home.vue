@@ -31,7 +31,7 @@ user.fetch().catch((e) => {
       <h2>Recent Transactions</h2>
 
       <div class="transactions-list">
-        <Transaction v-for="transaction in transactions.getAll()" :key="transaction.id" :type="transaction.type" :value="transaction.value" :date="transaction.date" />
+        <Transaction v-for="transaction in transactions.getAll()" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" />
       </div>
     </div>
   </div>
