@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import 'vue-toastification/dist/index.css' 
 
 </script>
 
