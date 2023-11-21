@@ -16,12 +16,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: LoginVcard
     },
     {
-      path: '/loginVcard',
-      name: 'loginVcard',
-      component: LoginVcard 
+      path: '/loginAdmin',
+      name: 'loginAdmin',
+      component: Login 
     },
     {
       path: '/register',
