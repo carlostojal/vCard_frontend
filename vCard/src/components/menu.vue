@@ -1,6 +1,9 @@
 <script setup>
+// import { ref } from 'vue';
 import router from '../router';
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore(); 
 </script>
 
 
@@ -21,6 +24,7 @@ import router from '../router';
                     <li class="nav-item">
                         <a class="nav-link" href="./vcard">Add VCard</a>
                     </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,6 +37,9 @@ import router from '../router';
                             <li><a class="dropdown-item" href="#">All Services</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item" id="logoutBtn" >
+                        <a class="nav-link" @:click="userStore.logout()" >Logout</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -43,5 +50,4 @@ import router from '../router';
 
 
 <style scoped>
-
 </style>

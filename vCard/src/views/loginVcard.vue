@@ -70,7 +70,7 @@ onMounted(() => {
         {{ msgInvalid }}
       </div>
 
-      <h2 class="mb-4">LOGIN</h2>
+      <h2 class="mb-4">vCard LOGIN</h2>
       <div class="form-outline mb-4">
         <label class="form-label">Phone Number</label>
         <input

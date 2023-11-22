@@ -28,10 +28,12 @@ const login = async () => {
             })
 
             console.log(response.data.status)
-            if(response.data.status == "sucess"){ // login valido
+            if(response.data.status == "success"){ // login valido
               flag_msgInvalid.value = false
               //routing -> pagina inicial com os dados do user (USAR PINIA)
-              console.log(response.data)
+              console.log(response.data.message)
+              msgInvalid.value = 'Admin Dashboard doesnt exists yet, '+response.data.message
+              flag_msgInvalid.value = true
               router.replace(url_home);
             }else{ // login invalido
                 msgInvalid.value = 'Invalid credentials, '+response.data.message
@@ -39,7 +41,8 @@ const login = async () => {
             }
         }catch(error) {
             console.log(error)
-            msgInvalid.value = 'Invalid credentials, '+response.data.message
+            // msgInvalid.value = 'Invalid credentials, '+error.response.message
+            msgInvalid.value = error.response.data.message;
             flag_msgInvalid.value = true
         }
 

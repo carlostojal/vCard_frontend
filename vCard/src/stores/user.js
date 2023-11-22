@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil';
+import router from '../router';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -57,6 +58,24 @@ export const useUserStore = defineStore('user', {
             this.balance = parseFloat(userData.data.data.balance);
             this.email = userData.data.data.email;
             this.phone = parseInt(userData.data.data.phone_number);
+        },
+        async logout() {
+            try {
+                await axios.get(`${ConfigUtil.getApiUrl()}/logout`, {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`
+                    }
+                }).then(response => {
+                    // alert(response.data.message);
+                    alert('Logout Successful')
+                    this.token = null;
+                    sessionStorage.removeItem('token');
+                    router.replace('/');
+                });
+            }catch(err){
+                alert(err.response.data.message);
+                return;
+            }
         }
     },
     mutations: {
