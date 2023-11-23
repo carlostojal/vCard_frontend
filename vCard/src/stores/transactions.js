@@ -27,20 +27,28 @@ export const useTransactionsStore = defineStore('transactions', {
             }
 
             // make the request to the backend
-            const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`, {
-                amount,
-                phone_number,
-                confirmation_code,
-                payment_type
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            try {
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`, {
+                    amount,
+                    phone_number,
+                    confirmation_code,
+                    payment_type
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            } catch(error) {
+                throw new Error("Error sending money to user");
+            }
 
             const notifMessage = `${this.userStore.getName()} sent you ${FormatUtil.formatBalance(parseFloat(amount))}`
 
-            this.notificationsStore.sendNotification(phone_number, notifMessage);
+            try {
+                this.notificationsStore.sendNotification(phone_number, notifMessage);
+            } catch(error) {
+                console.error(error);
+            }
 
             // decrement the user balance
             userStore.decrementBalance(amount);
