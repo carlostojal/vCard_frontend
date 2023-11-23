@@ -24,7 +24,7 @@ const transaction = useTransactionsStore();
 const validatePin = async () => {
 
     if(pin.value.length == 4){
-        const response = await transaction.sendMoneyTo(amount.value, phone_number.value, pin.value, payment_type.value, description.value)
+        const response = await transaction.sendMoneyTo(amount.value, phone_number.value, pin.value, payment_type.value, description.value??null )
 
         if(response == 'success'){
             toast.success("Money sent successfully")
