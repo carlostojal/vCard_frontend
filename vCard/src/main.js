@@ -10,6 +10,7 @@ import "bootstrap"
 
 import App from './App.vue'
 import router from './router'
+import { useUserStore } from '@/stores/user'
 
 const app = createApp(App)
 
@@ -18,3 +19,15 @@ app.use(Toast)
 app.use(router)
 
 app.mount('#app')
+
+const userStore = useUserStore();
+
+router.beforeEach(async (to, from, next) => {
+    if (userStore.token == null && to.name !== 'login' && to.name !== 'loginAdmin') {
+        next({ name: 'login' })
+    }else {
+        next();
+    }
+});
+
+

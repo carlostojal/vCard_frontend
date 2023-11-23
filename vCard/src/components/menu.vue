@@ -1,9 +1,10 @@
 <script setup>
-// import { ref } from 'vue';
-import router from '../router';
-import { useUserStore } from '@/stores/user'
-
-const userStore = useUserStore(); 
+    import { ref } from 'vue';
+    import router from '../router';
+    import { useUserStore } from '@/stores/user'
+    const userStore = useUserStore(); 
+    const showLogout = ref(false);
+    showLogout.value = userStore.token != null;
 </script>
 
 
@@ -37,7 +38,7 @@ const userStore = useUserStore();
                             <li><a class="dropdown-item" href="#">All Services</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item" id="logoutBtn" >
+                    <li v-show="showLogout" class="nav-item" id="logoutBtn" >
                         <a class="nav-link" @:click="userStore.logout()" >Logout</a>
                     </li>
                 </ul>

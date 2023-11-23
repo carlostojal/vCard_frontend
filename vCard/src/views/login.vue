@@ -61,7 +61,7 @@ const login = async () => {
   <Menu> </Menu>
 
 
-
+    <div class="container">
     <form>
       <div class="form-wrapper">
 
@@ -69,7 +69,7 @@ const login = async () => {
             {{ msgInvalid }}
         </div>
 
-        <h2 class="mb-4">LOGIN</h2>
+        <h2 class="mb-4">Admin Login</h2>
         <div class="form-outline mb-4">
           <label class="form-label">Email address</label>
           <input v-model="email" style="border-width: 2px; border-color: black;" id="form2Example1" class="form-control" />
@@ -82,22 +82,27 @@ const login = async () => {
 
         <button @click.prevent="login" type="button" class="btn btn-primary btn-block mb-4">Log in</button>
 
-        <div class="text-center">
-          <p>Not a member? <a href="./register">Register</a></p> <!-- ROUTING -> to: /register -->
-        </div>
+        <!-- <div class="text-center"> -->
+          <!-- <p>Not a member? <a href="./register">Register</a></p>  -->
+        <!-- </div> -->
       </div>
     </form>
+    </div>
 </template>
 
 
 
 <style scoped>
-.form-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px; /* Set the maximum width here */
-  margin: 0 auto; /* Center the form horizontally */
-  margin: 100px auto 0;
-}
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 400px; /* Set the maximum width here */
+      margin: 0 auto; /* Center the form horizontally */
+      margin: 100px auto 0;
+    }
+
+    .container {
+        background: yellow;
+    }
 </style>
