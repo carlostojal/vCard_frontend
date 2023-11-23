@@ -23,7 +23,7 @@ app.mount('#app')
 const userStore = useUserStore();
 
 router.beforeEach(async (to, from, next) => {
-    if (userStore.token == null && to.name !== 'login' && to.name !== 'loginAdmin') {
+    if (userStore.token == null && to.name !== 'login' && to.name !== 'loginAdmin' && to.name !== 'register') {
         next({ name: 'login' })
     }else {
         next();
