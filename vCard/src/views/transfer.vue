@@ -23,7 +23,7 @@ user.fetch().catch((e) => {
 const transaction = useTransactionsStore();
 const validatePin = async () => {
 
-    if(pin.value.length == 4){
+    if(pin.value.length >= 3){
         const response = await transaction.sendMoneyTo(amount.value, phone_number.value, pin.value, payment_type.value, description.value)
 
         if(response == 'success'){

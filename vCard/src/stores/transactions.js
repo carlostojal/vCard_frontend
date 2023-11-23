@@ -51,7 +51,7 @@ export const useTransactionsStore = defineStore('transactions', {
 
                 this.notificationsStore.sendNotification(phone_number, notifMessage);
                 // decrement the user balance
-                userStore.decrementBalance(amount);
+                this.userStore.decrementBalance(amount);
             }catch(e){
                 console.log(e)
             }
