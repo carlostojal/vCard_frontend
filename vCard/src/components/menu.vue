@@ -3,13 +3,12 @@
     import router from '../router';
     import { useUserStore } from '@/stores/user'
     const userStore = useUserStore(); 
-    const showLogout = ref(false);
-    showLogout.value = userStore.token != null;
+    const isAuthenticated = ref(false);
+    isAuthenticated.value = userStore.token != null;
 </script>
 
 
 <template>
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="./home">VCard</a>
@@ -27,9 +26,8 @@
                     </li>
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Services
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Services
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#">Service 1</a></li>
@@ -38,7 +36,7 @@
                             <li><a class="dropdown-item" href="#">All Services</a></li>
                         </ul>
                     </li>
-                    <li v-show="showLogout" class="nav-item" id="logoutBtn" >
+                    <li  class="nav-item" id="logoutBtn" >
                         <a class="nav-link" @:click="userStore.logout()" >Logout</a>
                     </li>
                 </ul>

@@ -4,7 +4,9 @@ import axios from 'axios'
 import Menu from '../components/menu.vue'
 import ConfigUtil from '../utils/ConfigUtil';
 import router from '../router';
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore();
 const email = ref('')
 const password = ref('')
 const url_home = ref('./home')
@@ -30,10 +32,10 @@ const login = async () => {
             console.log(response.data.status)
             if(response.data.status == "success"){ // login valido
               flag_msgInvalid.value = false
-              //routing -> pagina inicial com os dados do user (USAR PINIA)
               console.log(response.data.message)
               msgInvalid.value = 'Admin Dashboard doesnt exists yet, '+response.data.message
               flag_msgInvalid.value = true
+              userStore.setToken(response.data.data.access_token)
               router.replace(url_home);
             }else{ // login invalido
                 msgInvalid.value = 'Invalid credentials, '+response.data.message
