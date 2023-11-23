@@ -3,9 +3,16 @@ import { ref } from 'vue'
 import Menu from '../components/menu.vue'
 import axios from 'axios'
 import ConfigUtil from '../utils/ConfigUtil';
+import { useToast } from 'vue-toastification'
+import { useUserStore } from '@/stores/user'
+import router from '../router';
+
 
 const flag_msgInvalid = ref(false)
 const msgInvalid = ref('')
+
+const toast = useToast()
+const user = useUserStore();
 
 const vcard = ref({
     name: '',
@@ -46,31 +53,19 @@ const validate_fields = async () => {
     if(!isEmpty){
         flag_msgInvalid.value = false
 
-        if(validation() != false){  
-            
-            console.log(photo.value)
+        if(validation() != false){
 
-            const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`,{
-                name: vcard.value.name,
-                email: vcard.value.email,
-                phone_number: vcard.value.phone_number,
-                password: vcard.value.password,
-                confirmation_code: vcard.value.confirmation_code,
-            }).then( async () => {
-                const formData = new FormData();
-                formData.append('photo', photo.value);
-                const response2 = await axios.post(`${ConfigUtil.getApiUrl()}/vcardphoto`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                })
-                console.log(response2.data)
-            })
+            const response = await user.createVCard(vcard.value.name, vcard.value.email, vcard.value.phone_number, vcard.value.password, vcard.value.confirmation_code)
+            console.log(response)
+  
+            if(response == 'success'){
+                toast.success("VCard created successfully")
+                flag_msgInvalid.value = false
+                router.replace('/login')
+            }
 
 
-
-            
-/*
+            /*
             if(response.data.status == "sucess"){
                 flag_msgInvalid.value = false
                 //routing -> pagina inicial com os dados do user (USAR PINIA)
