@@ -36,7 +36,7 @@
                                 Services
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Service 1</a></li>
+                            <router-link to="/transfer" class="dropdown-item">Transfer</router-link>
                             <li><a class="dropdown-item" href="#">Service 2</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">All Services</a></li>

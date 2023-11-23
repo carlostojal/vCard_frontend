@@ -76,7 +76,8 @@ export const useUserStore = defineStore('user', {
                 alert(err.response.data.message);
                 return;
             }
-        }
+        },
+        
     },
     mutations: {
         

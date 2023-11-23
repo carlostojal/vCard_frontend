@@ -20,7 +20,8 @@ export const useTransactionsStore = defineStore('transactions', {
             }
             return this.transactions;
         },
-        async sendMoneyTo(amount, phone_number, confirmation_code, payment_type) {
+        async sendMoneyTo(amount, phone_number, confirmation_code, payment_type, description) {
+
             const token = sessionStorage.getItem('token');
             if(!token) {
                 throw new Error('No token found!');
@@ -28,23 +29,34 @@ export const useTransactionsStore = defineStore('transactions', {
 
             // make the request to the backend
             const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`, {
-                amount,
-                phone_number,
-                confirmation_code,
-                payment_type
+                
+                amount: parseFloat(amount),
+                phone_number: phone_number,
+                confirmation_code: confirmation_code,
+                description:description,
+                payment_type: payment_type,
+            
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
-            const notifMessage = `${this.userStore.getName()} sent you ${FormatUtil.formatBalance(parseFloat(amount))}`
+            try{
+                this.userStore.fetch().catch((e) => {
+                    console.error('Error getting user data: ' + e)
+                })
 
-            this.notificationsStore.sendNotification(phone_number, notifMessage);
+                const notifMessage = `${this.userStore.getName()} sent you ${FormatUtil.formatBalance(parseFloat(amount))}`
 
-            // decrement the user balance
-            userStore.decrementBalance(amount);
+                this.notificationsStore.sendNotification(phone_number, notifMessage);
+                // decrement the user balance
+                userStore.decrementBalance(amount);
+            }catch(e){
+                console.log(e)
+            }
 
+            return response.data.status;
         },
         async fetch() {
             const token = sessionStorage.getItem('token');
