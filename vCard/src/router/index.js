@@ -27,7 +27,7 @@ const router = createRouter({
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
     },
     {
       path: '/vcard',
@@ -37,12 +37,14 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: { requiredVcard: true},
     },
     {
       path: '/transfer',
       name: 'transfer',
-      component: Transfer
+      component: Transfer,
+      meta: { requiredVcard: true},
     }
   ]
 })

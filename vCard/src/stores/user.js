@@ -77,7 +77,22 @@ export const useUserStore = defineStore('user', {
                 return;
             }
         },
-        
+        async getAuthGuard() {
+            this.token = sessionStorage.getItem('token');
+            let retval = null
+            await axios.get(`${ConfigUtil.getApiUrl()}/checkAuth`, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+            }).then(response => {
+                if(response.data.status == 'success'){
+                    retval = response.data.message;
+                }
+            }).catch(error => {
+                return null;
+            })
+            return retval;
+        },
     },
     mutations: {
         

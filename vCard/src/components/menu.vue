@@ -25,10 +25,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="./home">Home</a>
+                        <router-link to="home">Home</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./vcard">Add VCard</a>
+                        <router-link to="register">Register</router-link>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -55,4 +55,7 @@
 
 
 <style scoped>
+    router-link {
+        text-decoration: none;
+    }
 </style>

@@ -23,11 +23,17 @@ app.mount('#app')
 const userStore = useUserStore();
 
 router.beforeEach(async (to, from, next) => {
-    if (sessionStorage.getItem('token') == null && to.name !== 'login' && to.name !== 'loginAdmin' && to.name !== 'register') {
-        next({ name: 'login' })
-    }else {
+    const userRole = await userStore.getAuthGuard()
+    if(to.meta.requiredVcard && userRole == 'vcards'){
         next();
-    }
+    }else if(to.meta.requiredAdmin && userRole == 'users'){
+        next();
+    }else if (to.name !== 'login' && to.name !== 'loginAdmin' && to.name !== 'register') {
+        next({ name: 'login' });
+    }else if (to.name == 'login' && userRole == 'vcards') {
+        next({ name: 'home' })
+    }else next();
+
 });
 
 
