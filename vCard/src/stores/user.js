@@ -93,6 +93,22 @@ export const useUserStore = defineStore('user', {
             })
             return retval;
         },
+        async createVCard(name, email, phone, password, confirmation_code) {
+
+            try {
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`, {
+                    name: name,
+                    phone_number: phone,
+                    email: email,
+                    password: password,
+                    confirmation_code: confirmation_code
+                });
+                return response.data.status;
+            }catch(err){
+                console.log(err)
+                return;
+            }
+        }
     },
     mutations: {
         

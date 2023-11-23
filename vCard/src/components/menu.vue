@@ -1,6 +1,5 @@
 <script setup>
     import { ref } from 'vue';
-    import router from '../router';
     import { useUserStore } from '@/stores/user'
     const userStore = useUserStore(); 
     const isAuthenticated = ref(false);
@@ -17,7 +16,7 @@
 
     <nav v-show="isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="./home">VCard</a>
+            <router-link class="navbar-brand" to="home" >VCard</router-link>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -25,10 +24,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <router-link to="home">Home</router-link>
+                        <router-link class="nav-link" to="home">Home</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="register">Register</router-link>
+                        <router-link class="nav-link" to="register">Register</router-link>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -37,9 +36,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/transfer" class="dropdown-item">Transfer</router-link>
-                            <li><a class="dropdown-item" href="#">Service 2</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">All Services</a></li>
+                            <li><router-link class="dropdown-item" to="#">Service 2</router-link></li>
+                            <li><router-link class="dropdown-item" to="#">All Services</router-link></li>
                         </ul>
                     </li>
                     <li  class="nav-item" id="logoutBtn" >

@@ -32,7 +32,8 @@ const router = createRouter({
     {
       path: '/vcard',
       name: 'vcard',
-      component: vCard
+      component: vCard,
+      meta: { requiredVcard: false},
     },
     {
       path: '/home',

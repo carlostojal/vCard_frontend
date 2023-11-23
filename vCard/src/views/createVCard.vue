@@ -54,9 +54,8 @@ const validate_fields = async () => {
         flag_msgInvalid.value = false
 
         if(validation() != false){
-
+            
             const response = await user.createVCard(vcard.value.name, vcard.value.email, vcard.value.phone_number, vcard.value.password, vcard.value.confirmation_code)
-            console.log(response)
   
             if(response == 'success'){
                 toast.success("VCard created successfully")
