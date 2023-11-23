@@ -31,17 +31,13 @@
                     </li>
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Services
-                        </a>
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <router-link to="/transfer" class="dropdown-item">Transfer</router-link>
-                            <li><router-link class="dropdown-item" to="#">Service 2</router-link></li>
-                            <li><router-link class="dropdown-item" to="#">All Services</router-link></li>
+                            <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
                         </ul>
                     </li>
                     <li  class="nav-item" id="logoutBtn" >
-                        <a class="nav-link" @:click="userStore.logout()" >Logout</a>
+                        <a class="nav-link logout" @:click="userStore.logout()" >Logout</a>
                     </li>
                 </ul>
             </div>
@@ -55,5 +51,8 @@
 <style scoped>
     router-link {
         text-decoration: none;
+    }
+    .logout{
+        cursor: pointer;
     }
 </style>
