@@ -22,6 +22,7 @@ app.mount('#app')
 
 const userStore = useUserStore();
 
+
 router.beforeEach(async (to, from, next) => {
     const userRole = await userStore.getAuthGuard()
     if(to.meta.requiredVcard && userRole == 'vcards'){

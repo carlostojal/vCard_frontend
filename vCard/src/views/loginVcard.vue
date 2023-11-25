@@ -97,7 +97,9 @@ onMounted(() => {
       <input type="submit" class="btn btn-primary btn-block mb-4" value="Login" />
 
       <div class="text-center">
-        <p>Not a member? <a href="./register">Register</a></p>
+        <p>
+          <router-link to="vCard">Not a member?</router-link>
+        </p>
         <!-- ROUTING -> to: /register -->
       </div>
     </div>

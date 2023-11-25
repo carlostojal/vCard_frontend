@@ -1,12 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Menu from '../components/menu.vue'
 import { useUserStore } from '@/stores/user'
 import { useTransactionsStore} from '@/stores/transactions'
 import { useToast } from 'vue-toastification'
+import router from '../router'
 
 const toast = useToast()
-
+const user = useUserStore();
+const transaction = useTransactionsStore();
 const phone_number = ref('')
 const amount = ref('')
 const description = ref('')
@@ -15,12 +17,16 @@ const isPin = ref(false)
 const payment_type_array = ref(["VCARD", "MBWAY", "PAYPAL", "IBAN", "MB", "VISA"])
 const payment_type = ref('')
 
-const user = useUserStore();
-user.fetch().catch((e) => {
-  console.error('Error getting user data: ' + e)
+onMounted(() => {
+    fetchUser()
 })
 
-const transaction = useTransactionsStore();
+const fetchUser = async () => {
+    await user.fetch().catch((e) => {
+        console.error('Error getting user data: ' + e)
+    })
+}
+
 const validatePin = async () => {
 
     if(pin.value.length >= 3){
@@ -28,6 +34,11 @@ const validatePin = async () => {
 
         if(response == 'success'){
             toast.success("Money sent successfully")
+            fetchUser() //para carregar as novas transações do user para a home
+            router.replace('/home')
+        }else{
+            toast.error(response.data)
+            return false
         }
     }else{
        toast.warning("Pin must be 4 digits")
