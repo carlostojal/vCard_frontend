@@ -14,7 +14,7 @@ export default defineConfig({
     }
   },build: {
     rollupOptions: {
-      external: ['icons/arrow-bar-up.svg','icons/arrow-bar-down.svg','icons/phone.svg','icons/bank.svg','icons/credit-card.svg'], // Add your SVG file path here
+      //external: ['icons/arrow-bar-up.svg','icons/arrow-bar-down.svg','icons/phone.svg','icons/bank.svg','icons/credit-card.svg'], // Add your SVG file path here
     },
   },
 })
