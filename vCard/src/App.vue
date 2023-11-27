@@ -7,7 +7,6 @@ import { useNotificationsStore } from '@/stores/notifications';
 
 const notifications = useNotificationsStore();
 notifications.destroy();
-notifications.init();
 
 </script>
 

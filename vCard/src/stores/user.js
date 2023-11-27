@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil';
 import router from '../router';
-import { useNotificationsStore } from '@/notifications'
+import { useNotificationsStore } from './notifications'
 
 export const useUserStore = defineStore('user', {
     state: () => ({
