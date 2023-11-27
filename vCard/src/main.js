@@ -21,13 +21,24 @@ app.use(router)
 app.mount('#app')
 
 const userStore = useUserStore();
+const apiDomain = import.meta.env.VITE_API_DOMAIN;
+const wsConnection = import.meta.env.VITE_WS_CONNECTION;
+
+app.provide('serverUrl',`${apiDomain}/api`);
+app.provide('socket',io(wsConnection));
 
 router.beforeEach(async (to, from, next) => {
-    if (sessionStorage.getItem('token') == null && to.name !== 'login' && to.name !== 'loginAdmin' && to.name !== 'register') {
-        next({ name: 'login' })
-    }else {
+    const userRole = await userStore.getAuthGuard()
+    if(to.meta.requiredVcard && userRole == 'vcards'){
         next();
-    }
+    }else if(to.meta.requiredAdmin && userRole == 'users'){
+        next();
+    }else if (to.name !== 'login' && to.name !== 'vcard' && to.name !== 'loginAdmin' && to.name !== 'register') {
+        next({ name: 'login' });
+    }else if (to.name == 'login' && userRole == 'vcards') {
+        next({ name: 'home' })
+    }else next();
+
 });
 
 

@@ -76,6 +76,38 @@ export const useUserStore = defineStore('user', {
                 alert(err.response.data.message);
                 return;
             }
+        },
+        async getAuthGuard() {
+            this.token = sessionStorage.getItem('token');
+            let retval = null
+            await axios.get(`${ConfigUtil.getApiUrl()}/checkAuth`, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+            }).then(response => {
+                if(response.data.status == 'success'){
+                    retval = response.data.message;
+                }
+            }).catch(error => {
+                return null;
+            })
+            return retval;
+        },
+        async createVCard(name, email, phone, password, confirmation_code) {
+
+            try {
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards`, {
+                    name: name,
+                    phone_number: phone,
+                    email: email,
+                    password: password,
+                    confirmation_code: confirmation_code
+                });
+                return response.data.status;
+            }catch(err){
+                console.log(err)
+                return;
+            }
         }
     },
     mutations: {

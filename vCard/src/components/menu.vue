@@ -1,6 +1,5 @@
 <script setup>
     import { ref } from 'vue';
-    import router from '../router';
     import { useUserStore } from '@/stores/user'
     const userStore = useUserStore(); 
     const isAuthenticated = ref(false);
@@ -17,7 +16,7 @@
 
     <nav v-show="isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="./home">VCard</a>
+            <router-link class="navbar-brand" to="home" >VCard</router-link>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -25,25 +24,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="./home">Home</a>
+                        <router-link class="nav-link" to="home">Home</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./vcard">Add VCard</a>
+                        <router-link class="nav-link" to="register">Register</router-link>
                     </li>
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Services
-                        </a>
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Service 1</a></li>
-                            <li><a class="dropdown-item" href="#">Service 2</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">All Services</a></li>
+                            <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
                         </ul>
                     </li>
                     <li  class="nav-item" id="logoutBtn" >
-                        <a class="nav-link" @:click="userStore.logout()" >Logout</a>
+                        <a class="nav-link logout" @:click="userStore.logout()" >Logout</a>
                     </li>
                 </ul>
             </div>
@@ -55,4 +49,10 @@
 
 
 <style scoped>
+    router-link {
+        text-decoration: none;
+    }
+    .logout{
+        cursor: pointer;
+    }
 </style>
