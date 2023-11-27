@@ -75,6 +75,7 @@ export const useUserStore = defineStore('user', {
                     sessionStorage.removeItem('token');
                     router.replace('/');
                 });
+                this.notifications.destroy();
             }catch(err){
                 alert(err.response.data.message);
                 return;
