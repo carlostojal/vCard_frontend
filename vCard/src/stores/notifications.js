@@ -31,6 +31,11 @@ export const useNotificationsStore = defineStore('notifications', {
                 this.ws = null;
             };
         },
+        destroy() {
+            if(this.ws != null) {
+                this.ws.close();
+            }
+        },
         sendNotification(phone_number, message) {
 
             // lazy initialization

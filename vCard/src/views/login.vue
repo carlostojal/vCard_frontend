@@ -5,11 +5,14 @@ import Menu from '../components/menu.vue'
 import ConfigUtil from '../utils/ConfigUtil';
 import router from '../router';
 import { useUserStore } from '@/stores/user'
+import { useNotificationsStore } from '@/stores/notifications'
 
 const userStore = useUserStore();
 const email = ref('')
 const password = ref('')
 const url_home = ref('./home')
+
+const notificationsStore = useNotificationsStore();
 
 const msgInvalid = ref('')
 const flag_msgInvalid = ref(false)
