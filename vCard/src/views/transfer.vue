@@ -30,7 +30,12 @@ const fetchUser = async () => {
 const validatePin = async () => {
 
     if(pin.value.length >= 3){
-        const response = await transaction.sendMoneyTo(amount.value, phone_number.value, pin.value, payment_type.value, description.value)
+        let response = "";
+        try {
+            response = await transaction.sendMoneyTo(amount.value, phone_number.value, pin.value, payment_type.value, description.value)
+        } catch(e) {
+            toast.error("Error sending money: " + e.message);
+        }
 
         if(response == 'success'){
             toast.success("Money sent successfully")
