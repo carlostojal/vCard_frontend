@@ -34,6 +34,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
+                            <router-link to="/transactions" class="dropdown-item">Transactions List</router-link>
                         </ul>
                     </li>
                     <li  class="nav-item" id="logoutBtn" >
