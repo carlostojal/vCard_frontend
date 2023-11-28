@@ -1,15 +1,17 @@
 <script setup>
 import Menu from '../components/menu.vue'
+import Transaction from '../components/transaction.vue'
+import { useUserStore } from '@/stores/user'
 import { ref, onMounted } from 'vue';
 import { useTransactionsStore } from '@/stores/transactions'
 
-const transactionsStore = useTransactionsStore()
-const array_transactions = ref([])
+const transactions = useTransactionsStore();
+const user = useUserStore();
 
 onMounted(async () => {
-    await transactionsStore.getAll()
-    array_transactions.value = transactionsStore.transactions
-    console.log(array_transactions.value)
+    user.fetch().catch((e) => {
+      console.error('Error getting user data: ' + e)
+    })
 })
 
 </script>
@@ -23,25 +25,10 @@ onMounted(async () => {
                 <h2 class="margens">My Transactions</h2>
             </div>
 
-            <div style="margin-top:1rem" class="container">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Transaction ID</th>
-                        <th>To</th>
-                        <th>Value</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="transaction in array_transactions" :key="transaction.id">
-                        <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.pair_vcard }}</td>
-                        <td>{{ transaction.value }}</td>
-                        <td>{{ transaction.date }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="transactions">
+                <div class="transactions-list">
+                    <Transaction v-for="transaction in transactions.getAll()" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" />
+                </div>
             </div>
 
         </div>
@@ -50,5 +37,7 @@ onMounted(async () => {
 
 
 <style scoped>
-
+.transactions {
+  margin-top: 2rem;
+}
 </style>
