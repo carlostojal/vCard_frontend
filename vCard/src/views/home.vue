@@ -35,7 +35,7 @@ onMounted(() => {
       <h2>Recent Transactions</h2>
 
       <div class="transactions-list">
-        <Transaction v-for="transaction in transactions.getAll().slice(0, 3)" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" />
+        <Transaction v-for="transaction in transactions.getAll()" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance"/>
       </div>
     </div>
   </div>
