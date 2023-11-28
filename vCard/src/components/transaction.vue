@@ -101,4 +101,10 @@ const props = defineProps({
 .details{
     font-size: 1.1rem;
 }
+.transaction:hover {
+    scale: 1.001;
+    box-shadow: 0.3rem 0.3rem 0.6rem 0.6rem rgb(175, 175, 175);
+    transition: 0.25s;
+    transition-timing-function: ease-in-out;
+}
 </style>
