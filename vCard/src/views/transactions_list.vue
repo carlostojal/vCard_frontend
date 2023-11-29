@@ -1,17 +1,21 @@
 <script setup>
 import Menu from '../components/menu.vue'
 import Transaction from '../components/transaction.vue'
-import { useUserStore } from '@/stores/user'
+import Search from '../components/search.vue'
 import { ref, onMounted } from 'vue';
 import { useTransactionsStore } from '@/stores/transactions'
 
 const transactions = useTransactionsStore();
+
+const query = ref(null);
+
 
 </script>
 
 
 <template>
 <Menu> </Menu>
+<Search :type="'transaction'"></Search>
     <div class="container">
         <div class="row justify-content-center">
             <div style="margin-top:3rem" >

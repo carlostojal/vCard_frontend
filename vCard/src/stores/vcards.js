@@ -4,27 +4,30 @@ import ConfigUtil from '../utils/ConfigUtil'
 
 export const useVcardsStore = defineStore('vcards', {
     state: () => ({
-        vcards: null,
+        data_vcard: null,
     }),
     actions: {
-        async fetchVcards() {
-            try{
-                const token = sessionStorage.getItem('token');
+        async fetchVcards(phone) {
+            try {
+                const token = sessionStorage.getItem('token')
                 if (!token) {
                     throw new Error('No token found!')
                 }
 
-                const vcardsData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards`, {
+                const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search`, {
                     headers: {
                         Authorization: `Bearer ${token}`
+                    },
+                    params: {
+                        phone_number: phone
                     }
-                });
-        
-                this.vcards = vcardsData.data.data;
-            }catch(e){
-                console.log(e);
+                })
+
+                this.data_vcard = response.data.data.data
+                
+            } catch (e) {
+              console.log(e)
             }
-            
         },
     },
     mutations: {

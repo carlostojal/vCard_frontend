@@ -63,7 +63,7 @@ export const useTransactionsStore = defineStore('transactions', {
 
       return response.data.status
     },
-    async fetch() {
+    async fetch(phone) {
       const token = sessionStorage.getItem('token')
       if (!token) {
         throw new Error('No token found!')
