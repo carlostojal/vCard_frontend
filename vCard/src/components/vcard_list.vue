@@ -9,24 +9,20 @@ const props = defineProps({
         type: String,
         required: true
     },
-    id:{
-        type: Number,
-        required: true
-    },
     phone:{
-        type: String,
+        type: Number,
         required: true
     },
     blocked:{
-        type: String,
+        type: Number,
         required: true
     },
     balance:{
-        type: Number,
+        type: String,
         required: true
     },
     max_debit:{
-        type: Number,
+        type: String,
         required: true
     },
 })

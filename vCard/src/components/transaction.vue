@@ -37,7 +37,7 @@ const props = defineProps({
         required: true
     },
     old_balance: {
-        type: Number,
+        type: String,
         required: true
     }
 });
