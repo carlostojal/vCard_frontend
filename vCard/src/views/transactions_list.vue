@@ -6,13 +6,6 @@ import { ref, onMounted } from 'vue';
 import { useTransactionsStore } from '@/stores/transactions'
 
 const transactions = useTransactionsStore();
-const user = useUserStore();
-
-onMounted(async () => {
-    await user.fetch().catch((e) => {
-      console.error('Error getting user data: ' + e)
-    })
-})
 
 </script>
 

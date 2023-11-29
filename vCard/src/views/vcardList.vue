@@ -1,0 +1,61 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+import Menu from '../components/menu.vue'
+import { useVcardsStore } from '@/stores/vcards'
+import Vcard from '../components/vcard_list.vue'
+import Search from '../components/search.vue'
+
+const vcardsStore = useVcardsStore();
+const vcards = ref(null)
+
+onMounted(async () => {
+    await vcardsStore.fetchVcards()
+    vcards.value = vcardsStore.vcards
+    console.log(vcards.value)
+})
+
+
+
+</script>
+
+
+<template>
+    <Menu> </Menu>
+
+    <Search></Search>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div style="margin-top:3rem" >
+                <h2 class="margens">Vcards</h2>
+                <br>
+            </div>
+
+            <div class="transactions">
+                <div class="transactions-list">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Blocked</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Max Debit</th>
+                            </tr>
+                        </thead>
+                        <Vcard v-for="vcard in vcards" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
+                        <br><br>
+                        FAZER PAGINATE
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+
+<style scoped>
+
+</style>

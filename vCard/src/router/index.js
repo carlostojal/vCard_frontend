@@ -6,6 +6,8 @@ import vCard from '../views/createVCard.vue'
 import Home from '../views/home.vue'
 import Transfer from '../views/transfer.vue'
 import Transactions from '../views/transactions_list.vue'
+import Admins from '../views/adminsList.vue'
+import vCards from '../views/vcardList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,11 +49,24 @@ const router = createRouter({
       name: 'transfer',
       component: Transfer,
       meta: { requiredVcard: true},
-    },{
+    },
+    {
       path: '/transactions',
       name: 'transactions',
       component: Transactions,
       meta: { requiredVcard: true},
+    },
+    {
+      path: '/admins',
+      name: 'admins',
+      component: Admins,
+      //meta: { requiredVcard: true},
+    },
+    {
+      path: '/vcards',
+      name: 'vcards',
+      component: vCards,
+      //meta: { requiredVcard: true},
     }
   ]
 })
