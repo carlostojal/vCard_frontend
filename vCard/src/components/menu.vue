@@ -42,6 +42,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ADMIN</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/admins" class="dropdown-item">Admin List</router-link>
+                            <router-link to="/vcards" class="dropdown-item">VCard List</router-link>
                         </ul>
                     </li>
 
