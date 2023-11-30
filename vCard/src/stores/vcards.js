@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil'
 import { getToken } from '@/utils/GetSessionToken'
-import { defineAsyncComponent } from 'vue';
 
 export const useVcardsStore = defineStore('vcards', {
   state: () => ({
@@ -15,34 +14,36 @@ export const useVcardsStore = defineStore('vcards', {
         const token = getToken()
 
         const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then((response) => {
-          this.lastPage = response.data.last
-          this.data_vcard = response.data[0].data
-        })
-
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }).then((response) => {
+            this.lastPage = response.data.last
+            this.data_vcard = response.data[0].data
+          })
       } catch (e) {
         console.log(e)
       }
     },
-    async searchVcards(phone, currentPage, totalPages) {
+    async searchVcards(phone) {
+      try {
+        const token = getToken()
 
-      this.data_vcard = this.data_vcard.filter((item) => item.phone_number == phone)
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search/${phone}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then((response) => {
+      console.log(response)
+          this.data_vcard = response.data.data.data
+          this.lastPage = response.data.last
 
-      while( this.data_vcard.length < 1) {
-
-        ++currentPage
-        await this.paginate(currentPage)
-        this.data_vcard = this.data_vcard.filter((item) => item.phone_number == phone)
-
+        })
+      } catch (e) {
+        console.log(e)
       }
-
-      console.log(this.data_vcard, currentPage)
-
     },
-    async paginate(page){
+    async paginate(page) {
       try {
         const token = getToken()
 
@@ -51,7 +52,9 @@ export const useVcardsStore = defineStore('vcards', {
             Authorization: `Bearer ${token}`
           }
         })
-        this.data_vcard = response.data[0].data
+
+          this.data_vcard = response.data[0].data
+        
       } catch (e) {
         console.log(e)
       }

@@ -36,8 +36,10 @@ const goToPage = (page) => {
     if (page >= 1 && page <= totalPages.value) {
         if(props.type == 'vcard'){
             vcardStore.paginate(page)
-        }else if(props.type == 'transactions'){
-            transactionStore.paginate(page)
+        }else if(props.type == 'allTransactions'){
+            transactionStore.paginate_allTransactions(page)
+        }else if(props.type == 'myTransactions'){
+            transactionStore.paginate_myTransactions(page)
         }
     }
 }
