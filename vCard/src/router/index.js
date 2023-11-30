@@ -59,7 +59,7 @@ const router = createRouter({
       meta: { requiredVcard: true},
     },
     {
-      path: '/transactions',
+      path: '/myTransactions',
       name: 'transactions',
       component: Transactions,
       meta: { requiredVcard: true }
