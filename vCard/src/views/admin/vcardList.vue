@@ -4,11 +4,15 @@ import Menu from '@/components/menu.vue'
 import { useVcardsStore } from '@/stores/vcards'
 import Vcard from '@/components/vcard_list.vue'
 import Search from '@/components/search.vue'
+import Paginate from '@/components/paginate.vue'
 
 const vcardsStore = useVcardsStore();
+const totalPages = ref();
 
 onMounted(async () => {
-    await vcardsStore.fetchVcards()
+    await vcardsStore.fetchVcards().then(() => {
+        totalPages.value = vcardsStore.lastPage
+    })
 })
 
 </script>
@@ -17,7 +21,7 @@ onMounted(async () => {
 <template>
     <Menu> </Menu>
 
-    <Search :type="'vcard'"></Search>
+    <Search :type="'vcard'" :totalPages="totalPages" :currentPage="1"></Search>
 
     <div class="container">
         <div class="row justify-content-center">
@@ -40,12 +44,10 @@ onMounted(async () => {
                             </tr>
                         </thead>
                         <Vcard v-if="vcardsStore.data_vcard" v-for="vcard in vcardsStore.data_vcard" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
-                        <br><br>
-                        <h1>FAZER PAGINATE</h1>
                     </table>
                 </div>
             </div>
-
+            <Paginate v-if="totalPages" :type="'vcard'" :totalPages="totalPages" :currentPage="1"> </Paginate>
         </div>
     </div>
 </template>
