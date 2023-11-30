@@ -8,7 +8,13 @@ const props = defineProps({
     type: {
         type: String,
         required: true
-    }
+    },
+    currentPage: {
+        required: true,
+    },
+    totalPages: {
+        required: true,
+    },
 })
 
 const transactionStore = useTransactionsStore();
@@ -23,7 +29,7 @@ const submit = async () => {
                 await vcardsStore.fetchVcards() //get all
             }
             else{
-                await vcardsStore.searchVcards(query.value) //with filter
+                await vcardsStore.searchVcards(query.value, props.currentPage, props.totalPages) //with filter
             }
             break;
         case 'transaction':
@@ -31,7 +37,7 @@ const submit = async () => {
                 await transactionStore.fetch() //get all
             }
             else{
-                await transactionStore.searchTransaction(query.value) //with filter
+                await transactionStore.searchTransaction(query.value, props.currentPage, props.totalPages) //with filter
             }
             break;
         default:
