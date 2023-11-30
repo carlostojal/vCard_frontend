@@ -25,11 +25,11 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async searchVcards(phone) {
+    async searchVcards(query) {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search/${phone}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search/${query}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

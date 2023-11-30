@@ -21,16 +21,17 @@ const submit = async () => {
         case 'vcard':
             if(query.value == null || query.value == "" || query.value == undefined){
                 await vcardsStore.fetchVcards() //get all
-            }
-            else{
+                return 1
+            }else{
                 await vcardsStore.searchVcards(query.value) //with filter
+                return 1
             }
+
             break;
         case 'transaction':
             if(query.value == null || query.value == "" || query.value == undefined){
                 await transactionStore.fetch() //get all
-            }
-            else{
+            }else{
                 await transactionStore.searchTransaction(query.value) //with filter
             }
             break;
@@ -46,6 +47,13 @@ const submit = async () => {
 
     <form class="navbar navbar-expand-lg" style="margin-top: 2.5rem" @submit.prevent="submit">
         <div class="container">
+
+        <select v-model="selectedField" class="form-select" id="selectField">
+            <option value="" selected>Select an option</option>
+            <option value="name">Name</option>
+            <option value="email">Email</option>
+        </select>
+
             <input v-model="query" class="form-control" type="text" name="query" placeholder="Search...">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </div>
