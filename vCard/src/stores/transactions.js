@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import ConfigUtil from '../utils/ConfigUtil'
-import FormatUtil from '../utils/FormatUtil'
-
+import { getToken } from '@/utils/GetSessionToken' 
 import { useUserStore } from './user'
 import { useNotificationsStore } from './notifications'
 
@@ -22,10 +21,7 @@ export const useTransactionsStore = defineStore('transactions', {
       return this.transactions
     },
     async sendMoneyTo(amount, phone_number, confirmation_code, payment_type, description) {
-      const token = sessionStorage.getItem('token')
-      if (!token) {
-        throw new Error('No token found!')
-      }
+      const token = getToken();
 
       // make the request to the backend
       const response = await axios.post(
@@ -65,10 +61,7 @@ export const useTransactionsStore = defineStore('transactions', {
       return response.data.status
     },
     async fetch() {
-      const token = sessionStorage.getItem('token')
-      if (!token) {
-        throw new Error('No token found!')
-      }
+      const token = getToken()
 
       const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
         headers: {
@@ -89,10 +82,7 @@ export const useTransactionsStore = defineStore('transactions', {
     async searchTransaction(phone) {
       console.log('phone ', phone)
       try {
-        const token = sessionStorage.getItem('token')
-        if (!token) {
-          throw new Error('No token found!')
-        }
+        const token = getToken()
 
         const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search/${phone}`, {
           headers: {
@@ -115,10 +105,7 @@ export const useTransactionsStore = defineStore('transactions', {
     },
     async AllTransactions() {
       try {
-        const token = sessionStorage.getItem('token')
-        if (!token) {
-          throw new Error('No token found!')
-        }
+        const token = getToken()
 
         const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions`, {
           headers: {

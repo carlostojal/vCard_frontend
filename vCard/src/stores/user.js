@@ -3,6 +3,7 @@ import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil';
 import router from '../router';
 import { useNotificationsStore } from './notifications'
+import { getToken } from '@/utils/GetSessionToken'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -85,7 +86,7 @@ export const useUserStore = defineStore('user', {
       }
     },
     async getAuthGuard() {
-      this.token = sessionStorage.getItem('token')
+      this.token = getToken()
       let retval = null
       await axios
         .get(`${ConfigUtil.getApiUrl()}/checkAuth`, {

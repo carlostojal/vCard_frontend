@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil'
+import { getToken } from '@/utils/GetSessionToken'
 
 export const useUsersStore = defineStore('users', {
     state: () => ({
@@ -9,10 +10,7 @@ export const useUsersStore = defineStore('users', {
     actions: {
         async fetchAdmins() {
             try{
-                const token = sessionStorage.getItem('token');
-                if (!token) {
-                    throw new Error('No token found!')
-                }
+                const token = getToken()
 
                 const adminsData = await axios.get(`${ConfigUtil.getApiUrl()}/admins`, {
                     headers: {
