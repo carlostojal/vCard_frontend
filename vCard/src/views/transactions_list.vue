@@ -1,11 +1,15 @@
 <script setup>
 import Menu from '../components/menu.vue'
 import Transaction from '../components/transaction.vue'
-import { useUserStore } from '@/stores/user'
-import { ref, onMounted } from 'vue';
+import Search from '../components/search.vue'
 import { useTransactionsStore } from '@/stores/transactions'
+import { onMounted } from 'vue'
 
 const transactions = useTransactionsStore();
+
+onMounted( async () => {
+    await transactions.fetch()
+})
 
 </script>
 
@@ -20,10 +24,10 @@ const transactions = useTransactionsStore();
 
             <div class="transactions">
                 <div class="transactions-list">
-                    <Transaction v-for="transaction in transactions.getAll()" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance"/>
+                    <Transaction v-for="transaction in transactions.transactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance"/>
                 </div>
             </div>
-
+<h1>FAZER PAGINATE</h1>
         </div>
     </div>
 </template>

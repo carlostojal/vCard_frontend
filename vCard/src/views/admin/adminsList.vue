@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import Menu from '../components/menu.vue'
+import Menu from '@/components/menu.vue'
 import { useUsersStore } from '@/stores/users'
-import User from '../components/user.vue'
+import User from '@/components/user.vue'
 
 const users = useUsersStore();
 const admins = ref(null)

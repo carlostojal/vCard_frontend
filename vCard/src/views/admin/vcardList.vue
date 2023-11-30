@@ -1,20 +1,16 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import Menu from '../components/menu.vue'
+import Menu from '@/components/menu.vue'
 import { useVcardsStore } from '@/stores/vcards'
-import Vcard from '../components/vcard_list.vue'
-import Search from '../components/search.vue'
+import Vcard from '@/components/vcard_list.vue'
+import Search from '@/components/search.vue'
 
 const vcardsStore = useVcardsStore();
-const vcards = ref(null)
+const query = ref(null);
 
 onMounted(async () => {
     await vcardsStore.fetchVcards()
-    vcards.value = vcardsStore.vcards
-    console.log(vcards.value)
 })
-
-
 
 </script>
 
@@ -22,7 +18,7 @@ onMounted(async () => {
 <template>
     <Menu> </Menu>
 
-    <Search></Search>
+    <Search :type="'vcard'"></Search>
 
     <div class="container">
         <div class="row justify-content-center">
@@ -44,7 +40,7 @@ onMounted(async () => {
                             <th scope="col">Max Debit</th>
                             </tr>
                         </thead>
-                        <Vcard v-for="vcard in vcards" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
+                        <Vcard v-for="vcard in vcardsStore.data_vcard" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
                         <br><br>
                         FAZER PAGINATE
                     </table>
