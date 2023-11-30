@@ -10,6 +10,7 @@ const admins = ref(null)
 onMounted(async () => {
     await users.fetchAdmins()
     admins.value = users.admins
+    console.log(admins.value)
 })
 
 

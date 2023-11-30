@@ -7,12 +7,9 @@ import Search from '@/components/search.vue'
 import Paginate from '@/components/paginate.vue'
 
 const vcardsStore = useVcardsStore();
-const totalPages = ref();
 
 onMounted(async () => {
-    await vcardsStore.fetchVcards().then(() => {
-        totalPages.value = vcardsStore.lastPage
-    })
+    await vcardsStore.fetchVcards()
 })
 
 </script>
@@ -21,7 +18,7 @@ onMounted(async () => {
 <template>
     <Menu> </Menu>
 
-    <Search :type="'vcard'" :totalPages="totalPages" :currentPage="1"></Search>
+    <Search :type="'vcard'"></Search>
 
     <div class="container">
         <div class="row justify-content-center">
@@ -44,10 +41,11 @@ onMounted(async () => {
                             </tr>
                         </thead>
                         <Vcard v-if="vcardsStore.data_vcard" v-for="vcard in vcardsStore.data_vcard" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
+                        <br><br>
                     </table>
                 </div>
             </div>
-            <Paginate v-if="totalPages" :type="'vcard'" :totalPages="totalPages" :currentPage="1"> </Paginate>
+            <Paginate v-if="vcardsStore.lastPage > 1" :type="'vcard'" :totalPages="vcardsStore.lastPage" :currentPage="1"> </Paginate>
         </div>
     </div>
 </template>

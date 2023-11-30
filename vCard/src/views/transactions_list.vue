@@ -1,14 +1,14 @@
 <script setup>
 import Menu from '../components/menu.vue'
 import Transaction from '../components/transaction.vue'
-import Search from '../components/search.vue'
+import Paginate from '@/components/paginate.vue'
 import { useTransactionsStore } from '@/stores/transactions'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
-const transactions = useTransactionsStore();
+const transactionsStore = useTransactionsStore();
 
 onMounted( async () => {
-    await transactions.fetch()
+    await transactionsStore.fetch()
 })
 
 </script>
@@ -24,10 +24,10 @@ onMounted( async () => {
 
             <div class="transactions">
                 <div class="transactions-list">
-                    <Transaction v-if="transactions.myTransactions" v-for="transaction in transactions.myTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance"/>
+                    <Transaction v-if="transactionsStore.myTransactions" v-for="transaction in transactionsStore.myTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance"/>
                 </div>
             </div>
-<h1>FAZER PAGINATE</h1>
+            <Paginate v-if="transactionsStore.lastPage_myTrans > 1" :type="'myTransactions'" :totalPages="transactionsStore.lastPage_myTrans" :currentPage="1"> </Paginate>
         </div>
     </div>
 </template>
