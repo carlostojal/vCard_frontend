@@ -6,7 +6,6 @@ import Vcard from '@/components/vcard_list.vue'
 import Search from '@/components/search.vue'
 
 const vcardsStore = useVcardsStore();
-const query = ref(null);
 
 onMounted(async () => {
     await vcardsStore.fetchVcards()
@@ -40,9 +39,9 @@ onMounted(async () => {
                             <th scope="col">Max Debit</th>
                             </tr>
                         </thead>
-                        <Vcard v-for="vcard in vcardsStore.data_vcard" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
+                        <Vcard v-if="vcardsStore.data_vcard" v-for="vcard in vcardsStore.data_vcard" :id="vcard.id" :name="vcard.name" :email="vcard.email" :phone="vcard.phone_number" :blocked="vcard.blocked" :max_debit="vcard.max_debit" :balance="vcard.balance"/>
                         <br><br>
-                        FAZER PAGINATE
+                        <h1>FAZER PAGINATE</h1>
                     </table>
                 </div>
             </div>

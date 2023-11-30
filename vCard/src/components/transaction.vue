@@ -37,7 +37,7 @@ const props = defineProps({
         required: true
     },
     old_balance: {
-        type: Number,
+        type: String,
         required: true
     }
 });
@@ -61,7 +61,7 @@ const props = defineProps({
         <div v-if="props.isDetail">
             <p class="details" v-if="props.type == 'D'"> <b>Balance:</b> €{{ props.old_balance }} (-{{ props.value }})</p>
             <p class="details" v-else> <b>Balance:</b> €{{ props.old_balance }} (+{{ props.value }})</p>
-            <p v-if="props.description" class="details"> <b>Description:</b> {{ props.description }} </p>
+            <p v-if="props.description" class="details"> <b>Message:</b> {{ props.description }} </p>
             <p class="details"> <b>From:</b> {{ props.pair_vcard }} </p>
         </div>
     </div>
