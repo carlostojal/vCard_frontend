@@ -10,7 +10,8 @@ export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
     userStore: useUserStore(),
     notificationsStore: useNotificationsStore(),
-    transactions: null
+    transactions: null,
+    allTransactions: null,
   }),
   actions: {
     getAll() {
@@ -63,25 +64,80 @@ export const useTransactionsStore = defineStore('transactions', {
 
       return response.data.status
     },
-    async fetch(phone) {
+    async fetch() {
       const token = sessionStorage.getItem('token')
       if (!token) {
         throw new Error('No token found!')
       }
 
-      const transactions = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
+      const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
 
-      this.transactions = transactions.data.data
+      console.log('response ', response.data.data)
+      this.transactions = response.data.data
+      console.log('this.transactions ', this.transactions)
 
       // convert all values to float. convert dates to Date objects
       this.transactions.forEach((transaction) => {
         transaction.value = parseFloat(transaction.value)
         transaction.date = new Date(transaction.datetime)
       })
+    },
+    async searchTransaction(phone) {
+      console.log('phone ', phone)
+      try {
+        const token = sessionStorage.getItem('token')
+        if (!token) {
+          throw new Error('No token found!')
+        }
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search/${phone}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        console.log('response ', response.data.data.data)
+        this.allTransactions = response.data.data.data
+        console.log('this.allTransactions ', this.transactions)
+
+        // convert all values to float. convert dates to Date objects
+        this.allTransactions.forEach((transaction) => {
+          transaction.value = parseFloat(transaction.value)
+          transaction.date = new Date(transaction.datetime)
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async AllTransactions() {
+      try {
+        const token = sessionStorage.getItem('token')
+        if (!token) {
+          throw new Error('No token found!')
+        }
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        console.log('response ', response.data.data.data)
+        this.allTransactions = response.data.data.data
+        console.log('this.allTransactions ', this.allTransactions)
+
+        // convert all values to float. convert dates to Date objects
+        this.allTransactions.forEach((transaction) => {
+          transaction.value = parseFloat(transaction.value)
+          transaction.date = new Date(transaction.datetime)
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 })

@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import Menu from '../components/menu.vue'
+import Menu from '@/components/menu.vue'
 import { useVcardsStore } from '@/stores/vcards'
-import Vcard from '../components/vcard_list.vue'
-import Search from '../components/search.vue'
+import Vcard from '@/components/vcard_list.vue'
+import Search from '@/components/search.vue'
 
 const vcardsStore = useVcardsStore();
 const query = ref(null);

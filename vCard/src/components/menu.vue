@@ -34,7 +34,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
-                            <router-link to="/transactions" class="dropdown-item">Transactions List</router-link>
+                            <router-link to="/myTransactions" class="dropdown-item">Transactions List</router-link>
                         </ul>
                     </li>
 
@@ -43,6 +43,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/admins" class="dropdown-item">Admin List</router-link>
                             <router-link to="/vcards" class="dropdown-item">VCard List</router-link>
+                            <router-link to="/allTransactions" class="dropdown-item">Transactions List</router-link>
                         </ul>
                     </li>
 

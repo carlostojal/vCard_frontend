@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { defineProps } from 'vue';
-import { useVcardsStore } from '@/stores/vcards'
-//import { useTransactionStore } from '@/stores/transactions'
+import { useVcardsStore } from '@/stores/vcards';
+import { useTransactionsStore } from '@/stores/transactions'
 
 const props = defineProps({
     type: {
@@ -11,21 +11,35 @@ const props = defineProps({
     }
 })
 
-//const transactionStore = useTransactionStore();
+const transactionStore = useTransactionsStore();
 const vcardsStore = useVcardsStore();
 const query = ref(null);
 
-const submit = () => {
+const submit = async () => {
 
 console.log(props.type)
 
     switch(props.type) {
         case 'vcard':
-            vcardsStore.fetchVcards(query.value)
+            if(query.value == null || query.value == "" || query.value == undefined){
+                console.log("fetching all vcards", query.value)
+                await vcardsStore.fetchVcards()
+            }
+            else{
+                console.log("fetching with search", query.value)
+                await vcardsStore.searchVcards(query.value)
+            }
             break;
-        /*case 'transaction':
-            transactionStore.searchTransactions(query.value)
-            break;*/
+        case 'transaction':
+            if(query.value == null || query.value == "" || query.value == undefined){
+                console.log("fetching all transactions", query.value)
+                await transactionStore.fetch()
+            }
+            else{
+                console.log("fetching with search", query.value)
+                await transactionStore.searchTransaction(query.value)
+            }
+            break;
         default:
             console.log("Invalid type")
     }
