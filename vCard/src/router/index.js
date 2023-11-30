@@ -5,6 +5,7 @@ import Register from '../views/register.vue'
 import vCard from '../views/createVCard.vue'
 import Home from '../views/home.vue'
 import Transfer from '../views/transfer.vue'
+import Profile from '../views/profile.vue'
 import Transactions from '../views/transactions_list.vue'
 import Admins from '../views/admin/adminsList.vue'
 import vCards from '../views/admin/vcardList.vue'
@@ -52,7 +53,13 @@ const router = createRouter({
       meta: { requiredVcard: true }
     },
     {
-      path: '/myTransactions',
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: { requiredVcard: true},
+    },
+    {
+      path: '/transactions',
       name: 'transactions',
       component: Transactions,
       meta: { requiredVcard: true }
