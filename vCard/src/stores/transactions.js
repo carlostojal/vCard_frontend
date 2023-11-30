@@ -78,7 +78,7 @@ export const useTransactionsStore = defineStore('transactions', {
         transaction.date = new Date(transaction.datetime)
       })
     },
-    async searchTransaction(phone) {
+    async searchTransaction(phone, currentPage, totalPages) {
       this.allTransactions = this.allTransactions.filter((item) => item.phone_number == phone)
 
       while (this.allTransactions.length < 1) {
@@ -131,6 +131,6 @@ export const useTransactionsStore = defineStore('transactions', {
       } catch (e) {
         console.log(e)
       }
-    },
+    }
   }
 })
