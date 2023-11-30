@@ -53,7 +53,7 @@ export const useUserStore = defineStore('user', {
       this.notifications.init()
     },
     async fetch() {
-      this.token = sessionStorage.getItem('token')
+      this.token = getToken()
       const userData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/profile`, {
         headers: {
           Authorization: `Bearer ${this.token}`

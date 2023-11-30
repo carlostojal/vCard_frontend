@@ -9,16 +9,16 @@ export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
     userStore: useUserStore(),
     notificationsStore: useNotificationsStore(),
-    transactions: null,
+    myTransactions: null,
     allTransactions: null,
   }),
   actions: {
     getAll() {
       // lazy initialization
-      if (!this.transactions) {
+      if (!this.myTransactions) {
         this.fetch()
       }
-      return this.transactions
+      return this.myTransactions
     },
     async sendMoneyTo(amount, phone_number, confirmation_code, payment_type, description) {
       const token = getToken();
@@ -69,18 +69,15 @@ export const useTransactionsStore = defineStore('transactions', {
         }
       })
 
-      console.log('response ', response.data.data)
-      this.transactions = response.data.data
-      console.log('this.transactions ', this.transactions)
+      this.myTransactions = response.data.data
 
       // convert all values to float. convert dates to Date objects
-      this.transactions.forEach((transaction) => {
+      this.myTransactions.forEach((transaction) => {
         transaction.value = parseFloat(transaction.value)
         transaction.date = new Date(transaction.datetime)
       })
     },
     async searchTransaction(phone) {
-      console.log('phone ', phone)
       try {
         const token = getToken()
 
@@ -90,9 +87,7 @@ export const useTransactionsStore = defineStore('transactions', {
           }
         })
 
-        console.log('response ', response.data.data.data)
         this.allTransactions = response.data.data.data
-        console.log('this.allTransactions ', this.transactions)
 
         // convert all values to float. convert dates to Date objects
         this.allTransactions.forEach((transaction) => {
@@ -113,9 +108,7 @@ export const useTransactionsStore = defineStore('transactions', {
           }
         })
 
-        console.log('response ', response.data.data.data)
         this.allTransactions = response.data.data.data
-        console.log('this.allTransactions ', this.allTransactions)
 
         // convert all values to float. convert dates to Date objects
         this.allTransactions.forEach((transaction) => {

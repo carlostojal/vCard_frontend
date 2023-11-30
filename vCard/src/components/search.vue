@@ -17,27 +17,21 @@ const query = ref(null);
 
 const submit = async () => {
 
-console.log(props.type)
-
     switch(props.type) {
         case 'vcard':
             if(query.value == null || query.value == "" || query.value == undefined){
-                console.log("fetching all vcards", query.value)
-                await vcardsStore.fetchVcards()
+                await vcardsStore.fetchVcards() //get all
             }
             else{
-                console.log("fetching with search", query.value)
-                await vcardsStore.searchVcards(query.value)
+                await vcardsStore.searchVcards(query.value) //with filter
             }
             break;
         case 'transaction':
             if(query.value == null || query.value == "" || query.value == undefined){
-                console.log("fetching all transactions", query.value)
-                await transactionStore.fetch()
+                await transactionStore.fetch() //get all
             }
             else{
-                console.log("fetching with search", query.value)
-                await transactionStore.searchTransaction(query.value)
+                await transactionStore.searchTransaction(query.value) //with filter
             }
             break;
         default:

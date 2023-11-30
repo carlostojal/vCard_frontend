@@ -5,7 +5,7 @@ import { getToken } from '@/utils/GetSessionToken'
 
 export const useVcardsStore = defineStore('vcards', {
   state: () => ({
-    data_vcard: []
+    data_vcard: null
   }),
   actions: {
     async fetchVcards() {
@@ -17,13 +17,14 @@ export const useVcardsStore = defineStore('vcards', {
             Authorization: `Bearer ${token}`
           }
         })
+
         this.data_vcard = response.data.data
+
       } catch (e) {
         console.log(e)
       }
     },
     async searchVcards(phone) {
-        console.log("phone ",phone)
       try {
         const token = getToken()
 
@@ -32,7 +33,9 @@ export const useVcardsStore = defineStore('vcards', {
             Authorization: `Bearer ${token}`
           }
         })
+
         this.data_vcard = response.data.data.data
+        
       } catch (e) {
         console.log(e)
       }
