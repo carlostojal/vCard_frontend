@@ -5,6 +5,11 @@ import Register from '../views/register.vue'
 import vCard from '../views/createVCard.vue'
 import Home from '../views/home.vue'
 import Transfer from '../views/transfer.vue'
+import Profile from '../views/profile.vue'
+import Transactions from '../views/transactions_list.vue'
+import Admins from '../views/admin/adminsList.vue'
+import vCards from '../views/admin/vcardList.vue'
+import AllTransactions from '../views/admin/transactionsList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,30 +27,63 @@ const router = createRouter({
     {
       path: '/loginAdmin',
       name: 'loginAdmin',
-      component: Login 
+      component: Login
     },
     {
       path: '/register',
       name: 'register',
-      component: Register,
+      component: Register
     },
     {
       path: '/vcard',
       name: 'vcard',
       component: vCard,
-      meta: { requiredVcard: false},
+      meta: { requiredVcard: false }
     },
     {
       path: '/home',
       name: 'home',
       component: Home,
-      meta: { requiredVcard: true},
+      meta: { requiredVcard: true }
     },
     {
       path: '/transfer',
       name: 'transfer',
       component: Transfer,
+      meta: { requiredVcard: true }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
       meta: { requiredVcard: true},
+    },
+    {
+      path: '/myTransactions',
+      name: 'transactions',
+      component: Transactions,
+      meta: { requiredVcard: true }
+    },
+    {
+      //ADMIN
+      path: '/admins',
+      name: 'admins',
+      component: Admins
+      //meta: { requiredVcard: true},
+    },
+    {
+      //ADMIN
+      path: '/vcards',
+      name: 'vcards',
+      component: vCards
+      //meta: { requiredVcard: true},
+    },
+    {
+      //ADMIN
+      path: '/allTransactions',
+      name: 'allTransactions',
+      component: AllTransactions
+      //meta: { requiredVcard: true},
     }
   ]
 })

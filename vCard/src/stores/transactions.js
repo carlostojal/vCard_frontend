@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import ConfigUtil from '../utils/ConfigUtil'
-import FormatUtil from '../utils/FormatUtil'
-
+import { getToken } from '@/utils/GetSessionToken' 
 import { useUserStore } from './user'
 import { useNotificationsStore } from './notifications'
 
@@ -10,21 +9,21 @@ export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
     userStore: useUserStore(),
     notificationsStore: useNotificationsStore(),
-    transactions: null
+    myTransactions: null,
+    allTransactions: null,
+    lastPage: null,
+    lastPage_myTrans: null,
   }),
   actions: {
-    getAll() {
+    async getAll() {
       // lazy initialization
-      if (!this.transactions) {
-        this.fetch()
+      if (!this.myTransactions) {
+        await this.fetch()
       }
-      return this.transactions
+      return this.myTransactions
     },
     async sendMoneyTo(amount, phone_number, confirmation_code, payment_type, description) {
-      const token = sessionStorage.getItem('token')
-      if (!token) {
-        throw new Error('No token found!')
-      }
+      const token = getToken()
 
       // make the request to the backend
       const response = await axios.post(
@@ -64,24 +63,118 @@ export const useTransactionsStore = defineStore('transactions', {
       return response.data.status
     },
     async fetch() {
-      const token = sessionStorage.getItem('token')
-      if (!token) {
-        throw new Error('No token found!')
+      const token = getToken()
+
+      const response = await axios
+        .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then((response) => {
+          this.lastPage_myTrans = response.data.last
+          this.myTransactions = response.data[0].data
+          console.log('minhas', this.lastPage_myTrans)
+          // convert all values to float. convert dates to Date objects
+          this.myTransactions.forEach((transaction) => {
+            transaction.value = parseFloat(transaction.value)
+            transaction.date = new Date(transaction.datetime)
+          })
+        })
+    },
+    async searchTransaction(phone) {
+      try {
+        const token = getToken()
+
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${phone}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            this.allTransactions = response.data.data.data
+            this.lastPage = response.data.last
+  console.log('pesquisa', this.lastPage)
+            // convert all values to float. convert dates to Date objects
+            this.allTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
       }
+    },
+    async AllTransactions() {
+      try {
+        const token = getToken()
 
-      const transactions = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            this.lastPage = response.data.last
+            this.allTransactions = response.data.data.data
+            console.log('todas', this.lastPage)
 
-      this.transactions = transactions.data.data
+            // convert all values to float. convert dates to Date objects
+            this.allTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async paginate_allTransactions(page) {
+      try {
+        const token = getToken()
 
-      // convert all values to float. convert dates to Date objects
-      this.transactions.forEach((transaction) => {
-        transaction.value = parseFloat(transaction.value)
-        transaction.date = new Date(transaction.datetime)
-      })
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions?page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        this.allTransactions = response.data.data.data
+
+        // convert all values to float. convert dates to Date objects
+        this.allTransactions.forEach((transaction) => {
+          transaction.value = parseFloat(transaction.value)
+          transaction.date = new Date(transaction.datetime)
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async paginate_myTransactions(page) {
+      try {
+        const token = getToken()
+
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?page=${page}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            this.lastPage = response.data.last
+            this.myTransactions = response.data[0].data
+
+            // convert all values to float. convert dates to Date objects
+            this.myTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 })

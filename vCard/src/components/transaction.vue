@@ -22,12 +22,29 @@ const props = defineProps({
     paymentType: { // "IBAN" or "VCARD"
         type: String,
         required: true
+    },
+    isDetail: { // if true, show the details of the transaction
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    description: {
+        type: String,
+        required: false
+    },
+    pair_vcard: {
+        type: String,
+        required: true
+    },
+    old_balance: {
+        type: String,
+        required: true
     }
 });
 
 </script>
 <template>
-
+    
     <div class="transaction">
         <div class="transaction-header">
             <img v-if="props.type == 'D'" class="transaction-icon" src="/icons/arrow-bar-up.svg" />
@@ -41,6 +58,12 @@ const props = defineProps({
         </div>
         <p class="transaction-value"><b>{{ FormatUtil.formatBalance(props.value) }}</b></p>
         <p class="transaction-date">{{ FormatUtil.formatDate(props.date) }}</p>
+        <div v-if="props.isDetail">
+            <p class="details" v-if="props.type == 'D'"> <b>Balance:</b> €{{ props.old_balance }} (-{{ props.value }})</p>
+            <p class="details" v-else> <b>Balance:</b> €{{ props.old_balance }} (+{{ props.value }})</p>
+            <p v-if="props.description" class="details"> <b>Message:</b> {{ props.description }} </p>
+            <p class="details"> <b>From:</b> {{ props.pair_vcard }} </p>
+        </div>
     </div>
 </template>
 
@@ -75,4 +98,13 @@ const props = defineProps({
     font-size: 2rem;
 }
 
+.details{
+    font-size: 1.1rem;
+}
+.transaction:hover {
+    scale: 1.001;
+    box-shadow: 0.3rem 0.3rem 0.6rem 0.6rem rgb(175, 175, 175);
+    transition: 0.25s;
+    transition-timing-function: ease-in-out;
+}
 </style>
