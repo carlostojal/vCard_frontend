@@ -14,17 +14,16 @@ const props = defineProps({
 const transactionStore = useTransactionsStore();
 const vcardsStore = useVcardsStore();
 const query = ref(null);
+const blocked = ref('all');
 
 const submit = async () => {
 
     switch(props.type) {
         case 'vcard':
             if(query.value == null || query.value == "" || query.value == undefined){
-                await vcardsStore.fetchVcards() //get all
-                return 1
+                await vcardsStore.fetchVcardsBlock(blocked.value) //get all
             }else{
-                await vcardsStore.searchVcards(query.value) //with filter
-                return 1
+                await vcardsStore.searchVcards(query.value, blocked.value) //with filter
             }
 
             break;
@@ -46,21 +45,25 @@ const submit = async () => {
 <template>
 
     <form class="navbar navbar-expand-lg" style="margin-top: 2.5rem" @submit.prevent="submit">
-        <div class="container">
+    <div class="container">
 
-        <select v-model="selectedField" class="form-select" id="selectField">
-            <option value="" selected>Select an option</option>
-            <option value="name">Name</option>
-            <option value="email">Email</option>
-        </select>
-
-            <input v-model="query" class="form-control" type="text" name="query" placeholder="Search...">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+        <div v-if="props.type == 'vcard'">
+            <select v-model="blocked" class="form-select size" aria-label="Default select example">
+                <option value="all" selected>All</option>
+                <option value="1">Blocked</option>
+                <option value="0">Unblocked</option>
+            </select>
         </div>
-    </form>
+
+      <input v-model="query" class="form-control" type="text" name="query" placeholder="Search...">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </div>
+  </form>
 
 </template>
 
 <style scoped>
-
+.size{
+    width: 11rem;
+}
 </style>

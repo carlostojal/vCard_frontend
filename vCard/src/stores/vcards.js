@@ -6,18 +6,20 @@ import { getToken } from '@/utils/GetSessionToken'
 export const useVcardsStore = defineStore('vcards', {
   state: () => ({
     data_vcard: null,
-    lastPage: null,
+    lastPage: null
   }),
   actions: {
     async fetchVcards() {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards`, {
-            headers: {
-              Authorization: `Bearer ${token}`
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards`,{
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
             }
-          }).then((response) => {
+          )
+          .then((response) => {
             this.lastPage = response.data.last
             this.data_vcard = response.data[0].data
           })
@@ -25,20 +27,39 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async searchVcards(query) {
+    async fetchVcardsBlock(blocked) {
+      try {
+        const token = getToken()
+        
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}`,{
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then((response) => {
+            this.lastPage = response.data.last
+            this.data_vcard = response.data[0].data
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async searchVcards(query, blocked) {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search/${query}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then((response) => {
-      console.log(response)
-          this.data_vcard = response.data.data.data
-          this.lastPage = response.data.last
-
-        })
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/vcards/search/${query}/?blocked=${blocked}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            console.log(response)
+            this.data_vcard = response.data.data.data
+            this.lastPage = response.data.last
+          })
       } catch (e) {
         console.log(e)
       }
@@ -53,8 +74,7 @@ export const useVcardsStore = defineStore('vcards', {
           }
         })
 
-          this.data_vcard = response.data[0].data
-        
+        this.data_vcard = response.data[0].data
       } catch (e) {
         console.log(e)
       }

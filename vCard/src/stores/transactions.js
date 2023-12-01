@@ -26,8 +26,7 @@ export const useTransactionsStore = defineStore('transactions', {
       const token = getToken()
 
       // make the request to the backend
-      const response = await axios.post(
-        `${ConfigUtil.getApiUrl()}/vcards/send`,
+      const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`,
         {
           amount: parseFloat(amount),
           phone_number: phone_number,
