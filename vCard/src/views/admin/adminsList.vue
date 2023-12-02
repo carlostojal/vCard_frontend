@@ -7,13 +7,11 @@ import User from '@/components/user.vue'
 const users = useUsersStore();
 const admins = ref(null)
 
+
 onMounted(async () => {
     await users.fetchAdmins()
     admins.value = users.admins
-    console.log(admins.value)
 })
-
-
 
 </script>
 
@@ -38,8 +36,13 @@ onMounted(async () => {
                             <th scope="col">Alterado</th>
                             </tr>
                         </thead>
-                        <User v-for="admin in admins" :id="admin.id" :name="admin.name" :email="admin.email" :created_at="admin.created_at.slice(0,10)" :updated_at="admin.updated_at.slice(0,10)"/>
+                        
+                        <User v-for="admin in admins" @getAdmins="admins = users.admins" :id="admin.id" :showButton="showButton" :name="admin.name" :email="admin.email" :created_at="admin.created_at.slice(0,10)" :updated_at="admin.updated_at.slice(0,10)"/>
+                        
                     </table>
+
+                    <router-link class="btn btn-outline-secondary addAdmin" to="/addAdmin">Add Admin </router-link>
+
                 </div>
             </div>
 
@@ -49,5 +52,12 @@ onMounted(async () => {
 
 
 <style scoped>
-
+.addAdmin{
+    max-width: 10rem;
+    margin-right: auto;
+    margin-top: 2rem;
+}
+.margens{
+    margin-bottom: 2rem;
+}
 </style>

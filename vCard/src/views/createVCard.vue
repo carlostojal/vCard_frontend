@@ -1,8 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import Menu from '../components/menu.vue'
-import axios from 'axios'
-import ConfigUtil from '../utils/ConfigUtil';
 import { useToast } from 'vue-toastification'
 import { useUserStore } from '@/stores/user'
 import router from '../router';

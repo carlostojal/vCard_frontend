@@ -15,6 +15,7 @@ const transactionStore = useTransactionsStore();
 const vcardsStore = useVcardsStore();
 const query = ref(null);
 const blocked = ref('all');
+const trans_type = ref('all');
 
 const submit = async () => {
 
@@ -48,12 +49,21 @@ const submit = async () => {
     <div class="container">
 
         <div v-if="props.type == 'vcard'">
-            <select v-model="blocked" class="form-select size" aria-label="Default select example">
+            <select v-model="blocked" class="form-select size" aria-label="">
                 <option value="all" selected>All</option>
                 <option value="1">Blocked</option>
                 <option value="0">Unblocked</option>
             </select>
         </div>
+
+        <div v-if="props.type == 'transaction'">
+            <select v-model="trans_type" class="form-select size" aria-label="">
+                <option value="all" selected>All</option>
+                <option value="debit">Debit</option>
+                <option value="credit">Credit</option>
+            </select>
+        </div>
+
 
       <input v-model="query" class="form-control" type="text" name="query" placeholder="Search...">
       <button class="btn btn-outline-success" type="submit">Search</button>
