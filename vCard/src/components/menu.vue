@@ -51,6 +51,7 @@ const toggleDropdown = () => {
                             <router-link to="/admins" class="dropdown-item">Admin List</router-link>
                             <router-link to="/vcards" class="dropdown-item">VCard List</router-link>
                             <router-link to="/allTransactions" class="dropdown-item">Transactions List</router-link>
+                            <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
                         </ul>
                     </li>
 

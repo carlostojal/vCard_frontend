@@ -19,10 +19,51 @@ export const useUsersStore = defineStore('users', {
                 });
         
                 this.admins = adminsData.data.data;
+                return 
             }catch(e){
                 console.log(e);
             }
             
+        },
+        async addUser(name, email, password){
+            console.log(name, email, password)
+
+            try{
+                const token = getToken()
+
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/users`, 
+                    {
+                        name: name,
+                        email: email,
+                        password: password,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+            }catch(e){
+                console.log(e);
+            }
+        },
+        async deleteAdmin(id) {
+            try{
+                const token = getToken()
+
+                const response = await axios.delete(`${ConfigUtil.getApiUrl()}/users/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(async (response) => {
+                    console.log(response);
+                    await this.fetchAdmins().then(() => {
+                        return response.data.status
+                    })
+                });
+            }catch(e){
+                console.log(e);
+            }
         },
     },
     mutations: {

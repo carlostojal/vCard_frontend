@@ -10,6 +10,7 @@ import Transactions from '../views/transactions_list.vue'
 import Admins from '../views/admin/adminsList.vue'
 import vCards from '../views/admin/vcardList.vue'
 import AllTransactions from '../views/admin/transactionsList.vue'
+import AddAdmin from '../views/admin/addAdmin.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,7 +85,12 @@ const router = createRouter({
       name: 'allTransactions',
       component: AllTransactions
       //meta: { requiredVcard: true},
-    }
+    },
+    {
+      path: '/addAdmin',
+      name: 'addAdmin',
+      component: AddAdmin
+    },
   ]
 })
 
