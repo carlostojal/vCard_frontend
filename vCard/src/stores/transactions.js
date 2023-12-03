@@ -87,16 +87,16 @@ export const useTransactionsStore = defineStore('transactions', {
         }else if(type == 'credit'){
           type = 'C'
         }
+
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/type/search?type=${type}`, {
+          .get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
-            console.log(response.data[0].data)
             this.lastPage = response.data.last
             this.allTransactions = response.data[0].data
 
@@ -110,12 +110,18 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    async searchTransaction(phone) {
+    async searchTransaction(query, type) {
       try {
+        if(type == 'debit'){
+          type = 'D'
+        }else if(type == 'credit'){
+          type = 'C'
+        }
+
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${phone}`, {
+          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -123,7 +129,7 @@ export const useTransactionsStore = defineStore('transactions', {
           .then((response) => {
             this.allTransactions = response.data.data.data
             this.lastPage = response.data.last
-  console.log('pesquisa', this.lastPage)
+
             // convert all values to float. convert dates to Date objects
             this.allTransactions.forEach((transaction) => {
               transaction.value = parseFloat(transaction.value)
