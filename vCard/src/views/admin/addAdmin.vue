@@ -13,7 +13,7 @@ onMounted(async () => {
     await users.fetchAdmins()
     admins.value = users.admins
 
-    let lastAdminId = parseInt(admins.value[admins.value.length - 1].id)
+    let lastAdminId = parseInt(admins.value[admins.value.length].id)
 
     newAdminName.value = "Administrator " + (lastAdminId+1)
     newAdminEmail.value = "a" + (lastAdminId+1) + "@mail.pt"

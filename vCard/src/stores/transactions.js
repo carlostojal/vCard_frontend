@@ -73,13 +73,42 @@ export const useTransactionsStore = defineStore('transactions', {
         .then((response) => {
           this.lastPage_myTrans = response.data.last
           this.myTransactions = response.data[0].data
-          console.log('minhas', this.lastPage_myTrans)
           // convert all values to float. convert dates to Date objects
           this.myTransactions.forEach((transaction) => {
             transaction.value = parseFloat(transaction.value)
             transaction.date = new Date(transaction.datetime)
           })
         })
+    },
+    async fetchTransactionType(type) {
+      try {
+        if(type == 'debit'){
+          type = 'D'
+        }else if(type == 'credit'){
+          type = 'C'
+        }
+        const token = getToken()
+
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions/type/search?type=${type}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            console.log(response.data[0].data)
+            this.lastPage = response.data.last
+            this.allTransactions = response.data[0].data
+
+            // convert all values to float. convert dates to Date objects
+            this.allTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
     },
     async searchTransaction(phone) {
       try {

@@ -30,9 +30,10 @@ const submit = async () => {
             break;
         case 'transaction':
             if(query.value == null || query.value == "" || query.value == undefined){
-                await transactionStore.fetch() //get all
+                console.log(trans_type.value)
+                await transactionStore.fetchTransactionType(trans_type.value) //get all
             }else{
-                await transactionStore.searchTransaction(query.value) //with filter
+                await transactionStore.searchTransaction(query.value, trans_type.value) //with filter
             }
             break;
         default:
