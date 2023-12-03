@@ -73,7 +73,6 @@ export const useTransactionsStore = defineStore('transactions', {
         .then((response) => {
           this.lastPage_myTrans = response.data.last
           this.myTransactions = response.data[0].data
-          console.log('minhas', this.lastPage_myTrans)
           // convert all values to float. convert dates to Date objects
           this.myTransactions.forEach((transaction) => {
             transaction.value = parseFloat(transaction.value)
@@ -81,12 +80,48 @@ export const useTransactionsStore = defineStore('transactions', {
           })
         })
     },
-    async searchTransaction(phone) {
+    async fetchTransactionType(type) {
       try {
+        if(type == 'debit'){
+          type = 'D'
+        }else if(type == 'credit'){
+          type = 'C'
+        }
+
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${phone}`, {
+          .get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            this.lastPage = response.data.last
+            this.allTransactions = response.data[0].data
+
+            // convert all values to float. convert dates to Date objects
+            this.allTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async searchTransaction(query, type) {
+      try {
+        if(type == 'debit'){
+          type = 'D'
+        }else if(type == 'credit'){
+          type = 'C'
+        }
+
+        const token = getToken()
+
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -94,7 +129,7 @@ export const useTransactionsStore = defineStore('transactions', {
           .then((response) => {
             this.allTransactions = response.data.data.data
             this.lastPage = response.data.last
-  console.log('pesquisa', this.lastPage)
+
             // convert all values to float. convert dates to Date objects
             this.allTransactions.forEach((transaction) => {
               transaction.value = parseFloat(transaction.value)
