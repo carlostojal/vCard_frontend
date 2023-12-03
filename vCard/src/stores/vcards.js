@@ -78,7 +78,26 @@ export const useVcardsStore = defineStore('vcards', {
       } catch (e) {
         console.log(e)
       }
-    }
+    },
+    async changeBlock(phone, block){
+      try {
+
+        const token = getToken()
+        
+        const response = await axios.put(`${ConfigUtil.getApiUrl()}/vcards/${phone}/${block}`,{
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(async () => {
+            await this.fetchVcards()
+          })
+      } catch (e) {
+        console.log(e)
+      }
+
+    },
   },
   mutations: {}
 })
