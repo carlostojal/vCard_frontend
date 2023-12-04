@@ -75,6 +75,7 @@ export const useVcardsStore = defineStore('vcards', {
         })
 
         this.data_vcard = response.data[0].data
+        
       } catch (e) {
         console.log(e)
       }
@@ -88,15 +89,29 @@ export const useVcardsStore = defineStore('vcards', {
               headers: {
                 Authorization: `Bearer ${token}`
               }
+            })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async deleteVcard(phone) {
+      try {
+
+        const token = getToken()
+        
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,{
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
             }
           )
-          .then(async () => {
+          .then(async (response) => {
+            console.log(response)
             await this.fetchVcards()
           })
       } catch (e) {
         console.log(e)
       }
-
     },
   },
   mutations: {}
