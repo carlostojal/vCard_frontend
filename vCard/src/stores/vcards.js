@@ -75,10 +75,67 @@ export const useVcardsStore = defineStore('vcards', {
         })
 
         this.data_vcard = response.data[0].data
+        
       } catch (e) {
         console.log(e)
       }
-    }
+    },
+    async changeBlock(phone, block){
+      try {
+
+        const token = getToken()
+        
+        const response = await axios.put(`${ConfigUtil.getApiUrl()}/vcards/${phone}/${block}`,{
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async deleteVcard(phone) {
+      try {
+
+        const token = getToken()
+        
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,{
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(async (response) => {
+            console.log(response)
+            await this.fetchVcards()
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async editMaxDebit(phone, max_debit) {
+      try{
+        const token = getToken()
+
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/maxDebit/${phone}`,
+          {
+              max_debit: max_debit
+          },
+          {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              }
+          }
+          )
+          .then(async (response) => {
+            console.log(response)
+            await this.fetchVcards()
+          })
+      }catch(e){
+        console.log(e)
+      }
+    },
   },
   mutations: {}
 })
