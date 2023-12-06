@@ -113,6 +113,29 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
+    async editMaxDebit(phone, max_debit) {
+      try{
+        const token = getToken()
+
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/maxDebit/${phone}`,
+          {
+              max_debit: max_debit
+          },
+          {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              }
+          }
+          )
+          .then(async (response) => {
+            console.log(response)
+            await this.fetchVcards()
+          })
+      }catch(e){
+        console.log(e)
+      }
+    },
   },
   mutations: {}
 })
