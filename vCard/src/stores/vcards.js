@@ -85,8 +85,13 @@ export const useVcardsStore = defineStore('vcards', {
 
         const token = getToken()
         
-        const response = await axios.put(`${ConfigUtil.getApiUrl()}/vcards/${phone}/${block}`,{
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/block/${phone}`,
+            {
+              block: block,
+            },
+            {
               headers: {
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
               }
             })
@@ -126,9 +131,7 @@ export const useVcardsStore = defineStore('vcards', {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
               }
-          }
-          )
-          .then(async (response) => {
+          }).then(async (response) => {
             console.log(response)
             await this.fetchVcards()
           })
