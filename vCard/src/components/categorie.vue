@@ -29,9 +29,8 @@ const props = defineProps({
         </div>
         </td>
         <td>
-        <div class="d-flex align-items-center">
-            {{ props.type }}
-        </div>
+        <div v-if="props.type == 'D'" class="d-flex align-items-center"> Debit </div>
+        <div v-if="props.type == 'C'" class="d-flex align-items-center"> Credit </div>
         </td>
     </tr>
     </tbody>

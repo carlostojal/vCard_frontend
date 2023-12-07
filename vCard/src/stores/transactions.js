@@ -80,7 +80,7 @@ export const useTransactionsStore = defineStore('transactions', {
           })
         })
     },
-    async fetchTransactionType(type) {
+    async fetchAllTransactionType(type) {
       try {
         const token = getToken()
 
@@ -127,7 +127,7 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    async searchTransaction(query, type) {
+    async searchAllTransaction(query, type) {
       try {
         if(type == 'debit'){
           type = 'D'
@@ -179,23 +179,22 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    async AllTransactions() {
+    /*async fetchMyTransactions(type) {
       try {
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
-            this.lastPage = response.data.last
-            this.allTransactions = response.data.data.data
-            console.log('todas', this.lastPage)
+            this.lastPage_myTrans = response.data.last
+            this.myTransactions = response.data[0].data
 
             // convert all values to float. convert dates to Date objects
-            this.allTransactions.forEach((transaction) => {
+            this.myTransactions.forEach((transaction) => {
               transaction.value = parseFloat(transaction.value)
               transaction.date = new Date(transaction.datetime)
             })
@@ -227,6 +226,6 @@ export const useTransactionsStore = defineStore('transactions', {
       } catch (e) {
         console.log(e)
       }
-    }
+    }*/
   }
 })

@@ -21,7 +21,7 @@ const props = defineProps({
 })
 
 const addAdmin = async () => {
-    let res = await usersStore.addUser(props.newAdminName, props.newAdminEmail, newAdminPassword.value)
+    await usersStore.addUser(props.newAdminName, props.newAdminEmail, newAdminPassword.value)
     
     router.replace('/admins')
 

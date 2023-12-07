@@ -30,9 +30,9 @@ const submit = async () => {
             break;
         case 'transaction':
             if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
-                await transactionStore.fetchTransactionType(paginateSearchStore.trans_type) //get all -> apenas com o type (all ou D ou C)
+                await transactionStore.fetchAllTransactionType(paginateSearchStore.trans_type) //get all -> apenas com o type (all ou D ou C)
             }else{
-                await transactionStore.searchTransaction(paginateSearchStore.query, paginateSearchStore.trans_type) //with filter -> com o type e query
+                await transactionStore.searchAllTransaction(paginateSearchStore.query, paginateSearchStore.trans_type) //with filter -> com o type e query
             }
             break;
         case 'categories':
@@ -40,6 +40,13 @@ const submit = async () => {
                 await categoriesStore.fetchCategoriesType(paginateSearchStore.categorie_type) //get all -> apenas com o type (all ou D ou C)
             }else{
                 await categoriesStore.searchCategories(paginateSearchStore.query, paginateSearchStore.categorie_type) //with filter -> com o type e query
+            }
+            break;
+        case 'myTransaction':
+            if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                await transactionStore.fetchMyTransactionType(paginateSearchStore.myTrans_type) //get all -> apenas com o type (all ou D ou C)
+            }else{
+                await transactionStore.searchMyTransaction(paginateSearchStore.query, paginateSearchStore.myTrans_type) //with filter -> com o type e query
             }
             break;
         default:

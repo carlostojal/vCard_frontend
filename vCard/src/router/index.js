@@ -12,6 +12,7 @@ import vCards from '../views/admin/vcardList.vue'
 import AllTransactions from '../views/admin/transactionsList.vue'
 import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
+import AddCategorie from '../views/admin/addCategorie.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -99,7 +100,13 @@ const router = createRouter({
       name: 'allCategories',
       component: AllCategories
       //meta: { requiredVcard: true},
-    }
+    },
+    {
+      path: '/addCategorie',
+      name: 'addCategorie',
+      component: AddCategorie
+      //meta: { requiredVcard: true},
+    },
   ]
 })
 

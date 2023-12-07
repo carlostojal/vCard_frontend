@@ -44,8 +44,9 @@ onMounted(async () => {
 
                     <Paginate v-if="categoriesStore.lastPage > 1" :type="'categories'" :totalPages="categoriesStore.lastPage" :currentPage="1"> </Paginate>
 
-                    <router-link class="btn btn-outline-secondary addAdmin" to="/addAdmin">Add Admin </router-link>
-
+                    <div class="d-flex justify-content-center">
+                        <router-link class="btn btn-outline-secondary" to="/addCategorie">Add Categorie </router-link>
+                    </div>
                 </div>
             </div>
 
@@ -56,5 +57,9 @@ onMounted(async () => {
 
 <style scoped>
 
-
+.addCategorie{
+    max-width: 10rem;
+    margin-right: auto;
+    margin-top: 2rem;
+}
 </style>

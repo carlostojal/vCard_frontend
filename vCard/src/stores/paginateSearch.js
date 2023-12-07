@@ -1,7 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios';
-import ConfigUtil from '../utils/ConfigUtil'
-import { getToken } from '@/utils/GetSessionToken'
 
 export const usePaginateSearchStore = defineStore('paginateSearch', {
   state: () => ({
@@ -9,6 +6,7 @@ export const usePaginateSearchStore = defineStore('paginateSearch', {
     blocked: 'all',
     trans_type: 'all',
     categorie_type: 'all',
+    myTrans_type: 'all',
   }),
   actions: {},
   mutations: {}

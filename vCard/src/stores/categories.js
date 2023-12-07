@@ -116,5 +116,25 @@ export const useCategoriesStore = defineStore('categories', {
         console.log(e)
       }
     },
+    async addCategorie(name, type){
+      try{
+        const token = getToken()
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/categories`,{
+          name: name,
+          type: type
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then((response) => {
+          console.log(response)
+          this.allCategories = response.data.data.data
+          this.lastPage = response.data.lastPage
+        })
+      }catch(e){
+        console.log(e)
+      }
+    }
   }
 })
