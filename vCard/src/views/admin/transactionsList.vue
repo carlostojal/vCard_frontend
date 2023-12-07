@@ -9,7 +9,7 @@ import { onMounted, ref } from 'vue'
 const transactionsStore = useTransactionsStore();
 
 onMounted( async () => {
-    await transactionsStore.AllTransactions()
+    await transactionsStore.fetchAllTransactionType('all')
 })
 
 </script> 

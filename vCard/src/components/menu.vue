@@ -48,9 +48,10 @@ const toggleDropdown = () => {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ADMIN</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <router-link to="/admins" class="dropdown-item">Admin List</router-link>
-                            <router-link to="/vcards" class="dropdown-item">VCard List</router-link>
-                            <router-link to="/allTransactions" class="dropdown-item">Transactions List</router-link>
+                            <router-link to="/admins" class="dropdown-item">Admins</router-link>
+                            <router-link to="/vcards" class="dropdown-item">VCards</router-link>
+                            <router-link to="/allTransactions" class="dropdown-item">Transactions</router-link>
+                            <router-link to="/allCategories" class="dropdown-item">Categories</router-link>
                             <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
                         </ul>
                     </li>

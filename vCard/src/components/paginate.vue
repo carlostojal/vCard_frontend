@@ -1,46 +1,98 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { defineProps } from 'vue';
 import { useVcardsStore } from '@/stores/vcards';
 import { useTransactionsStore } from '@/stores/transactions'
+import { useCategoriesStore } from '@/stores/categories'
+import { usePaginateSearchStore } from '../stores/paginateSearch';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-
+const paginateSearchStore = usePaginateSearchStore();
+const categoriesStore = useCategoriesStore();
 const transactionStore = useTransactionsStore();
 const vcardStore = useVcardsStore();
 const currentPage = ref();
 const totalPages = ref();
+
+const props = defineProps({
+    currentPage: {
+        required: true
+    },
+    totalPages: {
+        required: true
+    },
+    type: {
+        required: true
+    }   
+})
 
 onMounted(() => {
     currentPage.value = props.currentPage
     totalPages.value = props.totalPages
 })
 
-
-const props = defineProps({
-    type: {
-        type: String,
-        required: true
-    },
-    totalPages: {
-        required: true,
-    },
-    currentPage: {
-        required: true,
-    },
+//atualiza currentPage quando faz uma nova pesquisa
+watch(() => props.currentPage, (newValue) => {
+    currentPage.value = newValue
 })
-    
+//atualiza totalPages quando faz uma nova pesquisa
+watch(() => props.totalPages, (newValue) => {
+    totalPages.value = newValue
+})
 
 const goToPage = (page) => {
     if (page >= 1 && page <= totalPages.value) {
+        switch(props.type){
+            case 'vcard':
+                if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                    vcardStore.paginateType(page, paginateSearchStore.blocked) //vai buscar os dados da pagina com os filtros de type
+                }else{
+                    vcardStore.paginateSearch(page, paginateSearchStore.blocked, paginateSearchStore.query)
+                }
+                break;
+            case 'allTransactions':
+                if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                    transactionStore.paginate_allTransactionsType(page, paginateSearchStore.trans_type)
+                }else{
+                    transactionStore.paginate_allTransactionsSearch(page, paginateSearchStore.trans_type, paginateSearchStore.query)
+                }
+                break;
+            /*case 'myTransactions':
+                if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                    transactionStore.paginate_myTransactionsType(page)
+                }else{
+                    transactionStore.paginate_myTransactionsSearch(page)
+                }
+                break;*/
+            case 'categories':
+                if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                    //categoriesStore.paginate(page)
+                    categoriesStore.paginateType(page, paginateSearchStore.categorie_type)
+                }else{
+                    categoriesStore.paginateSearch(page, paginateSearchStore.categorie_type, paginateSearchStore.query)
+                }
+                break;
+            default:
+              console.log("Invalid type")
+        }
+
+
+
+
+
+
+/*
         if(props.type == 'vcard'){
             vcardStore.paginate(page)
         }else if(props.type == 'allTransactions'){
             transactionStore.paginate_allTransactions(page)
         }else if(props.type == 'myTransactions'){
             transactionStore.paginate_myTransactions(page)
+        }else if(props.type == 'categories'){
+            categoriesStore.paginate(page)
         }
+        */
     }
 }
 
@@ -55,7 +107,6 @@ const nextPage = () => {
         goToPage(++currentPage.value);
     }
 }   
-    
     
     
 </script>
@@ -73,10 +124,6 @@ const nextPage = () => {
     </button>
   </div>
 </template>
-
-
-
-
 
 <style scoped>
 .pagination {
