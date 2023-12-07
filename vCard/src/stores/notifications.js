@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia';
 import ConfigUtil from '../utils/ConfigUtil';
 import { useToast } from 'vue-toastification'
+import { useUserStore } from '../stores/user'
+import { useTransactionsStore } from './transactions';
 
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({
         ws: null,
-        toast: useToast()
+        toast: useToast(),
+        userStore: useUserStore(),
+        transactionStore: useTransactionsStore() 
     }),
     actions: {
         init() {
@@ -23,6 +27,9 @@ export const useNotificationsStore = defineStore('notifications', {
                     const data = JSON.parse(event.data);
                     console.log(data);
                     this.toast.info(data._message);
+                    this.userStore.fetch();
+                    this.transactionStore = null;
+                    this.transactionStore.getAll();
                 }
             };
 

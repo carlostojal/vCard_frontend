@@ -30,7 +30,6 @@ const validation = () => {
         return false
     }
 
-    //Se o pin != 4 digitos
     if(vcard.value.confirmation_code.length != 4){
         msgInvalid.value = 'The pin must have 4 digits'
         flag_msgInvalid.value = true
@@ -53,7 +52,7 @@ const validate_fields = async () => {
 
         if(validation() != false){
             
-            const response = await user.createVCard(vcard.value.name, vcard.value.email, vcard.value.phone_number, vcard.value.password, vcard.value.confirmation_code)
+            const response = await user.createVCard(vcard.value.name, vcard.value.email, vcard.value.phone_number, vcard.value.password, vcard.value.confirmation_code, photo.value)
   
             if(response == 'success'){
                 toast.success("VCard created successfully")
