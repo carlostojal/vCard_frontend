@@ -1,15 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user'
-import FormatUtil from '../utils/FormatUtil'
-import ConfigUtil from '../utils/ConfigUtil';
 const userStore = useUserStore();
 const isAuthenticated = ref(false);
 isAuthenticated.value = userStore.token != null;
-const showDropdown = ref('');
-const toggleDropdown = () => {
-  showDropdown.value = !showDropdown.value;
-};
+
+
 </script>
 
 
@@ -53,14 +49,16 @@ const toggleDropdown = () => {
                             <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
                         </ul>
                     </li>
-                    <!-- <li  class="nav-item" id="logoutBtn" > -->
-                    <!--     <a class="nav-link logout" @:click="userStore.logout()" >Logout</a> -->
-                    <!-- </li> -->
                 </ul>
                      <div class="nav-item dropdown">
-                        <img :src="userStore.avatar" alt="User Avatar" class="avatar" />
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{FormatUtil.formatFirstLastName(userStore.name)}}</a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <!-- <img v-if="userStore.avatar" :src="userStore.avatar" alt="User Avatar" class="avatar " /> -->
+                        <!-- <img v-else src="/src/assets/avatar.png" alt="User Avatar" class="avatar" /> -->
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img v-if="userStore.avatar" :src="userStore.avatar" alt="User Avatar" class="avatar " />
+                            <img v-else src="/src/assets/avatar.png" alt="User Avatar" class="avatar" />
+                        </a>
+                        <!-- <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{FormatUtil.formatFirstLastName(userStore.name)}}</a> -->
+                        <ul class="dropdown-menu" id="profileToggle" aria-labelledby="navbarDropdown">
                              <router-link class="dropdown-item" to="profile">Change Profile</router-link> 
                             <button @:click="userStore.logout()" class="dropdown-item">Logout</button>
                         </ul>
@@ -68,22 +66,6 @@ const toggleDropdown = () => {
                 <div class="nav-item mx-4"></div>
             </div>
         </div>
-            <!-- <div class="user-profile-dropdown"> -->
-    <!-- <div @click="toggleDropdown"> -->
-      <!-- <span>{{ FormatUtil.formatFirstLastName(userStore.name) }}</span> -->
-    <!-- </div> -->
-    <!-- <transition name="fade"> -->
-    <!--   <div v-if="showDropdown" class="dropdown-content"> -->
-    <!--     <ul> -->
-    <!--       <li @click="handleChangeProfile"><router-link class="nav-link" to="profile">Change Profile</router-link></li> -->
-    <!--       <li class="nav-item" id="logoutBtn"> -->
-    <!--           <a class="nav-link logout" @:click="userStore.logout()">Logout</a> -->
-    <!--       </li> -->
-    <!--     </ul> -->
-    <!--   </div> -->
-    <!-- </transition> -->
-  <!-- </div> -->
-  <!-- </div> -->
     </nav>
 </template>
 
@@ -93,7 +75,14 @@ const toggleDropdown = () => {
    right: 0 !important;
    left: auto !important;
 }
-/* Add your styles here */
+@media (min-width: 991px) {
+    #profileToggle {
+        right: 0 !important;
+        left: auto !important;
+    }   
+}
+
+
 .user-profile-dropdown {
   position: relative;
   display: inline-block;

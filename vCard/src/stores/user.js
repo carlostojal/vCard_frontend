@@ -68,8 +68,11 @@ export const useUserStore = defineStore('user', {
                         Authorization: `Bearer ${this.token}`
                     }
                 })
-                this.avatar = ConfigUtil.getDomainUrl() + avatar.data.data.photo
-                console.log(this.avatar)
+                if(avatar.data.data.photo != null) {
+                    this.avatar = ConfigUtil.getDomainUrl() + avatar.data.data.photo
+                }else {
+                    this.avatar = null
+                }
             }catch(err){
                 this.avatar = null;
             }
@@ -77,6 +80,7 @@ export const useUserStore = defineStore('user', {
             this.balance = parseFloat(userData.data.data.balance)
             this.email = userData.data.data.email
             this.phone = parseInt(userData.data.data.phone_number)
+            console.log(userData)
         },
         async logout() {
             try {
