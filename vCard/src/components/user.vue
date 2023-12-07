@@ -1,8 +1,7 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps } from 'vue';
 import { useUsersStore } from '@/stores/users'
 
-const showButton = ref(false)
 
 const props = defineProps({
     name: {
@@ -50,7 +49,7 @@ const adminDelete = async (id) => {
 <template>
 
 <tbody>
-  <tr @mouseover="showButton = true" @mouseleave="showButton = false">
+  <tr>
     <th scope="row">{{ props.id }}</th>
     <td>
       <div class="d-flex align-items-center">
@@ -72,7 +71,7 @@ const adminDelete = async (id) => {
         {{ props.updated_at }}
       </div>
     </td>
-    <td v-if="showButton">
+    <td>
       <div class="d-flex align-items-center">
         <button class="btn btn-outline-danger" style="max-width: 10rem;" @click="adminDelete(props.id)">Delete</button>
       </div>
