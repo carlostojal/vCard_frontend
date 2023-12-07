@@ -21,8 +21,10 @@ const toggleDropdown = () => {
     </nav>
 
     <nav v-show="isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="nav-item mx-2"></div>
         <div class="container-fluid">
             <router-link class="navbar-brand" to="home">VCard</router-link>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
