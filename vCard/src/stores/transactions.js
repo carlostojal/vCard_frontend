@@ -82,12 +82,6 @@ export const useTransactionsStore = defineStore('transactions', {
     },
     async fetchTransactionType(type) {
       try {
-        if(type == 'debit'){
-          type = 'D'
-        }else if(type == 'credit'){
-          type = 'C'
-        }
-
         const token = getToken()
 
         const response = await axios
@@ -106,6 +100,29 @@ export const useTransactionsStore = defineStore('transactions', {
               transaction.date = new Date(transaction.datetime)
             })
           })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async paginate_allTransactionsType(page, type){
+      try {
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}&page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then((response) => {
+
+          this.allTransactions = response.data[0].data
+          this.lastPage = response.data.last
+
+          // convert all values to float. convert dates to Date objects
+          this.allTransactions.forEach((transaction) => {
+            transaction.value = parseFloat(transaction.value)
+            transaction.date = new Date(transaction.datetime)
+          })
+        })
       } catch (e) {
         console.log(e)
       }
@@ -140,6 +157,28 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
+    async paginate_allTransactionsSearch(page, type, query){
+      try {
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}&page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        this.allTransactions = response.data.data.data
+        this.lastPage = response.data.last
+
+        // convert all values to float. convert dates to Date objects
+        this.allTransactions.forEach((transaction) => {
+          transaction.value = parseFloat(transaction.value)
+          transaction.date = new Date(transaction.datetime)
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
     async AllTransactions() {
       try {
         const token = getToken()
@@ -161,27 +200,6 @@ export const useTransactionsStore = defineStore('transactions', {
               transaction.date = new Date(transaction.datetime)
             })
           })
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    async paginate_allTransactions(page) {
-      try {
-        const token = getToken()
-
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions?page=${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-
-        this.allTransactions = response.data.data.data
-
-        // convert all values to float. convert dates to Date objects
-        this.allTransactions.forEach((transaction) => {
-          transaction.value = parseFloat(transaction.value)
-          transaction.date = new Date(transaction.datetime)
-        })
       } catch (e) {
         console.log(e)
       }

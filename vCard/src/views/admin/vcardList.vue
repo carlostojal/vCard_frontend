@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import Menu from '@/components/menu.vue'
 import { useVcardsStore } from '@/stores/vcards'
 import Vcard from '@/components/vcard_list.vue'
@@ -9,7 +9,7 @@ import Paginate from '@/components/paginate.vue'
 const vcardsStore = useVcardsStore();
 
 onMounted(async () => {
-    await vcardsStore.fetchVcards()
+    await vcardsStore.fetchVcardsBlock('all')
 })
 
 </script>

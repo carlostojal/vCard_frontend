@@ -9,11 +9,11 @@ export const useVcardsStore = defineStore('vcards', {
     lastPage: null
   }),
   actions: {
-    async fetchVcards() {
+    async fetchVcardsBlock(blocked) {
       try {
         const token = getToken()
-
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards`,{
+        
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}`,{
               headers: {
                 Authorization: `Bearer ${token}`
               }
@@ -27,11 +27,10 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async fetchVcardsBlock(blocked) {
+    async paginateType(page, blocked){
       try {
         const token = getToken()
-        
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}`,{
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}&page=${page}`,{
               headers: {
                 Authorization: `Bearer ${token}`
               }
@@ -56,7 +55,6 @@ export const useVcardsStore = defineStore('vcards', {
             }
           })
           .then((response) => {
-            console.log(response)
             this.data_vcard = response.data.data.data
             this.lastPage = response.data.last
           })
@@ -64,18 +62,20 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async paginate(page) {
+    async paginateSearch(page, blocked, query){
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards?page=${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-
-        this.data_vcard = response.data[0].data
-        
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/vcards/search/${query}/?blocked=${blocked}&page=${page}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            this.data_vcard = response.data.data.data
+            this.lastPage = response.data.last
+          })
       } catch (e) {
         console.log(e)
       }
@@ -112,7 +112,7 @@ export const useVcardsStore = defineStore('vcards', {
           )
           .then(async (response) => {
             console.log(response)
-            await this.fetchVcards()
+            await this.fetchVcardsBlock('all')
           })
       } catch (e) {
         console.log(e)
@@ -133,7 +133,7 @@ export const useVcardsStore = defineStore('vcards', {
               }
           }).then(async (response) => {
             console.log(response)
-            await this.fetchVcards()
+            await this.fetchVcardsBlock('all')
           })
       }catch(e){
         console.log(e)
