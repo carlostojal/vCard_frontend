@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'base',
-      component: Login
+      component: LoginVcard
     },
     {
       path: '/login',
