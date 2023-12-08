@@ -34,7 +34,6 @@ onMounted(() => {
           password: password.value
         })
 
-        console.log(response.data)
         if (response.data.status == 'success') {
           // login valido
           flag_msgInvalid.value = false

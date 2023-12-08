@@ -20,8 +20,9 @@ export const useVcardsStore = defineStore('vcards', {
             }
           )
           .then((response) => {
-            this.lastPage = response.data.last
-            this.data_vcard = response.data[0].data
+            this.lastPage = response.data.data.last
+            // this.data_vcard = response.data[0].data
+            this.data_vcard = response.data.data.vcards.data
           })
       } catch (e) {
         console.log(e)
@@ -37,8 +38,10 @@ export const useVcardsStore = defineStore('vcards', {
             }
           )
           .then((response) => {
-            this.lastPage = response.data.last
-            this.data_vcard = response.data[0].data
+            // this.data_vcard = response.data[0].data
+            // this.lastPage = response.data.last
+            this.data_vcard = response.data.data.vcards.data
+            this.lastPage = response.data.data.last
           })
       } catch (e) {
         console.log(e)
@@ -55,14 +58,17 @@ export const useVcardsStore = defineStore('vcards', {
             }
           })
           .then((response) => {
-            this.data_vcard = response.data.data.data
-            this.lastPage = response.data.last
+            this.data_vcard = response.data.data.vcards.data
+            this.lastPage = response.data.data.last
+            // this.data_vcard = response.data.data.data
+            // this.lastPage = response.data.last
           })
       } catch (e) {
         console.log(e)
       }
     },
-    async paginateSearch(page, blocked, query){
+    async paginateSearch(page, blocked, query){ //This function is not even being used??
+        console.log("paginateSearch")
       try {
         const token = getToken()
 

@@ -71,8 +71,10 @@ export const useTransactionsStore = defineStore('transactions', {
           }
         })
         .then((response) => {
-          this.lastPage_myTrans = response.data.last
-          this.myTransactions = response.data[0].data
+          // this.lastPage_myTrans = response.data.last
+          // this.myTransactions = response.data[0].data
+          this.lastPage_myTrans = response.data.data.last
+          this.myTransactions = response.data.data.transactions.data
           // convert all values to float. convert dates to Date objects
           this.myTransactions.forEach((transaction) => {
             transaction.value = parseFloat(transaction.value)
@@ -81,6 +83,7 @@ export const useTransactionsStore = defineStore('transactions', {
         })
     },
     async fetchAllTransactionType(type) {
+      console.log("T1")
       try {
         const token = getToken()
 
@@ -91,8 +94,10 @@ export const useTransactionsStore = defineStore('transactions', {
             }
           })
           .then((response) => {
-            this.lastPage = response.data.last
-            this.allTransactions = response.data[0].data
+            // this.lastPage = response.data.last
+            // this.allTransactions = response.data[0].data
+            this.lastPage = response.data.data.last
+            this.allTransactions = response.data.data.transactions.data
 
             // convert all values to float. convert dates to Date objects
             this.allTransactions.forEach((transaction) => {
@@ -105,6 +110,7 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async paginate_allTransactionsType(page, type){
+      console.log("T2")
       try {
         const token = getToken()
 
@@ -114,8 +120,9 @@ export const useTransactionsStore = defineStore('transactions', {
           }
         }).then((response) => {
 
-          this.allTransactions = response.data[0].data
-          this.lastPage = response.data.last
+          // this.allTransactions = response.data[0].data
+          // this.lastPage = response.data.last
+          this.allTransactions = response.data.data.transactions.data
 
           // convert all values to float. convert dates to Date objects
           this.allTransactions.forEach((transaction) => {
@@ -128,6 +135,7 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async searchAllTransaction(query, type) {
+      console.log("T3")
       try {
         if(type == 'debit'){
           type = 'D'
@@ -144,8 +152,10 @@ export const useTransactionsStore = defineStore('transactions', {
             }
           })
           .then((response) => {
-            this.allTransactions = response.data.data.data
-            this.lastPage = response.data.last
+            // this.allTransactions = response.data.data.data
+            // this.lastPage = response.data.last
+            this.allTransactions = response.data.data.transactions.data
+            this.lastPage = response.data.data.last
 
             // convert all values to float. convert dates to Date objects
             this.allTransactions.forEach((transaction) => {
@@ -158,6 +168,7 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async paginate_allTransactionsSearch(page, type, query){
+      console.log("T4")
       try {
         const token = getToken()
 
@@ -167,8 +178,8 @@ export const useTransactionsStore = defineStore('transactions', {
           }
         })
 
-        this.allTransactions = response.data.data.data
-        this.lastPage = response.data.last
+        this.allTransactions = response.data.data.transactions.data
+        this.lastPage = response.data.data.last
 
         // convert all values to float. convert dates to Date objects
         this.allTransactions.forEach((transaction) => {
@@ -179,7 +190,7 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    /*async fetchMyTransactions(type) {
+    async fetchMyTransactions(type) {
       try {
         const token = getToken()
 
@@ -214,8 +225,8 @@ export const useTransactionsStore = defineStore('transactions', {
             }
           })
           .then((response) => {
-            this.lastPage = response.data.last
-            this.myTransactions = response.data[0].data
+            this.lastPage = response.data.data.last
+            this.myTransactions = response.data.data.transactions.data
 
             // convert all values to float. convert dates to Date objects
             this.myTransactions.forEach((transaction) => {
@@ -226,6 +237,6 @@ export const useTransactionsStore = defineStore('transactions', {
       } catch (e) {
         console.log(e)
       }
-    }*/
+    }
   }
 })

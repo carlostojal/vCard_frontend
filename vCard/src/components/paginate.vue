@@ -73,6 +73,9 @@ const goToPage = (page) => {
                     categoriesStore.paginateSearch(page, paginateSearchStore.categorie_type, paginateSearchStore.query)
                 }
                 break;
+            case 'myTransactions': 
+                transactionStore.paginate_myTransactions(page)
+                break;
             default:
               console.log("Invalid type")
         }

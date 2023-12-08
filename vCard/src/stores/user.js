@@ -80,7 +80,6 @@ export const useUserStore = defineStore('user', {
             this.balance = parseFloat(userData.data.data.balance)
             this.email = userData.data.data.email
             this.phone = parseInt(userData.data.data.phone_number)
-            console.log(userData)
         },
         async logout() {
             try {
