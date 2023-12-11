@@ -14,9 +14,10 @@ export const useUserStore = defineStore('user', {
         email: 'email@mail.com',
         avatar: null,
         token: null,
+        isAdmin: false,
         notifications: useNotificationsStore(),
         transactions: null,
-        toast: useToast()
+        toast: useToast(),
     }),
     actions: {
         init(name, balance, phone, email, token) {
@@ -80,6 +81,25 @@ export const useUserStore = defineStore('user', {
             this.balance = parseFloat(userData.data.data.balance)
             this.email = userData.data.data.email
             this.phone = parseInt(userData.data.data.phone_number)
+            this.isAdmin = false;
+        },
+        async fetchAdmin(){
+            this.token = getToken()
+            try {
+                const userData = await axios.get(`${ConfigUtil.getApiUrl()}/users/profile`, {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`
+                    }
+                })
+                this.name = userData.data.data.name
+                this.email = userData.data.data.name
+                this.isAdmin = true;
+            }catch(err){
+                this.token = null;
+                router.push('/admin');
+                this.toast.error('Please try again later, server error');
+            }
+            
         },
         async logout() {
             try {
@@ -91,7 +111,11 @@ export const useUserStore = defineStore('user', {
                     this.toast.info('Logout Successful')
                     this.token = null
                     sessionStorage.removeItem('token')
-                    router.replace('/')
+                    if(this.isAdmin) {
+                        router.replace('/admin')
+                    }else {
+                        router.replace('/')
+                    }
                   })
                 this.notifications.destroy()
           }catch (err) {
