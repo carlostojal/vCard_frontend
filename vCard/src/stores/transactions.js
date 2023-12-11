@@ -4,6 +4,8 @@ import ConfigUtil from '../utils/ConfigUtil'
 import { getToken } from '@/utils/GetSessionToken' 
 import { useUserStore } from './user'
 import { useNotificationsStore } from './notifications'
+import { useToast } from 'vue-toastification'
+import router from '../router';
 
 export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
@@ -13,6 +15,7 @@ export const useTransactionsStore = defineStore('transactions', {
     allTransactions: null,
     lastPage: null,
     lastPage_myTrans: null,
+    toast: useToast(),
   }),
   actions: {
     async getAll() {
@@ -26,20 +29,21 @@ export const useTransactionsStore = defineStore('transactions', {
       const token = getToken()
 
       // make the request to the backend
-      const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`,
-        {
-          amount: parseFloat(amount),
-          phone_number: phone_number,
-          confirmation_code: confirmation_code,
-          description: description,
-          payment_type: payment_type
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      try {
+          const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`,
+            {
+              amount: parseFloat(amount),
+              phone_number: phone_number,
+              confirmation_code: confirmation_code,
+              description: description,
+              payment_type: payment_type
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
 
       try {
         this.userStore.fetch().catch((e) => {
@@ -57,9 +61,16 @@ export const useTransactionsStore = defineStore('transactions', {
         this.userStore.decrementBalance(amount)
       } catch (e) {
         console.log(e)
+        
       }
+      return response.data
+    }catch(e) {
+        this.toast.error("Transaction couldnt be processed, try again later");
+        router.replace('/')
+        return false
+        
+    }
 
-      return response.data.status
     },
     async fetch() {
       const token = getToken()
