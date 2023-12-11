@@ -5,11 +5,10 @@ import Transaction from '../components/transaction.vue'
 import { useUserStore } from '@/stores/user'
 import { useTransactionsStore } from '@/stores/transactions'
 import FormatUtil from '../utils/FormatUtil'
-import { onMounted } from 'vue'
+import { onMounted} from 'vue'
 
 const user = useUserStore();
 const transactionsStore = useTransactionsStore();
-
 onMounted( async () => {
     await user.fetch().catch((e) => {
       console.error('Error getting user data: ' + e)

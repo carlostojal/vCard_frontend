@@ -26,16 +26,10 @@ onMounted(async () => {
 
     <Menu>  </Menu>
 
-    <h2 class="container mt-5 d-flex justify-content-center">Add Admin</h2>
+    <h2 class="container mt-5 d-flex justify-content-center">Add Administrator</h2>
     <div class="container mt-5 d-flex justify-content-center">
             <AdminForm :newAdminName="newAdminName" :newAdminEmail="newAdminEmail"> </AdminForm>
     </div>
 
 
 </template>
-
-
-<style scoped>
-
-
-</style>

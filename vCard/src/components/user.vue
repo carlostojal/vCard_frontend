@@ -2,7 +2,6 @@
 import { defineProps } from 'vue';
 import { useUsersStore } from '@/stores/users'
 
-
 const props = defineProps({
     name: {
         type: String,
@@ -30,15 +29,13 @@ const props = defineProps({
     }
 })
 
-
 const emit = defineEmits(['getAdmins']);
 
 const userStore = useUsersStore();
 
 const adminDelete = async (id) => {
-    console.log(id)
-
-    await userStore.deleteAdmin(id)
+    const res = await userStore.deleteAdmin(id)
+    console.log(res, "RETURN DELETE")
     await userStore.fetchAdmins()
     emit('getAdmins', true)
 }

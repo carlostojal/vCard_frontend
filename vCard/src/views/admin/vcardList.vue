@@ -27,8 +27,8 @@ onMounted(async () => {
                 <br>
             </div>
 
-            <div class="transactions">
-                <div class="transactions-list">
+            <div>
+                <div>
                     <table class="table table-hover">
                         <thead>
                             <tr>

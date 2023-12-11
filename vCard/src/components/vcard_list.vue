@@ -109,8 +109,8 @@ const saveChanges = () => {
         <td>{{ props.phone }}</td>
         <td>{{ props.email }}</td>
 
-        <td v-if="atual_block == 1"><button class="btn btn-warning" @click="changeBlock" > Blocked </button></td>
-        <td v-else><button class="btn btn-info" @click="changeBlock"> Unblocked </button></td>
+        <td v-if="atual_block == 1"><button class="btn btn-warning buttons" @click="changeBlock" > Blocked </button></td>
+        <td v-else><button class="btn btn-info buttons" @click="changeBlock"> Unblocked </button></td>
         
         <td>€{{ props.balance }}</td>
         <td>€{{ props.max_debit }}</td>
@@ -188,5 +188,10 @@ const saveChanges = () => {
   padding: 10px;
   border: none;
   cursor: pointer;
+}
+    .buttons { 
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
 }
 </style>

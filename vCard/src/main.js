@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
         next();
     }else if(to.meta.requiredAdmin && userRole == 'users'){
         next();
-    }else if (to.name !== 'login' && to.name !== 'vcard' && to.name !== 'loginAdmin' && to.name !== 'register') {
+    }else if (to.name !== 'login' && to.name !== 'vcard' && to.name !== 'admin' && to.name !== 'register') {
         next({ name: 'login' });
     }else if (to.name == 'login' && userRole == 'vcards') {
         next({ name: 'home' })

@@ -48,6 +48,16 @@ const props = defineProps({
     cursor: default;
 }
 
+@media (max-width: 525px){
+    .vcard {
+        width: 90%;
+        height: 250px;
+    }
+    
+    .vcard .entity {
+        font-size: 1rem !important;      
+    }
+}
 .vcard:hover {
     scale: 1.01;
     box-shadow: 0.3rem 0.3rem 0.6rem 0.6rem rgb(175, 175, 175);

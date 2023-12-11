@@ -10,7 +10,7 @@ import { useNotificationsStore } from '@/stores/notifications'
 const userStore = useUserStore();
 const email = ref('')
 const password = ref('')
-const url_home = ref('./home')
+const url_home = ref('/admin/home')
 
 const notificationsStore = useNotificationsStore();
 
@@ -22,33 +22,23 @@ const login = async () => {
     if(email.value != '' || password.value != ''){
         flag_msgInvalid.value = false
 
-        console.log(`${ConfigUtil.getApiUrl()}/login`);
-
-        //validar login
         try {
             const response = await axios.post(`${ConfigUtil.getApiUrl()}/users/login`,
             {
                 email: email.value,
                 password: password.value
             })
-
-            console.log(response.data.status)
-            if(response.data.status == "success"){ // login valido
-              flag_msgInvalid.value = false
-              console.log(response.data.message)
-              msgInvalid.value = 'Admin Dashboard doesnt exists yet, '+response.data.message
-              flag_msgInvalid.value = true
-              userStore.setToken(response.data.data.access_token)
-              router.replace(url_home);
-            }else{ // login invalido
+            if(response.data.status == "success"){ 
+                flag_msgInvalid.value = false
+                userStore.setToken(response.data.data.access_token)
+                router.replace(url_home.value);
+            }else{                 
                 msgInvalid.value = 'Invalid credentials, '+response.data.message
                 flag_msgInvalid.value = true
             }
         }catch(error) {
-            console.log(error)
-            // msgInvalid.value = 'Invalid credentials, '+error.response.message
-            msgInvalid.value = error.response.data.message;
             flag_msgInvalid.value = true
+            msgInvalid.value = error.response.data.message;
         }
 
     }else{
@@ -57,7 +47,6 @@ const login = async () => {
     }
     return
 }
-
 </script>
 
 

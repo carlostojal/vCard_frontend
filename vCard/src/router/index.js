@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/login.vue'
+import LoginAdmin from '../views/loginAdmin.vue'
 import LoginVcard from '../views/loginVcard.vue'
 import Register from '../views/register.vue'
 import vCard from '../views/createVCard.vue'
 import Home from '../views/home.vue'
+import HomeAdmin from '../views/admin/home.vue'
 import Transfer from '../views/transfer.vue'
 import Profile from '../views/profile.vue'
 import Transactions from '../views/transactions_list.vue'
@@ -20,7 +21,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'base',
-      component: Login
+      component: LoginVcard
     },
     {
       path: '/login',
@@ -28,9 +29,9 @@ const router = createRouter({
       component: LoginVcard
     },
     {
-      path: '/loginAdmin',
-      name: 'loginAdmin',
-      component: Login
+      path: '/admin',
+      name: 'admin',
+      component: LoginAdmin
     },
     {
       path: '/register',
@@ -48,6 +49,12 @@ const router = createRouter({
       name: 'home',
       component: Home,
       meta: { requiredVcard: true }
+    },
+    {
+        path: '/admin/home',
+        name: 'admin/home',
+        component: HomeAdmin,
+        meta: { requiredAdmin: true}
     },
     {
       path: '/transfer',

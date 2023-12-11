@@ -7,8 +7,11 @@ export default class FormatUtil {
     static formatFirstLastName(fullName) {
         const nameArray = fullName.split(' ');
         const firstName = nameArray[0];
-        const lastName = nameArray[nameArray.length - 1];
-        return `${firstName} ${lastName}`;
+        if(nameArray.length >= 2){
+            const lastName = nameArray[nameArray.length - 1];
+            return `${firstName} ${lastName}`;
+        }
+        return `${firstName}`
     }
 
     static formatFirstName(fullName) {
@@ -18,19 +21,13 @@ export default class FormatUtil {
     }
 
     static formatDate(date) {
-        // get the month name
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const month = monthNames[date.getMonth()];
-
-        // get the week day name
-        const weekDayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        const weekDay = weekDayNames[date.getDay()];
-
-        // get the day and year
         const day = date.getDate();
+        const month = date.getDate();
         const year = date.getFullYear();
+        const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-        return `${weekDay}, ${day} ${month} ${year}`;
+        const d = new Date(date);
+        let wk = weekday[d.getDay()];
+        return `${wk}, ${day}/${month}/${year}`;
     }
 }
