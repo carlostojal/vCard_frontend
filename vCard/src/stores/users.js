@@ -2,10 +2,12 @@ import { defineStore } from 'pinia'
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil'
 import { getToken } from '@/utils/GetSessionToken'
+import { useToast } from 'vue-toastification'
 
 export const useUsersStore = defineStore('users', {
     state: () => ({
         admins: null,
+        toast: useToast(),
     }),
     actions: {
         async fetchAdmins() {
@@ -31,8 +33,7 @@ export const useUsersStore = defineStore('users', {
             try{
                 const token = getToken()
 
-                const response = await axios.post(`${ConfigUtil.getApiUrl()}/users`, 
-                    {
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/users`, {
                         name: name,
                         email: email,
                         password: password,
@@ -43,6 +44,12 @@ export const useUsersStore = defineStore('users', {
                         }
                     }
                 )
+
+                if(response.data.status == "success"){
+                    this.toast.success(response.data.message);
+                    await this.fetchAdmins();
+                }
+
             }catch(e){
                 console.log(e);
             }
@@ -55,12 +62,13 @@ export const useUsersStore = defineStore('users', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
-                }).then(async (response) => {
-                    console.log(response);
-                    await this.fetchAdmins().then(() => {
-                        return response.data.status
-                    })
-                });
+                })
+
+                if(response.data.status == "success"){
+                    this.toast.success(response.data.message);
+                    await this.fetchAdmins();
+                }
+                
             }catch(e){
                 console.log(e);
             }

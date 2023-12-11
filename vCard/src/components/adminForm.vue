@@ -4,7 +4,6 @@ import { useUsersStore } from '@/stores/users'
 import router from '../router';
 import { useToast } from 'vue-toastification'
 
-
 const toast = useToast()
 const usersStore = useUsersStore();
 const newAdminPassword = ref(null)
@@ -21,10 +20,8 @@ const props = defineProps({
 })
 
 const addAdmin = async () => {
-    await usersStore.addUser(props.newAdminName, props.newAdminEmail, newAdminPassword.value)
-    
+    const res = await usersStore.addUser(props.newAdminName, props.newAdminEmail, newAdminPassword.value)
     router.replace('/admins')
-
 }
 
 </script>
@@ -42,7 +39,7 @@ const addAdmin = async () => {
           <input type="email" v-model="props.newAdminEmail" class="form-control" id="adminEmail" readonly>
         </div>
         <div class="margens ">
-          <label for="adminPassword">Email</label>
+          <label for="adminPassword">Password</label>
           <input type="password" v-model="newAdminPassword" class="form-control" id="adminPassword" placeholder="Enter password">
         </div>
       </div>

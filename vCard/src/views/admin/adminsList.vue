@@ -1,12 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import Menu from '@/components/menu.vue'
 import { useUsersStore } from '@/stores/users'
+import Menu from '@/components/menu.vue'
 import User from '@/components/user.vue'
 
 const users = useUsersStore();
 const admins = ref(null)
-
 
 onMounted(async () => {
     await users.fetchAdmins()
@@ -17,11 +16,14 @@ onMounted(async () => {
 
 
 <template>
-<Menu> </Menu>
+
+    <Menu> </Menu>
+
     <div class="container">
         <div class="row justify-content-center">
+
             <div style="margin-top:3rem" >
-                <h2 class="margens">Admins</h2>
+                <h2 class="margens">Administrators</h2>
             </div>
 
             <div class="transactions">
@@ -41,7 +43,7 @@ onMounted(async () => {
                         
                     </table>
 
-                    <router-link class="btn btn-outline-secondary addAdmin" to="/addAdmin">Add Admin </router-link>
+                    <router-link class="btn btn-outline-secondary addAdmin" to="/addAdmin">Add Administrator </router-link>
 
                 </div>
             </div>
