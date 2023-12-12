@@ -49,6 +49,10 @@ isAuthenticated.value = userStore.token != null;
                             <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
                         </ul>
                     </li>
+
+                    <li  class="nav-item">
+                      <router-link to="statistics" class="nav-link">Statistics</router-link>
+                    </li>
                 </ul>
                      <div class="nav-item dropdown">
                         <!-- <img v-if="userStore.avatar" :src="userStore.avatar" alt="User Avatar" class="avatar " /> -->
