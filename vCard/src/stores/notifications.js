@@ -3,6 +3,7 @@ import ConfigUtil from '../utils/ConfigUtil';
 import { useToast } from 'vue-toastification'
 import { useUserStore } from '../stores/user'
 import { useTransactionsStore } from './transactions';
+import io from "socket.io-client";
 
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({
@@ -15,13 +16,13 @@ export const useNotificationsStore = defineStore('notifications', {
         init() {
             // initialize the websocket
             try {
-                this.ws = new WebSocket(ConfigUtil.getNotificationUrl());
+                this.ws = io(ConfigUtil.getNotificationUrl());
             } catch(e) {
                 this.ws = null;
                 throw new Error("Error starting notifications");
             }
 
-            this.ws.onopen = () => {
+            this.ws.on("connect", () => {
                 console.log("Notifications enabled");
                 this.ws.onmessage = (event) => {
                     const data = JSON.parse(event.data);
@@ -31,12 +32,44 @@ export const useNotificationsStore = defineStore('notifications', {
                     this.transactionStore = null;
                     this.transactionStore.getAll();
                 }
-            };
+            });
 
-            this.ws.onclose = () => {
+            this.ws.on("disconnect", () => {
                 console.log("Notifications disabled");
                 this.ws = null;
-            };
+            });
+            
+            this.ws.on("transaction", (transaction) => {
+                // received when a transaction is received
+                /*
+                structure:
+
+                {
+                    amount: parseFloat(amount),
+                    phone_number: phone_number,
+                    confirmation_code: confirmation_code,
+                    description: description,
+                    payment_type: payment_type
+                }*/
+
+                // add the transaction to the list
+                this.transactionStore.myTransactions.unshift(transaction);
+            });
+
+            this.ws.on("notification", () => {
+                // received on notification
+                /*
+                structure:
+
+                {
+                    "destination": phone_number,
+                    "message": message
+                }
+                */
+
+                // show the alert
+                this.toast.info(data.message);
+            });
         },
         destroy() {
             if(this.ws != null) {
@@ -51,10 +84,24 @@ export const useNotificationsStore = defineStore('notifications', {
             }
 
             // send a notification
-            this.ws.send(JSON.stringify({
-                _destination: phone_number,
-                _type: "credit_in",
-                _message: message
+            this.ws.emit("notification", JSON.stringify({
+                destination: phone_number,
+                message: message
+            }));
+        },
+        sendMoneyTo(amount, phone_number, payment_type) {
+
+            // lazy initialization
+            if(this.ws == null) {
+                this.init();
+            }
+
+            // send a notification
+            this.ws.emit("transaction", JSON.stringify({
+                amount: parseFloat(amount),
+                phone_number: phone_number,
+                date: new Date(),
+                payment_type: payment_type
             }));
         }
     }
