@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import ConfigUtil from '../utils/ConfigUtil'
-import { getToken } from '@/utils/GetSessionToken' 
+import { getToken } from '@/utils/GetSessionToken'
+import { useToast } from 'vue-toastification'
 
 export const useCategoriesStore = defineStore('categories', {
   state: () => ({
     allCategories: null,
     lastPage: null,
+    toast: useToast(),
   }),
   actions: {
     async fetch() {
@@ -128,12 +130,16 @@ export const useCategoriesStore = defineStore('categories', {
           }
         })
         .then((response) => {
-          console.log(response)
-          this.allCategories = response.data.data.data
-          this.lastPage = response.data.lastPage
+
+          if(response.data.status == "success"){
+            this.allCategories = response.data.data.data
+            this.lastPage = response.data.lastPage
+            this.toast.success("Category added successfully");
+          }
+
         })
       }catch(e){
-        console.log(e)
+        this.toast.error("Error adding category");
       }
     }
   }

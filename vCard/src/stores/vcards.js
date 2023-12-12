@@ -109,7 +109,7 @@ export const useVcardsStore = defineStore('vcards', {
 
             })
       } catch (e) {
-        console.log(e)
+        this.toast.error(e.response.data.message);
       }
     },
     async deleteVcard(phone) {
@@ -130,7 +130,7 @@ export const useVcardsStore = defineStore('vcards', {
             }
           })
       } catch (e) {
-        console.log(e)
+        this.toast.error(e.response.data.message);
       }
     },
     async editMaxDebit(phone, max_debit) {
@@ -147,14 +147,13 @@ export const useVcardsStore = defineStore('vcards', {
                 Authorization: `Bearer ${token}`
               }
           }).then(async (response) => {
-
             if(response.data.status == "success"){
               this.toast.success(response.data.message);
               await this.fetchVcardsBlock('all')
             }
           })
       }catch(e){
-        console.log(e)
+        this.toast.error(e.response.data.message);
       }
     },
   },
