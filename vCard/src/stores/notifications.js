@@ -10,11 +10,14 @@ export const useNotificationsStore = defineStore('notifications', {
         ws: null,
         toast: useToast(),
         userStore: useUserStore(),
-        transactionStore: useTransactionsStore() 
+        transactionStore: useTransactionsStore(),
+        initDone: false
     }),
     actions: {
         async init() {
-            await this.userStore.fetch();
+            if(!this.userStore.fetchDone)
+                await this.userStore.fetch();
+
             // initialize the websocket
             try {
                 this.ws = io(ConfigUtil.getNotificationUrl(), {
@@ -57,7 +60,7 @@ export const useNotificationsStore = defineStore('notifications', {
                 this.transactionStore.myTransactions.unshift(transaction);
 
                 // update the user balance
-                this.userStore.decrementBalance(transaction.amount);
+                this.userStore.incrementBalance(transaction.amount);
             });
 
             this.ws.on("notification", (notification) => {
@@ -76,6 +79,8 @@ export const useNotificationsStore = defineStore('notifications', {
                 // show the alert
                 this.toast.info(notification.message);
             });
+
+            this.initDone = true;
         },
         destroy() {
             if(this.ws != null) {

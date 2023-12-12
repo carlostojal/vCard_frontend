@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', {
         notifications: useNotificationsStore(),
         transactions: null,
         toast: useToast(),
+        fetchDone: false
     }),
     actions: {
         init(name, balance, phone, email, token) {
@@ -54,7 +55,6 @@ export const useUserStore = defineStore('user', {
         setToken(token) {
             this.token = token
             sessionStorage.setItem('token', token)
-            this.notifications.init()
         },
         async fetch() {
             try {
@@ -83,6 +83,12 @@ export const useUserStore = defineStore('user', {
                 this.email = userData.data.data.email
                 this.phone = parseInt(userData.data.data.phone_number)
                 this.isAdmin = false;
+
+                this.fetchDone = true;
+
+                if(!this.notifications.initDone)
+                    this.notifications.init();
+                
             } catch (err) {
             }
         },
