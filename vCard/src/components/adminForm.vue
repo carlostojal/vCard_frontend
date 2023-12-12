@@ -20,6 +20,12 @@ const props = defineProps({
 })
 
 const addAdmin = async () => {
+
+    if(newAdminPassword.value == null){
+        toast.error('Fill the password field')
+        return
+    }
+
     const res = await usersStore.addUser(props.newAdminName, props.newAdminEmail, newAdminPassword.value)
     router.replace('/admins')
 }

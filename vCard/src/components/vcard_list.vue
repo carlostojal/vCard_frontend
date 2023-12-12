@@ -1,8 +1,10 @@
 <script setup>
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useVcardsStore } from '@/stores/vcards'
+import { useToast } from 'vue-toastification'
 
 const vcardsStore = useVcardsStore();
+const toast = useToast()
 const props = defineProps({
     name: {
         type: String,
@@ -89,14 +91,15 @@ watch(() => props.phone, (newValue) => {
     atual_block.value = props.blocked
 });
 
-
-
 const saveChanges = () => {
-    console.log("SAVE CHANGES", editInputValue.value, props.phone)
+    if(editInputValue.value == null || editInputValue.value == ''){
+        toast.error("Fill the max debit field")
+        return
+    }
+
     vcardsStore.editMaxDebit(props.phone, editInputValue.value)
     editFlag.value = false
     editInputValue.value = ''
-    //toast
 }
 
 </script>
@@ -127,7 +130,6 @@ const saveChanges = () => {
             </div>
         </td>
 
-
 <!-- POPUP EDIT -->
         <div v-if="editFlag">
             <div class="overlay" @click="editFlag = false"></div>
@@ -139,8 +141,6 @@ const saveChanges = () => {
                 <button @click="editFlag = false">Cancel</button>
             </div>
         </div>
-
-
 
         </tr>
     </tbody>
