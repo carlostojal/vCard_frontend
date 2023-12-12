@@ -12,13 +12,13 @@ export const useVcardsStore = defineStore('vcards', {
     async fetchVcardsBlock(blocked) {
       try {
         const token = getToken()
-        
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}`,{
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+        )
           .then((response) => {
             this.lastPage = response.data.data.last
             // this.data_vcard = response.data[0].data
@@ -28,15 +28,15 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async paginateType(page, blocked){
+    async paginateType(page, blocked) {
       try {
         const token = getToken()
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}&page=${page}`,{
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}&page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+        )
           .then((response) => {
             // this.data_vcard = response.data[0].data
             // this.lastPage = response.data.last
@@ -67,8 +67,8 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async paginateSearch(page, blocked, query){ //This function is not even being used??
-        console.log("paginateSearch")
+    async paginateSearch(page, blocked, query) { //This function is not even being used??
+      console.log("paginateSearch")
       try {
         const token = getToken()
 
@@ -86,21 +86,21 @@ export const useVcardsStore = defineStore('vcards', {
         console.log(e)
       }
     },
-    async changeBlock(phone, block){
+    async changeBlock(phone, block) {
       try {
 
         const token = getToken()
-        
+
         const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/block/${phone}`,
-            {
-              block: block,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-              }
-            })
+          {
+            block: block,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            }
+          })
       } catch (e) {
         console.log(e)
       }
@@ -109,13 +109,13 @@ export const useVcardsStore = defineStore('vcards', {
       try {
 
         const token = getToken()
-        
-        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,{
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
+
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/vcards/${phone}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+        )
           .then(async (response) => {
             console.log(response)
             await this.fetchVcardsBlock('all')
@@ -125,23 +125,23 @@ export const useVcardsStore = defineStore('vcards', {
       }
     },
     async editMaxDebit(phone, max_debit) {
-      try{
+      try {
         const token = getToken()
 
         const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/maxDebit/${phone}`,
           {
-              max_debit: max_debit
+            max_debit: max_debit
           },
           {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-              }
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            }
           }).then(async (response) => {
             console.log(response)
             await this.fetchVcardsBlock('all')
           })
-      }catch(e){
+      } catch (e) {
         console.log(e)
       }
     },
