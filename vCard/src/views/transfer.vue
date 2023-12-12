@@ -42,7 +42,7 @@ const validatePin = async () => {
             fetchUser() //para carregar as novas transações do user para a home
             router.replace('/home')
         }else{
-            toast.error(response.data.message)
+            toast.error(response.message)
             return false
         }
     }else{
