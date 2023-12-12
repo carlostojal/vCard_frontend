@@ -1,5 +1,6 @@
 <script setup>
 import Menu from '../components/menu.vue'
+import Search from '../components/search.vue'
 import Transaction from '../components/transaction.vue'
 import Paginate from '@/components/paginate.vue'
 import { useTransactionsStore } from '@/stores/transactions'
@@ -16,6 +17,7 @@ onMounted( async () => {
 
 <template>
 <Menu> </Menu>
+<!--<Search :type="'myTransaction'"></Search>-->
     <div class="container">
         <div class="row justify-content-center">
             <div style="margin-top:3rem" >

@@ -1,15 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user'
-import FormatUtil from '../utils/FormatUtil'
-
 const userStore = useUserStore();
 const isAuthenticated = ref(false);
 isAuthenticated.value = userStore.token != null;
-const showDropdown = ref('');
-const toggleDropdown = () => {
-  showDropdown.value = !showDropdown.value;
-};
+
+
 </script>
 
 
@@ -21,21 +17,19 @@ const toggleDropdown = () => {
     </nav>
 
     <nav v-show="isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+        <div class="nav-item mx-2"></div>
+        <div class="container-fluid">
             <router-link class="navbar-brand" to="home">VCard</router-link>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <router-link class="nav-link" to="home">Home</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="register">Register</router-link>
-                    </li>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">Services</a>
@@ -48,41 +42,47 @@ const toggleDropdown = () => {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ADMIN</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <router-link to="/admins" class="dropdown-item">Admin List</router-link>
-                            <router-link to="/vcards" class="dropdown-item">VCard List</router-link>
-                            <router-link to="/allTransactions" class="dropdown-item">Transactions List</router-link>
+                            <router-link to="/admins" class="dropdown-item">Admins</router-link>
+                            <router-link to="/vcards" class="dropdown-item">VCards</router-link>
+                            <router-link to="/allTransactions" class="dropdown-item">Transactions</router-link>
+                            <router-link to="/allCategories" class="dropdown-item">Categories</router-link>
+                            <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
                         </ul>
                     </li>
-
-                    <li  class="nav-item" id="logoutBtn" >
-                        <a class="nav-link logout" @:click="userStore.logout()" >Logout</a>
-                    </li>
                 </ul>
+                     <div class="nav-item dropdown">
+                        <!-- <img v-if="userStore.avatar" :src="userStore.avatar" alt="User Avatar" class="avatar " /> -->
+                        <!-- <img v-else src="/src/assets/avatar.png" alt="User Avatar" class="avatar" /> -->
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img v-if="userStore.avatar" :src="userStore.avatar" alt="User Avatar" class="avatar " />
+                            <img v-else src="/src/assets/avatar.png" alt="User Avatar" class="avatar" />
+                        </a>
+                        <!-- <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{FormatUtil.formatFirstLastName(userStore.name)}}</a> -->
+                        <ul class="dropdown-menu" id="profileToggle" aria-labelledby="navbarDropdown">
+                             <router-link class="dropdown-item" to="profile">Change Profile</router-link> 
+                            <button @:click="userStore.logout()" class="dropdown-item">Logout</button>
+                        </ul>
+                    </div>
+                <div class="nav-item mx-4"></div>
             </div>
-            <div class="user-profile-dropdown">
-    <div @click="toggleDropdown">
-      <!--<img :src="user.avatar" alt="User Avatar" class="avatar" />-->
-      <span>{{ FormatUtil.formatFirstLastName(userStore.name) }}</span>
-    </div>
-    <transition name="fade">
-      <div v-if="showDropdown" class="dropdown-content">
-        <!-- Dropdown content goes here -->
-        <ul>
-          <li @click="handleChangeProfile"><router-link class="nav-link" to="profile">Change Profile</router-link></li>
-          <li class="nav-item" id="logoutBtn">
-              <a class="nav-link logout" @:click="userStore.logout()">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </transition>
-  </div>
-  </div>
+        </div>
     </nav>
 </template>
 
 
 <style scoped>
-/* Add your styles here */
+.dropdown-menu-right {
+   right: 0 !important;
+   left: auto !important;
+}
+@media (min-width: 991px) {
+    #profileToggle {
+        right: 0 !important;
+        left: auto !important;
+    }   
+}
+
+
 .user-profile-dropdown {
   position: relative;
   display: inline-block;

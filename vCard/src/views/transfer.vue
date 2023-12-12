@@ -22,7 +22,7 @@ onMounted(() => {
 })
 
 const fetchUser = async () => {
-    await user.fetch().catch((e) => {
+    await transaction.fetch().catch((e) => {
         console.error('Error getting user data: ' + e)
     })
 }
@@ -37,12 +37,12 @@ const validatePin = async () => {
             toast.error("Error sending money: " + e.message);
         }
 
-        if(response == 'success'){
+        if(response.status == 'success'){
             toast.success("Money sent successfully")
             fetchUser() //para carregar as novas transações do user para a home
             router.replace('/home')
         }else{
-            toast.error(response.data)
+            toast.error(response.data.message)
             return false
         }
     }else{
