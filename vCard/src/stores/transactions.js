@@ -5,6 +5,7 @@ import { getToken } from '@/utils/GetSessionToken'
 import { useUserStore } from './user'
 import { useNotificationsStore } from './notifications'
 import { useToast } from 'vue-toastification'
+import FormatUtil from '../utils/FormatUtil'
 import router from '../router';
 
 export const useTransactionsStore = defineStore('transactions', {
@@ -52,12 +53,11 @@ export const useTransactionsStore = defineStore('transactions', {
           })
 
           try {
-            this.notificationsStore.sendNotification(phone_number, notifMessage)
+            this.notificationsStore.sendNotification(phone_number, `You received ${FormatUtil.formatBalance(amount)} from ${this.userStore.phone}`)
           } catch (error) {
             console.error(error)
           }
 
-          this.notificationsStore.sendNotification(phone_number, notifMessage)
           // decrement the user balance
           this.userStore.decrementBalance(amount)
         } catch (e) {

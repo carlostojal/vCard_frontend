@@ -31,14 +31,6 @@ export const useNotificationsStore = defineStore('notifications', {
 
             this.ws.on("connect", () => {
                 console.log("Notifications enabled");
-                this.ws.onmessage = (event) => {
-                    const data = JSON.parse(event.data);
-                    console.log(data);
-                    this.toast.info(data._message);
-                    this.userStore.fetch();
-                    this.transactionStore = null;
-                    this.transactionStore.getAll();
-                }
             });
 
             this.ws.on("disconnect", () => {
@@ -59,11 +51,16 @@ export const useNotificationsStore = defineStore('notifications', {
                     payment_type: payment_type
                 }*/
 
+                transaction = JSON.parse(transaction);
+
                 // add the transaction to the list
                 this.transactionStore.myTransactions.unshift(transaction);
+
+                // update the user balance
+                this.userStore.decrementBalance(transaction.amount);
             });
 
-            this.ws.on("notification", () => {
+            this.ws.on("notification", (notification) => {
                 // received on notification
                 /*
                 structure:
@@ -74,8 +71,10 @@ export const useNotificationsStore = defineStore('notifications', {
                 }
                 */
 
+                notification = JSON.parse(notification);
+
                 // show the alert
-                this.toast.info(data.message);
+                this.toast.info(notification.message);
             });
         },
         destroy() {
