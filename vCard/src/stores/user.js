@@ -127,9 +127,9 @@ export const useUserStore = defineStore('user', {
             }
         },
         async getAuthGuard() {
+            let retval = null
             try {
                 this.token = getToken()
-                let retval = null
                 await axios.get(`${ConfigUtil.getApiUrl()}/checkAuth`, {
                     headers: {
                         Authorization: `Bearer ${this.token}`
