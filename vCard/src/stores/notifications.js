@@ -13,14 +13,21 @@ export const useNotificationsStore = defineStore('notifications', {
         transactionStore: useTransactionsStore() 
     }),
     actions: {
-        init() {
+        async init() {
+            await this.userStore.fetch();
             // initialize the websocket
             try {
-                this.ws = io(ConfigUtil.getNotificationUrl());
+                this.ws = io(ConfigUtil.getNotificationUrl(), {
+                    query: "client_id="+this.userStore.phone
+                });
             } catch(e) {
                 this.ws = null;
                 throw new Error("Error starting notifications");
             }
+
+            this.ws.on("connect_error", (error) => {
+                this.toast.error("Error connecting to the notification service: " + error.message);
+            });
 
             this.ws.on("connect", () => {
                 console.log("Notifications enabled");
