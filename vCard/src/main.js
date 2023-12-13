@@ -25,7 +25,6 @@ const apiDomain = import.meta.env.VITE_API_DOMAIN;
 const wsConnection = import.meta.env.VITE_WS_CONNECTION;
 
 app.provide('serverUrl',`${apiDomain}/api`);
-app.provide('socket',io(wsConnection));
 
 router.beforeEach(async (to, from, next) => {
     const userRole = await userStore.getAuthGuard()

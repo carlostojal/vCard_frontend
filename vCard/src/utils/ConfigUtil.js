@@ -9,6 +9,6 @@ export default class ConfigUtil {
     }
 
     static getNotificationUrl() {
-        return `ws://${import.meta.env.VITE_NOTIFICATION_ADDRESS}:${import.meta.env.VITE_NOTIFICATION_PORT}${import.meta.env.VITE_NOTIFICATION_ENDPOINT}?authorization=${sessionStorage.getItem('token')}`;
+        return `ws://${import.meta.env.VITE_NOTIFICATION_ADDRESS}:${import.meta.env.VITE_NOTIFICATION_PORT}`;
     }
 }

@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import ConfigUtil from '../utils/ConfigUtil'
-import { getToken } from '@/utils/GetSessionToken' 
+import { getToken } from '@/utils/GetSessionToken'
 import { useUserStore } from './user'
 import { useNotificationsStore } from './notifications'
 import { useToast } from 'vue-toastification'
+import FormatUtil from '../utils/FormatUtil'
 import router from '../router';
 import { saveAs } from 'file-saver';
 
@@ -27,71 +28,75 @@ export const useTransactionsStore = defineStore('transactions', {
       return this.myTransactions
     },
     async sendMoneyTo(amount, phone_number, confirmation_code, payment_type, description) {
-      const token = getToken()
 
       // make the request to the backend
       try {
-          const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`,
-            {
-              amount: parseFloat(amount),
-              phone_number: phone_number,
-              confirmation_code: confirmation_code,
-              description: description,
-              payment_type: payment_type
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
+        const token = getToken()
 
-      try {
-        this.userStore.fetch().catch((e) => {
-          console.error('Error getting user data: ' + e)
-        })
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`,
+          {
+            amount: parseFloat(amount),
+            phone_number: phone_number,
+            confirmation_code: confirmation_code,
+            description: description,
+            payment_type: payment_type
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
 
         try {
-          this.notificationsStore.sendNotification(phone_number, notifMessage)
-        } catch (error) {
-          console.error(error)
-        }
+          this.userStore.fetch().catch((e) => {
+            console.error('Error getting user data: ' + e)
+          })
 
-        this.notificationsStore.sendNotification(phone_number, notifMessage)
-        // decrement the user balance
-        this.userStore.decrementBalance(amount)
+          try {
+            this.notificationsStore.sendNotification(phone_number, `You received ${FormatUtil.formatBalance(amount)} from ${this.userStore.phone}`)
+          } catch (error) {
+            console.error(error)
+          }
+
+          // decrement the user balance
+          this.userStore.decrementBalance(amount)
+        } catch (e) {
+          console.log(e)
+
+        }
+        return response.data
       } catch (e) {
-        console.log(e)
-        
-      }
-      return response.data
-    }catch(e) {
         this.toast.error("Transaction couldnt be processed, try again later");
         router.replace('/')
         return false
-    }
+      }
 
     },
     async fetch() {
-      const token = getToken()
+      try {
+        const token = getToken()
 
-      const response = await axios
-        .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then((response) => {
-          // this.lastPage_myTrans = response.data.last
-          // this.myTransactions = response.data[0].data
-          this.lastPage_myTrans = response.data.data.last
-          this.myTransactions = response.data.data.transactions.data
-          // convert all values to float. convert dates to Date objects
-          this.myTransactions.forEach((transaction) => {
-            transaction.value = parseFloat(transaction.value)
-            transaction.date = new Date(transaction.datetime)
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           })
-        })
+          .then((response) => {
+            // this.lastPage_myTrans = response.data.last
+            // this.myTransactions = response.data[0].data
+            this.lastPage_myTrans = response.data.data.last
+            this.myTransactions = response.data.data.transactions.data
+            // convert all values to float. convert dates to Date objects
+            this.myTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
     },
     async fetchAllTransactionType(type) {
       console.log("T1")
@@ -120,7 +125,7 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    async paginate_allTransactionsType(page, type){
+    async paginate_allTransactionsType(page, type) {
       console.log("T2")
       try {
         const token = getToken()
@@ -148,9 +153,9 @@ export const useTransactionsStore = defineStore('transactions', {
     async searchAllTransaction(query, type) {
       console.log("T3")
       try {
-        if(type == 'debit'){
+        if (type == 'debit') {
           type = 'D'
-        }else if(type == 'credit'){
+        } else if (type == 'credit') {
           type = 'C'
         }
 
@@ -178,7 +183,7 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    async paginate_allTransactionsSearch(page, type, query){
+    async paginate_allTransactionsSearch(page, type, query) {
       console.log("T4")
       try {
         const token = getToken()
