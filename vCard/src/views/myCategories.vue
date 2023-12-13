@@ -9,7 +9,7 @@ import Search from '@/components/search.vue'
 const categoriesStore = useCategoriesStore();
 
 onMounted(async () => {
-    await categoriesStore.fetch()
+    await categoriesStore.fetchMyCategories()
 })
 
 
@@ -18,13 +18,14 @@ onMounted(async () => {
 
 <template>
 <Menu> </Menu>
-
-<Search :type="'categories'"></Search>
-
     <div class="container">
         <div class="row justify-content-center">
             <div style="margin-top:3rem" >
                 <h2 class="margens">Categories</h2>
+            </div>
+
+            <div style="margin-top: 2rem; margin-bottom: 2rem;" class="d-flex">
+                <router-link class="btn btn-outline-secondary" to="/addCategorie">Add Categorie </router-link>
             </div>
 
             <div class="categories">
@@ -38,15 +39,9 @@ onMounted(async () => {
                             </tr>
                         </thead>
                         
-                        <Categorie v-for="categorie in categoriesStore.allCategories" :id="categorie.id" :name="categorie.name" :type="categorie.type" :isDefaultCategory="true"/>
+                        <Categorie v-for="categorie in categoriesStore.myCategories" :id="categorie.id" :name="categorie.name" :type="categorie.type" :isDefaultCategory="false" />
                         
                     </table>
-
-                    <Paginate v-if="categoriesStore.lastPage > 1" :type="'categories'" :totalPages="categoriesStore.lastPage" :currentPage="1"> </Paginate>
-
-                    <div class="d-flex justify-content-center">
-                        <router-link class="btn btn-outline-secondary" to="/addCategorie">Add Categorie </router-link>
-                    </div>
                 </div>
             </div>
 
