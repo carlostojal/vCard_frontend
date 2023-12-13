@@ -4,6 +4,8 @@ import { useUserStore } from '@/stores/user'
 import FormatUtil from '@/utils/FormatUtil'
 import { onMounted} from 'vue'
 
+
+
 const user = useUserStore();
 onMounted( async () => {
     await user.fetchAdmin()
@@ -13,7 +15,11 @@ onMounted( async () => {
 </script>
 
 <template>
+  
     <Menu> </Menu>
+
+    <div id="pdf-container" style="width: 100%; height: 600px;"></div>
+
     <div class="container">
         <div class="header">
             <h1 class="welcome">Hello, {{ FormatUtil.formatFirstName(user.name) }}.</h1>

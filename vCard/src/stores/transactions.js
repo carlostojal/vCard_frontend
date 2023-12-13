@@ -6,6 +6,7 @@ import { useUserStore } from './user'
 import { useNotificationsStore } from './notifications'
 import { useToast } from 'vue-toastification'
 import router from '../router';
+import { saveAs } from 'file-saver';
 
 export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
@@ -68,7 +69,6 @@ export const useTransactionsStore = defineStore('transactions', {
         this.toast.error("Transaction couldnt be processed, try again later");
         router.replace('/')
         return false
-        
     }
 
     },
@@ -229,8 +229,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions?page=${page}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -248,6 +247,31 @@ export const useTransactionsStore = defineStore('transactions', {
       } catch (e) {
         console.log(e)
       }
-    }
+    },
+    async extractPDF(month, year){
+      try{
+
+          const token = getToken()
+
+          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=2023&month=12`, 
+          {
+            headers: {
+              //responseType: 'arraybuffer',
+              Accept: 'application/pdf',
+              Authorization: `Bearer ${token}`,
+            }
+          }).then(response => {
+            console.log(response.data)
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const pdfUrl = URL.createObjectURL(blob);
+            window.open(response.data);
+            //saveAs(blob, 'output.pdf');
+            
+          })
+
+      }catch(e){
+        console.log(e)
+      }
+    },
   }
 })

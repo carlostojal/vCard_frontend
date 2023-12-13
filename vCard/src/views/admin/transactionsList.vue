@@ -18,6 +18,9 @@ onMounted( async () => {
 <template>
 <Menu> </Menu>
 <Search :type="'transaction'"></Search>
+
+    <button @click="extractPDF"> Extract monthly</button>
+
     <div class="container">
         <div class="row justify-content-center">
             <div style="margin-top:3rem" >
