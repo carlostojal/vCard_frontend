@@ -37,7 +37,7 @@ onMounted(() => {
         if (response.data.status == 'success') {
           // login valido
           flag_msgInvalid.value = false
-
+console.log(response.data.data.access_token)
           userStore.setToken(response.data.data.access_token)
 
           router.replace(url_home.value)

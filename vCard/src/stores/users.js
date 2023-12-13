@@ -3,7 +3,7 @@ import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil'
 import { getToken } from '@/utils/GetSessionToken'
 import { useToast } from 'vue-toastification'
-
+ 
 export const useUsersStore = defineStore('users', {
     state: () => ({
         admins: null,
@@ -28,7 +28,6 @@ export const useUsersStore = defineStore('users', {
             
         },
         async addUser(name, email, password){
-            console.log(name, email, password)
 
             try{
                 const token = getToken()
@@ -51,7 +50,7 @@ export const useUsersStore = defineStore('users', {
                 }
 
             }catch(e){
-                console.log(e);
+                this.toast.error(e.response.data.message);
             }
         },
         async deleteAdmin(id) {
@@ -70,7 +69,7 @@ export const useUsersStore = defineStore('users', {
                 }
                 
             }catch(e){
-                console.log(e);
+                this.toast.error(e.response.data.message);
             }
         },
     },

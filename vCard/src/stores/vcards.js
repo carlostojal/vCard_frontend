@@ -2,11 +2,13 @@ import { defineStore } from 'pinia'
 import axios from 'axios';
 import ConfigUtil from '../utils/ConfigUtil'
 import { getToken } from '@/utils/GetSessionToken'
+import { useToast } from 'vue-toastification'
 
 export const useVcardsStore = defineStore('vcards', {
   state: () => ({
     data_vcard: null,
-    lastPage: null
+    lastPage: null,
+    toast: useToast(),
   }),
   actions: {
     async fetchVcardsBlock(blocked) {
@@ -92,17 +94,22 @@ export const useVcardsStore = defineStore('vcards', {
         const token = getToken()
 
         const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/block/${phone}`,
-          {
-            block: block,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
-            }
-          })
+            {
+              block: block,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              }
+            }).then( (response) => {
+              if(response.data.status == "success"){
+                this.toast.success(response.data.message);
+              }
+
+            })
       } catch (e) {
-        console.log(e)
+        this.toast.error(e.response.data.message);
       }
     },
     async deleteVcard(phone) {
@@ -117,11 +124,13 @@ export const useVcardsStore = defineStore('vcards', {
         }
         )
           .then(async (response) => {
-            console.log(response)
-            await this.fetchVcardsBlock('all')
+            if(response.data.status == "success"){
+              this.toast.success(response.data.message);
+              await this.fetchVcardsBlock('all')
+            }
           })
       } catch (e) {
-        console.log(e)
+        this.toast.error(e.response.data.message);
       }
     },
     async editMaxDebit(phone, max_debit) {
@@ -138,11 +147,13 @@ export const useVcardsStore = defineStore('vcards', {
               Authorization: `Bearer ${token}`
             }
           }).then(async (response) => {
-            console.log(response)
-            await this.fetchVcardsBlock('all')
+            if(response.data.status == "success"){
+              this.toast.success(response.data.message);
+              await this.fetchVcardsBlock('all')
+            }
           })
-      } catch (e) {
-        console.log(e)
+      }catch(e){
+        this.toast.error(e.response.data.message);
       }
     },
   },

@@ -1,34 +1,38 @@
 <script setup>
 import { ref } from 'vue';
 import router from '../router';
-import { useToast } from 'vue-toastification'
 import { useCategoriesStore } from '@/stores/categories'
+import { useToast } from 'vue-toastification';
+import { useUserStore } from '@/stores/user';
 
-const toast = useToast()
+const userStore = useUserStore()
 const categoriesStore = useCategoriesStore();
 const name = ref(null)
 const type = ref(null)
+const toast = useToast()
 
-const addAdmin = async () => {
+const addCategory = async () => {
 
     if(name.value == null || type.value == null){
         toast.error('Fill all the fields')
         return
     }
 
-    await categoriesStore.addCategorie(name.value, type.value)
-    
-    toast.success('Categorie added successfully')
-
-    router.replace('/allCategories')
-
+    if(userStore.isAdmin){
+      await categoriesStore.addCategorie(name.value, type.value)
+      router.replace('/allCategories')
+    }else{
+      await categoriesStore.addMyCategorie(name.value, type.value)
+      router.replace('/myCategories')
+    }
+        
 }
 
 </script>
 
 <template>
 
-    <form @submit.prevent="addAdmin" class="mt-4">
+    <form @submit.prevent="addCategory" class="mt-4">
       <div>
         <div class="margens ">
           <label for="name">Name</label>
@@ -43,9 +47,12 @@ const addAdmin = async () => {
         </div>
 
       </div>
-      <button type="submit" class="btn btn-primary margens">Add Categorie</button>
+      
+      <button type="submit" class="btn btn-primary margens">Add Category</button>
         <br>
-      <button @click="router.replace('/allCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
+      
+      <button v-if="userStore.isAdmin" @click="router.replace('/allCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
+      <button v-else @click="router.replace('/myCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
 
     </form>
 

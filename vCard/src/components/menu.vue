@@ -1,10 +1,17 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user'
+import { useTransactionsStore } from '@/stores/transactions'
 const userStore = useUserStore();
+const transactionsStore = useTransactionsStore();
 const isAuthenticated = ref(false);
 isAuthenticated.value = userStore.token != null;
 
+const extractPDF = async () => {
+    let month = new Date().getMonth() + 1;
+    let year = new Date().getFullYear();
+    await transactionsStore.extractPDF(month, year);
+}
 
 </script>
 
@@ -36,6 +43,7 @@ isAuthenticated.value = userStore.token != null;
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
                             <router-link to="/myTransactions" class="dropdown-item">Transactions List</router-link>
+                            <router-link to="/myCategories" class="dropdown-item">My categories</router-link>
                         </ul>
                     </li>
 
@@ -49,6 +57,11 @@ isAuthenticated.value = userStore.token != null;
                             <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
                         </ul>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" @:click="extractPDF">Monthly Extract </a>
+                    </li>
+
                 </ul>
                      <div class="nav-item dropdown">
                         <!-- <img v-if="userStore.avatar" :src="userStore.avatar" alt="User Avatar" class="avatar " /> -->
