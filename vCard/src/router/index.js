@@ -13,7 +13,7 @@ import vCards from '../views/admin/vcardList.vue'
 import AllTransactions from '../views/admin/transactionsList.vue'
 import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
-import AddCategorie from '../views/admin/addCategorie.vue'
+import AddCategory from '../views/admin/addCategorie.vue'
 import MyCategories from '../views/myCategories.vue'
 
 const router = createRouter({
@@ -110,9 +110,9 @@ const router = createRouter({
       //meta: { requiredVcard: true},
     },
     {
-      path: '/addCategorie',
-      name: 'addCategorie',
-      component: AddCategorie
+      path: '/addCategory',
+      name: 'addCategory',
+      component: AddCategory
       //meta: { requiredVcard: true},
     },
     {
