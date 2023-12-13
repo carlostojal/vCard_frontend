@@ -9,6 +9,7 @@ export const useCategoriesStore = defineStore('categories', {
     allCategories: null,
     lastPage: null,
     toast: useToast(),
+    myCategories: null,
   }),
   actions: {
     async fetch() {
@@ -140,6 +141,81 @@ export const useCategoriesStore = defineStore('categories', {
         })
       }catch(e){
         this.toast.error("Error adding category");
+      }
+    },
+    async fetchMyCategories(){
+      try{
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/mycategories`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            })
+            .then((response) => {
+              console.log(response)
+                this.myCategories = response.data.data.categories
+                console.log(this.myCategories)
+            })
+      }catch(e){
+          console.log(e)
+      }
+    },
+    async addMyCategorie(name, type){
+      try{
+        const token = getToken()
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/mycategories`,{
+          name: name,
+          type: type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then((response) => {
+          console.log(response)
+          this.myCategories = response.data.data.category
+          if(response.data.status == "success"){
+            this.toast.success("Categories added successfully");
+          }
+        })
+      }catch(e){
+        this.toast.error("Error adding categories");
+      }
+    },
+    async deleteCategorie(id){
+      try{
+        const token = getToken()
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/categories/${id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then((response) => {
+          if(response.data.status == "success"){
+            this.toast.success("Category deleted successfully");
+          }
+        })
+      }catch(e){
+        this.toast.error("Error deleting category");
+      }
+    },
+    async deleteMyCategorie(id){
+      try{
+        const token = getToken()
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/myCategories/${id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then((response) => {
+          if(response.data.status == "success"){
+            this.toast.success("Category deleted successfully");
+          }
+        })
+      }catch(e){
+        this.toast.error("Error deleting category");
       }
     }
   }

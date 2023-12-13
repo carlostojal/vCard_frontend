@@ -43,6 +43,7 @@ const extractPDF = async () => {
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
                             <router-link to="/myTransactions" class="dropdown-item">Transactions List</router-link>
+                            <router-link to="/myCategories" class="dropdown-item">My categories</router-link>
                         </ul>
                     </li>
 

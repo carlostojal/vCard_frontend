@@ -4,13 +4,10 @@ import { useUserStore } from '@/stores/user'
 import FormatUtil from '@/utils/FormatUtil'
 import { onMounted} from 'vue'
 
-
-
 const user = useUserStore();
 onMounted( async () => {
     await user.fetchAdmin()
 })
-
 
 </script>
 
