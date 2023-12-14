@@ -27,51 +27,51 @@ export const useTransactionsStore = defineStore('transactions', {
       }
       return this.myTransactions
     },
-    async sendMoneyTo(amount, phone_number, confirmation_code, payment_type, description) {
+    async sendMoneyTo(amount, reference, confirmation_code, payment_type, description) {
 
-      // make the request to the backend
-      try {
         const token = getToken()
+        const data = {
+          amount: parseFloat(amount),
+          confirmation_code: confirmation_code,
+          description: description,
+          payment_type: payment_type
+        };
 
-        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`,
-          {
-            amount: parseFloat(amount),
-            phone_number: phone_number,
-            confirmation_code: confirmation_code,
-            description: description,
-            payment_type: payment_type
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
+        if (payment_type == 'VCARD') {
+          data.phone_number = reference;
+        }else{
+          data.payment_reference = reference;
+        }
 
         try {
-          this.userStore.fetch().catch((e) => {
-            console.error('Error getting user data: ' + e)
-          })
+            const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/send`, data,
+                {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }
+            )
+
+            this.userStore.fetch().catch((e) => {
+                console.error('Error getting user data: ' + e)
+            })
 
           try {
-            this.notificationsStore.sendNotification(phone_number, `You received ${FormatUtil.formatBalance(amount)} from ${this.userStore.phone}`)
+              if(payment_type == 'VCARD'){
+                this.notificationsStore.sendNotification(reference, `You received ${FormatUtil.formatBalance(amount)} from ${this.userStore.phone}`)
+              }
           } catch (error) {
             console.error(error)
           }
-
-          // decrement the user balance
           this.userStore.decrementBalance(amount)
+          return response.data
         } catch (e) {
-          console.log(e)
-
+            console.log(e)
+            console.log(data)
+            this.toast.error("Transaction couldnt be processed, try again later");
+            router.replace('/')
+            return false
         }
-        return response.data
-      } catch (e) {
-        this.toast.error("Transaction couldnt be processed, try again later");
-        router.replace('/')
-        return false
-      }
-
     },
     async fetch() {
       try {
