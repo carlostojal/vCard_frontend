@@ -53,6 +53,7 @@ isAuthenticated.value = userStore.token != null;
                         <!-- <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{FormatUtil.formatFirstLastName(userStore.name)}}</a> -->
                         <ul class="dropdown-menu" id="profileToggle" aria-labelledby="navbarDropdown">
                              <router-link class="dropdown-item" to="profile">Change Profile</router-link> 
+                            <router-link to="/statistics" class="dropdown-item">Statistics</router-link>
                             <button @:click="userStore.logout()" class="dropdown-item">Logout</button>
                         </ul>
                     </div>
