@@ -14,9 +14,10 @@ import Statistics from '../views/statistics.vue'
 import AllTransactions from '../views/admin/transactionsList.vue'
 import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
-import AddCategory from '../views/admin/addCategorie.vue'
+import AddCategory from '../views/admin/addCategory.vue'
 import MyCategories from '../views/myCategories.vue'
 import DeleteOwnVcard from '../views/deleteOwnVcard.vue'
+import AddCategoryVcard from '../views/addCategoryVcard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -131,6 +132,12 @@ const router = createRouter({
       component: DeleteOwnVcard,
       meta: { requiredVcard: true},
     },
+    {
+      path: '/addCategoryVcard',
+      name: AddCategoryVcard,
+      component: AddCategoryVcard,
+      meta: { requiredVcard: true},
+    }
   ]
 })
 

@@ -32,6 +32,7 @@ const addCategory = async () => {
 
 <template>
 
+  <div>
     <form @submit.prevent="addCategory" class="mt-4">
       <div>
         <div class="margens ">
@@ -49,12 +50,14 @@ const addCategory = async () => {
       </div>
       
       <button type="submit" class="btn btn-primary margens">Add Category</button>
-        <br>
-      
-      <button v-if="userStore.isAdmin" @click="router.replace('/allCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
-      <button v-else @click="router.replace('/myCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
 
     </form>
+
+    <div class="mt-4">
+      <button v-if="userStore.isAdmin" @click="router.replace('/allCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
+      <button v-else @click="router.replace('/myCategories')" class="btn btn-secondary margens" style="margin-top: 2rem;">Categories List</button>
+    </div>
+  </div>
 
 </template>
 
