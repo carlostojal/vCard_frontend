@@ -16,6 +16,7 @@ import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
 import AddCategory from '../views/admin/addCategorie.vue'
 import MyCategories from '../views/myCategories.vue'
+import DeleteOwnVcard from '../views/deleteOwnVcard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -122,6 +123,12 @@ const router = createRouter({
       path: '/myCategories',
       name: 'myCategories',
       component: MyCategories,
+      meta: { requiredVcard: true},
+    },
+    {
+      path: '/deleteOwnVcard',
+      name: 'deleteOwnVcard',
+      component: DeleteOwnVcard,
       meta: { requiredVcard: true},
     },
   ]

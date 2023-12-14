@@ -182,6 +182,23 @@ export const useUserStore = defineStore('user', {
                 return
             }
         },
+        async verifyPassword(password){
+            try{
+                this.token = getToken()
+
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/verifyPassword`, {
+                    password: password
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`
+                    }
+                }).then((response) => {
+                    return response.data.status
+                })
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
     },
     mutations: {}
 })
