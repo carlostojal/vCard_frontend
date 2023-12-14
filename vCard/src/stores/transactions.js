@@ -98,8 +98,8 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
+    //ALL TRANSACTIONS
     async fetchAllTransactionType(type) {
-      console.log("T1")
       try {
         const token = getToken()
 
@@ -206,41 +206,20 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
-    async fetchMyTransactions(type) {
+    //MY TRANSACTIONS
+    async fetchMyTransactionType(type) {
       try {
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/myTransactions?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
-            this.lastPage_myTrans = response.data.last
-            this.myTransactions = response.data[0].data
-
-            // convert all values to float. convert dates to Date objects
-            this.myTransactions.forEach((transaction) => {
-              transaction.value = parseFloat(transaction.value)
-              transaction.date = new Date(transaction.datetime)
-            })
-          })
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    async paginate_myTransactions(page) {
-      try {
-        const token = getToken()
-
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions?page=${page}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          .then((response) => {
-            this.lastPage = response.data.data.last
+            console.log(response.data)
+            this.lastPage_myTrans = response.data.data.last
             this.myTransactions = response.data.data.transactions.data
 
             // convert all values to float. convert dates to Date objects
@@ -253,26 +232,100 @@ export const useTransactionsStore = defineStore('transactions', {
         console.log(e)
       }
     },
+    async paginate_myTransactionsType(page, type) {
+      try {
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/myTransactions?type=${type}&page=${page}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            this.lastPage_myTrans = response.data.data.last
+            this.myTransactions = response.data.data.transactions.data
+
+            // convert all values to float. convert dates to Date objects
+            this.myTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async searchMyTransaction(query, type) {
+
+      try {
+
+        const token = getToken()
+
+        const response = await axios
+          .get(`${ConfigUtil.getApiUrl()}/myTransactions/search/${query}?type=${type}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            console.log(response.data)
+            this.myTransactions = response.data.data.transactions.data
+            this.lastPage_myTrans = response.data.data.last
+
+            // convert all values to float. convert dates to Date objects
+            this.myTransactions.forEach((transaction) => {
+              transaction.value = parseFloat(transaction.value)
+              transaction.date = new Date(transaction.datetime)
+            })
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async paginate_myTransactionsSearch(page, type, query){
+      try {
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/myTransactions/search/${query}?type=${type}&page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        this.myTransactions = response.data.data.transactions.data
+        this.lastPage_myTrans = response.data.data.last
+
+        // convert all values to float. convert dates to Date objects
+        this.myTransactions.forEach((transaction) => {
+          transaction.value = parseFloat(transaction.value)
+          transaction.date = new Date(transaction.datetime)
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    //PDF
     async extractPDF(month, year){
       try{
 
           const token = getToken()
 
-          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=2023&month=12`, 
+          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=${year}&month=${month}`, 
           {
             headers: {
-              //responseType: 'arraybuffer',
               Accept: 'application/pdf',
               Authorization: `Bearer ${token}`,
-            }
-          }).then(response => {
+            },
+            responseType: 'arraybuffer',
+          })
+
+          console.log(response.data)
+
             console.log(response.data)
             const blob = new Blob([response.data], { type: 'application/pdf' });
             const pdfUrl = URL.createObjectURL(blob);
-            window.open(response.data);
-            //saveAs(blob, 'output.pdf');
-            
-          })
+            //window.open(pdfUrl);
+            saveAs(blob, 'extract.pdf');
 
       }catch(e){
         console.log(e)

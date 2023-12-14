@@ -7,12 +7,6 @@ const transactionsStore = useTransactionsStore();
 const isAuthenticated = ref(false);
 isAuthenticated.value = userStore.token != null;
 
-const extractPDF = async () => {
-    let month = new Date().getMonth() + 1;
-    let year = new Date().getFullYear();
-    await transactionsStore.extractPDF(month, year);
-}
-
 </script>
 
 
@@ -35,9 +29,10 @@ const extractPDF = async () => {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <router-link class="nav-link" to="home">Home</router-link>
+                        <router-link v-if="userStore.isAdmin" class="nav-link" to="admin/home">Home</router-link>
+                        <router-link v-else class="nav-link" to="home">Home</router-link>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li v-if="!userStore.isAdmin" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">Services</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -45,21 +40,6 @@ const extractPDF = async () => {
                             <router-link to="/myTransactions" class="dropdown-item">Transactions List</router-link>
                             <router-link to="/myCategories" class="dropdown-item">My categories</router-link>
                         </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ADMIN</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <router-link to="/admins" class="dropdown-item">Admins</router-link>
-                            <router-link to="/vcards" class="dropdown-item">VCards</router-link>
-                            <router-link to="/allTransactions" class="dropdown-item">Transactions</router-link>
-                            <router-link to="/allCategories" class="dropdown-item">Categories</router-link>
-                            <router-link to="/addAdmin" class="dropdown-item">Add Admin</router-link>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" @:click="extractPDF">Monthly Extract </a>
                     </li>
 
                 </ul>

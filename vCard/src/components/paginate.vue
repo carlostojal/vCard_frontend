@@ -58,13 +58,13 @@ const goToPage = (page) => {
                     transactionStore.paginate_allTransactionsSearch(page, paginateSearchStore.trans_type, paginateSearchStore.query)
                 }
                 break;
-            /*case 'myTransactions':
+            case 'myTransactions':
                 if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
-                    transactionStore.paginate_myTransactionsType(page)
+                    transactionStore.paginate_myTransactionsType(page, paginateSearchStore.myTrans_type)
                 }else{
-                    transactionStore.paginate_myTransactionsSearch(page)
+                    transactionStore.paginate_myTransactionsSearch(page, paginateSearchStore.myTrans_type, paginateSearchStore.query)
                 }
-                break;*/
+                break;
             case 'categories':
                 if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
                     //categoriesStore.paginate(page)
@@ -79,23 +79,6 @@ const goToPage = (page) => {
             default:
               console.log("Invalid type")
         }
-
-
-
-
-
-
-/*
-        if(props.type == 'vcard'){
-            vcardStore.paginate(page)
-        }else if(props.type == 'allTransactions'){
-            transactionStore.paginate_allTransactions(page)
-        }else if(props.type == 'myTransactions'){
-            transactionStore.paginate_myTransactions(page)
-        }else if(props.type == 'categories'){
-            categoriesStore.paginate(page)
-        }
-        */
     }
 }
 
@@ -116,6 +99,7 @@ const nextPage = () => {
 
 <template>
   <div class="pagination">
+
     <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-outline-secondary">
       <i class="bi bi-arrow-left"></i> Prev
     </button>

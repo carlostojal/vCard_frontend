@@ -78,46 +78,45 @@ const router = createRouter({
     {
       path: '/admins',
       name: 'admins',
-      component: Admins
-      //meta: { requiredVcard: true},
-      // meta: { requiredAdmin: true}
+      component: Admins,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/vcards',
       name: 'vcards',
-      component: vCards
-      // meta: { requiredAdmin: true}
+      component: vCards,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/allTransactions',
       name: 'allTransactions',
-      component: AllTransactions
-      // meta: { requiredAdmin: true}
+      component: AllTransactions,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/addAdmin',
       name: 'addAdmin',
-      component: AddAdmin
-      //meta: { requiredVcard: true},
+      component: AddAdmin,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/allCategories',
       name: 'allCategories',
-      component: AllCategories
-      // meta: { requiredAdmin: true}
+      component: AllCategories,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/addCategory',
       name: 'addCategory',
-      component: AddCategory
-      //meta: { requiredVcard: true},
+      component: AddCategory,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/myCategories',
       name: 'myCategories',
       component: MyCategories,
       meta: { requiredVcard: true},
-    }
+    },
   ]
 })
 

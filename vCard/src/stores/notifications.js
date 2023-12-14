@@ -29,7 +29,7 @@ export const useNotificationsStore = defineStore('notifications', {
             }
 
             this.ws.on("connect_error", (error) => {
-                this.toast.error("Error connecting to the notification service: " + error.message);
+                //this.toast.error("Error connecting to the notification service: " + error.message);
             });
 
             this.ws.on("connect", () => {
