@@ -21,8 +21,6 @@ ChartJS.register(ArcElement, Title, Tooltip, Legend, BarElement, CategoryScale, 
 const fetchData = async () => {
     try {
         await transactionsStore.fetch();
-        console.log("BAWDAD")
-
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -69,7 +67,6 @@ const piechartDataC = ref({
 })
 const refreshTable = async () => {
     await transactionsStore.fetch();
-    console.log(transactionsStore.myTransactions)
     var sumArrayCredit
     var sumArrayDebit
     var newData = {
@@ -78,7 +75,6 @@ const refreshTable = async () => {
     };
     if (radioCheck.value == 'year') {
         newData.labels = years;
-        console.log(newData)
     }
     if (radioCheck.value == 'month') {
         newData.labels = months
@@ -111,7 +107,6 @@ const refreshTable = async () => {
                 backgroundColor: '#2598b8',
             });
         }
-        //console.log(filteredObjects);
     }
     if (debitChecked.value === true) {
         let filteredObjects = transactionsStore.myTransactions.filter(obj => obj.type === 'D');
@@ -141,11 +136,8 @@ const refreshTable = async () => {
                 backgroundColor: '#f87979',
             })
         }
-        console.log(sumArrayCredit)
     }
-    console.log(radioCheck.value)
     chartData.value = newData
-    console.log(creditChecked.value)
 }
 //function returns months in transactions
 function monthsInTransactions() {
