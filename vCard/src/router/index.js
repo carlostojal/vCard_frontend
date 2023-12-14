@@ -76,38 +76,35 @@ const router = createRouter({
       meta: { requiredVcard: true }
     },
     {
-      //ADMIN
       path: '/admins',
       name: 'admins',
       component: Admins
       //meta: { requiredVcard: true},
+      // meta: { requiredAdmin: true}
     },
     {
-      //ADMIN
       path: '/vcards',
       name: 'vcards',
       component: vCards
-      //meta: { requiredVcard: true},
+      // meta: { requiredAdmin: true}
     },
     {
-      //ADMIN
       path: '/allTransactions',
       name: 'allTransactions',
       component: AllTransactions
-      //meta: { requiredVcard: true},
+      // meta: { requiredAdmin: true}
     },
     {
-      //ADMIN
       path: '/addAdmin',
       name: 'addAdmin',
       component: AddAdmin
+      //meta: { requiredVcard: true},
     },
     {
-      //ADMIN
       path: '/allCategories',
       name: 'allCategories',
       component: AllCategories
-      //meta: { requiredVcard: true},
+      // meta: { requiredAdmin: true}
     },
     {
       path: '/addCategory',

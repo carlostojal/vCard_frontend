@@ -122,6 +122,7 @@ export const useUserStore = defineStore('user', {
                     sessionStorage.removeItem('token')
                     if (this.isAdmin) {
                         router.replace('/admin')
+                        this.isAdmin = false
                     } else {
                         router.replace('/')
                     }
