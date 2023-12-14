@@ -1,31 +1,31 @@
 <script setup>
-import AdminForm from '@/components/adminForm.vue'
+import router from '../router';
 import Menu from '@/components/menu.vue'
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user'
 
-const user = useUserStore();
+const user = useUserStore()
 const isPasswordCorrect = ref(false)
 const password = ref(null)
 const pin = ref(null)
 
 const verifyPassword = async () => {
-    const res = await user.verifyPassword(password)
-    console.log(res)
+    const res = await user.verifyPassword(password.value)
     if(res){
         isPasswordCorrect.value = true
     }
 }
 
 const verifyPin = async () => {
-    const res = await user.verifyPin(pin)
+    const res = await user.verifyPin(pin.value)
     if(res){
         deleteOwnVcard()
     }
 }
 
 const deleteOwnVcard = async () => {
-    await user.deleteOwnVcard(password, pin)
+    await user.deleteOwnVcard(password.value, pin.value)
+    router.replace('/login')
 }
 
 </script>
