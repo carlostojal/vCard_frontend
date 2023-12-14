@@ -27,6 +27,10 @@ onMounted(async () => {
                 <h2 class="margens">Categories</h2>
             </div>
 
+            <div class="d-flex">
+                <router-link class="btn btn-outline-secondary" style="margin-bottom: 2rem; margin-top: 1rem;" to="/addCategory">Add Categorie </router-link>
+            </div>
+
             <div class="categories">
                 <div class="categories-list">
                     <table class="table table-hover">
@@ -44,9 +48,7 @@ onMounted(async () => {
 
                     <Paginate v-if="categoriesStore.lastPage > 1" :type="'categories'" :totalPages="categoriesStore.lastPage" :currentPage="1"> </Paginate>
 
-                    <div class="d-flex justify-content-center">
-                        <router-link class="btn btn-outline-secondary" to="/addCategorie">Add Categorie </router-link>
-                    </div>
+                    
                 </div>
             </div>
 

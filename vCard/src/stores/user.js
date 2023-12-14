@@ -182,6 +182,62 @@ export const useUserStore = defineStore('user', {
                 return
             }
         },
+        async verifyPassword(password_vcard){
+            try{
+                this.token = getToken()
+
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/verifyPassword`, 
+                {
+                    pass: password_vcard,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                this.toast.success(response.data.message)
+                return response.data.status
+                
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
+        async verifyPin(pin){
+            try{
+                this.token = getToken()
+
+                const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/verifyPin`, 
+                {
+                    pin: pin,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                this.toast.success(response.data.message)
+                return response.data.status
+                
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
+        async deleteOwnVcard(password_vcard, pin){
+            try{
+                this.token = getToken()
+
+                const response = await axios.delete(`${ConfigUtil.getApiUrl()}/ownVcard?pass=${password_vcard}&pin=${pin}`, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                this.toast.success(response.data.message)
+                return response.data.status
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
     },
     mutations: {}
 })
