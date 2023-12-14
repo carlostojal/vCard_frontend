@@ -10,6 +10,7 @@ import Profile from '../views/profile.vue'
 import Transactions from '../views/transactions_list.vue'
 import Admins from '../views/admin/adminsList.vue'
 import vCards from '../views/admin/vcardList.vue'
+import Statistics from '../views/statistics.vue'
 import AllTransactions from '../views/admin/transactionsList.vue'
 import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
@@ -67,6 +68,12 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: Profile,
+      meta: { requiredVcard: true},
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: Statistics,
       meta: { requiredVcard: true},
     },
     {
