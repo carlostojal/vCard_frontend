@@ -39,7 +39,11 @@ const props = defineProps({
     old_balance: {
         type: String,
         required: true
-    }
+    },
+    reference: {
+        type: String,
+        required: true
+    },
 });
 
 </script>
@@ -54,16 +58,23 @@ const props = defineProps({
             <img v-if="props.paymentType == 'IBAN'" class="transaction-icon" src="/icons/bank.svg" />
             <img v-if="props.paymentType == 'VISA'" class="transaction-icon" src="/icons/credit-card.svg" />
             <img v-if="props.paymentType == 'MB'" class="transaction-icon" src="/icons/credit-card.svg" />
-            <p class="transaction-entity">{{ props.entityName }}</p>
         </div>
         <p class="transaction-value"><b>{{ FormatUtil.formatBalance(props.value) }}</b></p>
         <p class="transaction-date">{{ FormatUtil.formatDate(props.date) }}</p>
         <div v-if="props.isDetail">
             <p class="details" v-if="props.type == 'D'"> <b>Balance:</b> €{{ props.old_balance }} (-{{ props.value }})</p>
             <p class="details" v-else> <b>Balance:</b> €{{ props.old_balance }} (+{{ props.value }})</p>
+
             <p v-if="props.description" class="details"> <b>Message:</b> {{ props.description }} </p>
-            <p class="details" v-if="props.type == 'D'"> <b>To:</b> {{ props.pair_vcard }} </p>
-            <p class="details" v-else> <b>From:</b> {{ props.pair_vcard }} </p>
+
+            <!-- If Vcard -->
+            <p class="details" v-if="props.type == 'D' && props.paymentType == 'VCARD'"> <b>To:</b> {{ props.pair_vcard }} </p>
+            <p class="details" v-else-if="props.type == 'C' && props.paymentType == 'VCARD'"> <b>From:</b> {{ props.pair_vcard }} </p>
+
+            <!-- If not Vcard -->
+            <p class="details" v-else-if="props.type == 'D' && props.paymentType != 'VCARD'"> <b>To:</b> {{ props.reference }} </p>
+            <p class="details" v-else-if="props.type == 'C' && props.paymentType != 'VCARD'"> <b>From:</b> {{ props.reference }} </p>
+
         </div>
     </div>
 </template>
