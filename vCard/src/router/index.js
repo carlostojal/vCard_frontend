@@ -120,7 +120,7 @@ const router = createRouter({
       name: 'myCategories',
       component: MyCategories,
       meta: { requiredVcard: true},
-    }
+    },
   ]
 })
 

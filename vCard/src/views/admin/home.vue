@@ -1,6 +1,5 @@
 <script setup>
 import Menu from '@/components/menu.vue'
-import cardAdminHome from '../../components/cardAdminHome.vue'
 import { useUserStore } from '@/stores/user'
 import FormatUtil from '@/utils/FormatUtil'
 import { onMounted} from 'vue'
@@ -27,15 +26,12 @@ onMounted( async () => {
 
       <CardAdminHome href="/admins" title="Admins" desc="List, Add and Delete Administrators"></CardAdminHome>
       <CardAdminHome href="/vcards" title="Vcards" desc="List, Add, Delete, (Un)Block Vcards and Edit max debit"></CardAdminHome>
-      <CardAdminHome href="/transactions" title="Transactions" desc="List all Transactions"></CardAdminHome>
-      <CardAdminHome href="/categories" title="Categories" desc="List, Add and Delete Default Categories"></CardAdminHome>
+      <CardAdminHome href="/allTransactions" title="Transactions" desc="List all Transactions"></CardAdminHome>
+      <CardAdminHome href="/allCategories" title="Categories" desc="List, Add and Delete Default Categories"></CardAdminHome>
       <CardAdminHome href="/addAdmin" title="Add Admin" desc="Create a new Administrator"></CardAdminHome>
       <CardAdminHome href="/addCategory" title="Add Category" desc="Create a new Default Category"></CardAdminHome>
       
     </div>
-
-    
-
 
 </template>
 

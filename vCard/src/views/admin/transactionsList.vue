@@ -19,12 +19,14 @@ onMounted( async () => {
 <Menu> </Menu>
 <Search :type="'transaction'"></Search>
 
-    <button @click="extractPDF"> Extract monthly</button>
-
     <div class="container">
         <div class="row justify-content-center">
             <div style="margin-top:3rem" >
                 <h2 class="margens">All Transactions</h2>
+
+                <button @click="extractFlag = true" class="btn btn-outline-secondary" style="margin-top: 1rem;">
+                  Extract PDF Monthly
+                </button>
             </div>
    
             <div class="transactions">
@@ -35,10 +37,73 @@ onMounted( async () => {
             <Paginate v-if="transactionsStore.lastPage" :type="'allTransactions'" :totalPages="transactionsStore.lastPage" :currentPage="1"> </Paginate>
         </div>
     </div>
+
+
+    <!-- POPUP EDIT -->
+    <div v-if="extractFlag">
+        <div class="overlay" @click="extractFlag = false"></div>
+        <div class="popup">
+            <h2>Download Monthly Extract</h2>
+
+            <label style="margin-top: 1rem;">Month</label>
+            <select v-model="selected_month" class="form-select size" aria-label="">
+                <option v-for="(month, id) in months" :key="id" :value="id+1"> 
+                    {{ month }}
+                </option>
+            </select>
+            
+            <label style="margin-top: 0.9rem;">Year</label>
+            <input v-model="selected_year" type="number" class="form-control" id="yearInput" placeholder="Year">
+
+            <button style="margin-bottom: 1rem; margin-top: 1rem;" @click="download">Download</button>
+            <button @click="extractFlag = false">Cancel</button>
+        </div>
+    </div>
+
+
 </template>
 
 
 <style scoped>
+.overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.popup {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+
+}
+.popup label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+.popup button {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
 .transactions {
   margin-top: 2rem;
 }

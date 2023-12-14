@@ -86,6 +86,13 @@ const submit = async () => {
             </select>
         </div>
 
+        <div v-if="props.type == 'myTransaction'">
+            <select v-model="paginateSearchStore.myTrans_type" class="form-select size" aria-label="">
+                <option value="all" selected>All</option>
+                <option value="D">Debit</option>
+                <option value="C">Credit</option>
+            </select>
+        </div>
 
       <input v-model="paginateSearchStore.query" class="form-control" type="text" name="query" placeholder="Search...">
       <button class="btn btn-outline-success" type="submit">Search</button>
