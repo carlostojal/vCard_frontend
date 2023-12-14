@@ -66,12 +66,12 @@ const login = async () => {
         <h2 class="mb-4">Admin Login</h2>
         <div class="form-outline mb-4">
           <label class="form-label">Email address</label>
-          <input v-model="email" style="border-width: 2px; border-color: black;" id="form2Example1" class="form-control" />
+          <input v-model="email" style="border-width: 2px; border-color: black;" id="form2Example1" class="form-control" autocomplete="username" />
         </div>
 
         <div class="form-outline mb-4">
           <label class="form-label">Password</label>
-          <input v-model="password" style="border-width: 2px; border-color: black;" type="password" id="form2Example2" class="form-control" />
+          <input v-model="password" style="border-width: 2px; border-color: black;" type="password" id="form2Example2" class="form-control" autocomplete="current-password"/>
         </div>
 
         <button @click.prevent="login" type="button" class="btn btn-primary btn-block mb-4">Log in</button>

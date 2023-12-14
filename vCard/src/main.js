@@ -28,7 +28,6 @@ app.provide('serverUrl',`${apiDomain}/api`);
 
 router.beforeEach(async (to, from, next) => {
     const userRole = await userStore.getAuthGuard()
-    console.log(userRole);
     if(to.meta.requiredVcard && userRole == 'vcards'){
         next();
     }else if(to.meta.requiredAdmin && userRole == 'users'){
