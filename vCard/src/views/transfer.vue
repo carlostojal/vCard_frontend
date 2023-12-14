@@ -30,7 +30,9 @@ const fetchUser = async () => {
 }
 
 const validatePin = async () => {
-
+    if(validationFields() == false){
+        return false
+    }
     if(pin.value.length >= 3){
         let response = "";
         let ref = reference.value
