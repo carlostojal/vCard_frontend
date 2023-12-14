@@ -67,7 +67,6 @@ export const useTransactionsStore = defineStore('transactions', {
           return response.data
         } catch (e) {
             console.log(e)
-            console.log(data)
             this.toast.error("Transaction couldnt be processed, try again later");
             router.replace('/')
             return false
@@ -84,11 +83,9 @@ export const useTransactionsStore = defineStore('transactions', {
             }
           })
           .then((response) => {
-            // this.lastPage_myTrans = response.data.last
-            // this.myTransactions = response.data[0].data
             this.lastPage_myTrans = response.data.data.last
             this.myTransactions = response.data.data.transactions.data
-            // convert all values to float. convert dates to Date objects
+
             this.myTransactions.forEach((transaction) => {
               transaction.value = parseFloat(transaction.value)
               transaction.date = new Date(transaction.datetime)

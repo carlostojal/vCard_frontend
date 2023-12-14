@@ -16,7 +16,7 @@ const description = ref('')
 const pin = ref('')
 const isPin = ref(false)
 const payment_type_array = ref(["VCARD", "MBWAY", "PAYPAL", "IBAN", "MB", "VISA"])
-const payment_type = ref('')
+const payment_type = ref('VCARD')
 
 const regexVerifyEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
 onMounted(() => {
@@ -34,13 +34,9 @@ const validatePin = async () => {
     if(pin.value.length >= 3){
         let response = "";
         let ref = reference.value
-        let phone = ''
         try {
             if(payment_type.value == 'MB'){
                 ref = entity.value + '-' + ref
-            }
-            if(payment_type.value == 'VCARD'){
-                phone = reference.value
             }
             response = await transaction.sendMoneyTo(amount.value, ref, pin.value, payment_type.value, description.value)
         } catch(e) {
@@ -51,9 +47,6 @@ const validatePin = async () => {
             toast.success("Money sent successfully")
             fetchUser() //para carregar as novas transações do user para a home
             router.replace('/home')
-        }else{
-            toast.error(response.message)
-            return false
         }
     }else{
        toast.warning("Pin must be 4 digits")
@@ -121,16 +114,16 @@ const validationFields = () => {
             }
             break;
         case 'IBAN':
-            if(reference.value.slice(0, 3).isNumber){
+            if(reference.value.slice(0, 2).isNumber()){
                 toast.warning("IBAN must start with 2 letters");
                 return false
             }
-            if(!reference.value.slice(2, reference.value.length).isNumber){
+            if(!reference.value.slice(2, reference.value.length).isNumber()){
                 toast.warning("IBAN must have 23 digits, not letters");
                 return false
             }
-            if(!reference.value.length != 25){
-                toast.warning("Iban must be have 2 letters and 23 digits");
+            if(reference.value.length != 25){
+                toast.warning("IBAN must be have 2 letters and 23 digits");
                 return false
             }
             break;
@@ -161,7 +154,7 @@ const validationFields = () => {
 
                 <form @submit.prevent="validationFields">
                     <div class="mb-3" v-if="payment_type == 'VCARD' || payment_type == 'MBWAY' || payment_type == ''">
-                        <label for="phoneNumber" class="form-label">Phone Number:</label>
+                        <label for="reference" class="form-label">Phone Number:</label>
                         <input type="number" id="reference" v-model="reference" class="form-control" required>
                     </div>
                     <div class="mb-3" v-if="payment_type == 'MB'">
