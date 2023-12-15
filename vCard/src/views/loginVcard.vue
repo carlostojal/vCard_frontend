@@ -27,7 +27,6 @@ onMounted(() => {
     if (phone_number.value != '' || password.value != '') {
       flag_msgInvalid.value = false
 
-      //validar login
       try {
         const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/login`, {
           phone_number: phone_number.value,
@@ -35,13 +34,10 @@ onMounted(() => {
         })
 
         if (response.data.status == 'success') {
-          // login valido
           flag_msgInvalid.value = false
           userStore.setToken(response.data.data.access_token)
-console.log(response.data.data.access_token)
           router.replace(url_home.value)
         } else {
-          // login invalido
           msgInvalid.value = 'Invalid credentials, ' + response.data.message
           flag_msgInvalid.value = true
         }
@@ -77,6 +73,7 @@ console.log(response.data.data.access_token)
           maxlength="9"
           id="form2Example1"
           class="form-control"
+          autocomplete="username"
         />
       </div>
 
@@ -88,17 +85,16 @@ console.log(response.data.data.access_token)
           type="password"
           id="form2Example2"
           class="form-control"
+          autocomplete="current-password"
         />
       </div>
 
-      <!-- TODO: handle the login as a form action, preventing the default -->
       <input type="submit" class="btn btn-primary btn-block mb-4" value="Login" />
 
       <div class="text-center">
         <p>
           <router-link to="vCard">Not a member?</router-link>
         </p>
-        <!-- ROUTING -> to: /register -->
       </div>
     </div>
   </form>

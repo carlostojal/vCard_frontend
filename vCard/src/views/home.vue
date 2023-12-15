@@ -27,7 +27,6 @@ onMounted( async () => {
     <div class="header">
       <h1 class="welcome">Hello, {{ FormatUtil.formatFirstName(user.name) }}.</h1>
 
-      <!-- TODO: the vCard component is not reacting to changes -->
       <vCard :name="user.name" :phone="user.phone" :balance="user.balance" />
 
     </div>
