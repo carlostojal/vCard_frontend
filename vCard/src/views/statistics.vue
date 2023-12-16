@@ -42,6 +42,10 @@ const piechartDataCatD = ref({
     labels: [],
     datasets: []
 })
+const piechartDataCatC = ref({
+    labels: [],
+    datasets: []
+})
 
 const refreshTable = async () => {
     try {
@@ -221,17 +225,15 @@ const categoriesData = async () => {
                 Authorization: `Bearer ${userStore.token}`
             }
         });
-        var keys = Object.keys(response.data.data[0]);
         percentageOfCategoryOfMostMoneySpent = response.data.data.perc
         categoryWithMostMoneySpent.value = response.data.data.maxCategory
         var newData = {
             labels: [],
             datasets: []
         }
-        const count = 0
         var keys = Object.keys(response.data.data[0]);
-        const labels = []
-        const data = []
+        var labels = []
+        var data = []
         keys.forEach(key => {
                 labels.push(key)
                 data.push(response.data.data[0][key])
@@ -239,6 +241,28 @@ const categoriesData = async () => {
         newData.labels = labels
         newData.datasets.push({ backgroundColor: generateRandomColors(keys.length), data: data })
         piechartDataCatD.value = newData
+
+        const responseC = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/CategoriesReceived`, {
+            headers: {
+                Authorization: `Bearer ${userStore.token}`
+            }
+        });
+        percentageOfCategoryOfMostMoneyReceived = responseC.data.data.perc
+        categoryWithMostMoneyReceived.value = responseC.data.data.maxCategory
+        var newDataC = {
+            labels: [],
+            datasets: []
+        }
+        var keys = Object.keys(responseC.data.data[0]);
+        labels = []
+        data = []
+        keys.forEach(key => {
+                labels.push(key)
+                data.push(responseC.data.data[0][key])
+        });
+        newDataC.labels = labels
+        newDataC.datasets.push({ backgroundColor: generateRandomColors(keys.length), data: data })
+        piechartDataCatC.value = newDataC
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -305,7 +329,7 @@ onMounted(async () => {
     </div>
     <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
         with most money spent : <h4 style="margin-top: 20px;">
-            <bold>{{ categoryWithMostMoneySpent }} with a percentage of {{ percentageOfCategoryOfMostMoneySpent }} %</bold>
+            <bold><u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u></bold>
         </h4>
     </h2>
     <div class="container">
@@ -313,6 +337,16 @@ onMounted(async () => {
         <div class="graph-div-pie">
             <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
         </div>
+    </div>
+    <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+        with most money Received : <h4 style="margin-top: 20px;">
+            <bold><u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u></bold>
+        </h4>
+    </h2>
+    <div class="container">
+        <div class="graph-div-pie">
+            <Pie :data="piechartDataCatC" :options="piechartOptions"></Pie>
+        </div>  
     </div>
 </template>
   
