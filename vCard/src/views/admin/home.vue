@@ -30,9 +30,9 @@ onMounted( async () => {
       <CardAdminHome href="/allCategories" title="Categories" desc="List, Add and Delete Default Categories"></CardAdminHome>
       <CardAdminHome href="/addAdmin" title="Add Admin" desc="Create a new Administrator"></CardAdminHome>
       <CardAdminHome href="/addCategory" title="Add Category" desc="Create a new Default Category"></CardAdminHome>
+      <CardAdminHome href="/admin/credit" title="Credit" desc="Make a credit to a vcard"></CardAdminHome>
       
     </div>
-
 </template>
 
 <style scoped>
@@ -64,6 +64,15 @@ onMounted( async () => {
 
 .transactions {
   margin-top: 2rem;
+}
+
+body {
+    background-image: url("/img/gear.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
 }
 
 </style>

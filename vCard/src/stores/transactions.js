@@ -27,6 +27,33 @@ export const useTransactionsStore = defineStore('transactions', {
       }
       return this.myTransactions
     },
+    async creditVcard(vcard, amount, payment_type, ref){
+        const token = getToken()
+        const data = {
+            amount: parseFloat(amount),
+            payment_type: payment_type,
+            vcard: vcard,
+            payment_reference: ref,
+        };
+        console.log(data)
+        try {
+            const response = await axios.post(`${ConfigUtil.getApiUrl()}/users/credit-vcard`, data,
+                {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }
+            )
+
+          return response.data
+        } catch (e) {
+            console.log(e)
+            this.toast.error(e.response.data.message);
+            router.replace('/admin/home')
+            return false
+        }
+
+    },
     async sendMoneyTo(amount, reference, confirmation_code, payment_type, description) {
 
         const token = getToken()
