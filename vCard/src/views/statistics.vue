@@ -5,8 +5,10 @@ import Menu from '../components/menu.vue'
 import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 import axios from 'axios'
 import { useTransactionsStore } from '@/stores/transactions'
-
+import ConfigUtil from '../utils/ConfigUtil';
+import { useUserStore } from '@/stores/user'
 const transactionsStore = useTransactionsStore();
+const userStore = useUserStore()
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const years = [2020, 2021, 2022, 2023, 2024, 2025]
@@ -16,133 +18,125 @@ const debitChecked = ref(true);
 const byYearChecked = ref(false);
 const byMonthChecked = ref(true);
 const radioCheck = ref('month');
-ChartJS.register(ArcElement, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+var categoryWithMostMoneySpent = ref('');
+var percentageOfCategoryOfMostMoneySpent = ref('');
+var categoryWithMostMoneyReceived = ref('');
+var percentageOfCategoryOfMostMoneyReceived = ref('');
 
-const fetchData = async () => {
-    try {
-        await transactionsStore.fetch();
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-};
-fetchData()
+ChartJS.register(ArcElement, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const chartData = ref({
     labels: [],
     datasets: []
 })
-
-const payment_Types = ["VCARD", "MBWAY", "PAYPAL", "IBAN", "MB", "VISA"]
-
-const paymentTypeValueD = new Array(payment_Types.length).fill(0);
-
-const paymentTypeValueC = new Array(payment_Types.length).fill(0);
-
-
-
-transactionsStore.myTransactions.forEach((obj) => {
-    if (obj.type === "D") {
-        const index = payment_Types.indexOf(obj.payment_type);
-        if (index !== -1) {
-            paymentTypeValueD[index] += obj.value;
-        }
-    }
-});
-transactionsStore.myTransactions.forEach((obj) => {
-    if (obj.type === "C") {
-        const index = payment_Types.indexOf(obj.payment_type);
-        if (index !== -1) {
-            paymentTypeValueC[index] += obj.value;
-        }
-    }
-});
+const piechartDataC = ref({
+    labels: [],
+    datasets: []
+})
 
 const piechartDataD = ref({
-    labels: payment_Types,
-    datasets: [{ backgroundColor: ['#FCBA03', '#FC0328', '#BFF2eC', '#FF6384', '#36A2EB', '#9130C9'], data: paymentTypeValueD }]
+    labels: [],
+    datasets: []
 })
-const piechartDataC = ref({
-    labels: payment_Types,
-    datasets: [{ backgroundColor: ['#FCBA03', '#FC0328', '#BFF2eC', '#FF6384', '#36A2EB', '#9130C9'], data: paymentTypeValueC }]
+const piechartDataCatD = ref({
+    labels: [],
+    datasets: []
 })
+
 const refreshTable = async () => {
-    await transactionsStore.fetch();
-    var sumArrayCredit
-    var sumArrayDebit
-    var newData = {
-        labels: [],
-        datasets: []
-    };
-    if (radioCheck.value == 'year') {
-        newData.labels = years;
-    }
-    if (radioCheck.value == 'month') {
-        newData.labels = months
-    }
-    if (creditChecked.value === true) {
-        let filteredObjects = transactionsStore.myTransactions.filter(obj => obj.type === 'C');
-        if (radioCheck.value == 'month') {
-            sumArrayCredit = Array.from({ length: 12 }, () => 0);
-            filteredObjects.forEach(obj => {
-                const date = new Date(obj.date);
-                const monthIndex = date.getMonth();
-                sumArrayCredit[monthIndex] += obj.value;
-            });
-            newData.datasets.push({
-                label: "Credit",
-                data: sumArrayCredit,
-                backgroundColor: '#2598b8',
-            });
-        }
+    try {
+        var dataC //data of credit to add to newData
+        var dataD //data of debit to add to newData
+        var newData = {     //New Data to add to chart
+            labels: months,
+            datasets: []
+        };
+
         if (radioCheck.value == 'year') {
-            sumArrayCredit = Array.from({ length: 6 }, () => 0);
-            filteredObjects.forEach(obj => {
-                const date = new Date(obj.date);
-                const year = date.getFullYear();
-                sumArrayCredit[years.findIndex(y => y == year)] += obj.value;
-            });
-            newData.datasets.push({
-                label: "Credit",
-                data: sumArrayCredit,
-                backgroundColor: '#2598b8',
-            });
+            newData.labels = years;
+            if (debitChecked.value === true) {
+                dataD = Array.from({ length: 6 }, () => 0);
+                const response = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/DebitPerYear`, {
+                    headers: {
+                        Authorization: `Bearer ${userStore.token}`
+                    }
+                });
+                const keys = Object.keys(response.data.data[0]);
+
+                keys.forEach(key => {
+                    dataD[key] = response.data.data[0][key]
+                });
+                newData.datasets.push({
+                    label: "Debit",
+                    data: dataD,
+                    backgroundColor: '#f87979',
+                })
+            }
+            if (creditChecked.value === true) {
+                dataC = Array.from({ length: 6 }, () => 0);
+                const response = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/CreditPerYear`, {
+                    headers: {
+                        Authorization: `Bearer ${userStore.token}`
+                    }
+                });
+                const keys = Object.keys(response.data.data[0]);
+
+                keys.forEach(key => {
+                    dataC[key] = response.data.data[0][key]
+                });
+                newData.datasets.push({
+                    label: "Credit",
+                    data: dataC,
+                    backgroundColor: '#2598b8',
+                })
+            }
         }
-    }
-    if (debitChecked.value === true) {
-        let filteredObjects = transactionsStore.myTransactions.filter(obj => obj.type === 'D');
         if (radioCheck.value == 'month') {
-            sumArrayDebit = Array.from({ length: 12 }, () => 0);
-            filteredObjects.forEach(obj => {
-                const date = new Date(obj.date);
-                const monthIndex = date.getMonth();
-                sumArrayDebit[monthIndex] += obj.value;
-            });
-            newData.datasets.push({
-                label: "Debit",
-                data: sumArrayDebit,
-                backgroundColor: '#f87979',
-            })
+            newData.labels = months
+            if (debitChecked.value === true) {
+                dataD = Array.from({ length: 12 }, () => 0);
+                const response = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/DebitPerMonth`, {
+                    headers: {
+                        Authorization: `Bearer ${userStore.token}`
+                    }
+                });
+                const keys = Object.keys(response.data.data[0]);
+
+                keys.forEach(key => {
+                    dataD[key] = response.data.data[0][key]
+                });
+                newData.datasets.push({
+                    label: "Debit",
+                    data: dataD,
+                    backgroundColor: '#f87979',
+                })
+            }
+            if (creditChecked.value === true) {
+                dataC = Array.from({ length: 12 }, () => 0);
+                const response = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/CreditPerMonth`, {
+                    headers: {
+                        Authorization: `Bearer ${userStore.token}`
+                    }
+                });
+                const keys = Object.keys(response.data.data[0]);
+
+                keys.forEach(key => {
+                    dataC[key] = response.data.data[0][key]
+                });
+                newData.datasets.push({
+                    label: "Credit",
+                    data: dataC,
+                    backgroundColor: '#2598b8',
+                })
+            }
         }
-        if (radioCheck.value == 'year') {
-            sumArrayDebit = Array.from({ length: 6 }, () => 0);
-            filteredObjects.forEach(obj => {
-                const date = new Date(obj.date);
-                const year = date.getFullYear()
-                sumArrayDebit[years.findIndex(x => x == year)] += obj.value;
-            });
-            newData.datasets.push({
-                label: "Debit",
-                data: sumArrayDebit,
-                backgroundColor: '#f87979',
-            })
-        }
+        chartData.value = newData
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
-    chartData.value = newData
-}
-//function returns months in transactions
-function monthsInTransactions() {
-    let uniqueMonths = [...new Set(transactionsStore.myTransactions.map(item => new Date(item.date).toLocaleString('default', { month: 'long' })))];
-    return uniqueMonths
+
+
+
 }
 
 const piechartOptions = ref({
@@ -159,11 +153,104 @@ const chartOptions = ref({
         },
     },
 });
+const pieData = async () => {
+    try {
+
+        const payment_Types = ["VCARD", "MBWAY", "PAYPAL", "IBAN", "MB", "VISA"]
+        const paymentTypeValueD = new Array(payment_Types.length).fill(0);
+        const paymentTypeValueC = new Array(payment_Types.length).fill(0);
+        var newDataC = {    
+            labels: payment_Types,
+            datasets: []
+        };
+        var newDataD = {
+            labels: payment_Types,
+            datasets: []
+        }
 
 
+        const responseD = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/MoneySpentPerCard`, {
+            headers: {
+                Authorization: `Bearer ${userStore.token}`
+            }
+        });
+        const responseC = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/MoneyReceivedPerCard`, {
+            headers: {
+                Authorization: `Bearer ${userStore.token}`
+            }
+        });
+        var keys = Object.keys(responseC.data.data[0]);
+
+        keys.forEach(key => {
+            const index = payment_Types.indexOf(key);
+            if (index !== -1) {
+                paymentTypeValueC[index] += responseC.data.data[0][key];
+            }
+        });
+        keys = Object.keys(responseD.data.data[0]);
+        keys.forEach(key => {
+            const index = payment_Types.indexOf(key);
+            if (index !== -1) {
+                paymentTypeValueD[index] += responseD.data.data[0][key];
+            }
+        });
+        newDataC.datasets.push({ backgroundColor: ['#FCBA03', '#FC0328', '#BFF2eC', '#FF6384', '#36A2EB', '#9130C9'], data: paymentTypeValueC })
+        newDataD.datasets.push({ backgroundColor: ['#FCBA03', '#FC0328', '#BFF2eC', '#FF6384', '#36A2EB', '#9130C9'], data: paymentTypeValueD })
+        piechartDataC.value = newDataC
+        piechartDataD.value = newDataD
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+
+}
+function generateRandomColors(count) {
+    const colors = [];
+
+    for (let i = 0; i < count; i++) {
+        const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+        colors.push(color);
+    }
+
+    return colors;
+}
+const categoriesData = async () => {
+
+    try {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/statistics/CategoriesSpent`, {
+            headers: {
+                Authorization: `Bearer ${userStore.token}`
+            }
+        });
+        var keys = Object.keys(response.data.data[0]);
+        percentageOfCategoryOfMostMoneySpent = response.data.data.perc
+        categoryWithMostMoneySpent.value = response.data.data.maxCategory
+        var newData = {
+            labels: [],
+            datasets: []
+        }
+        const count = 0
+        var keys = Object.keys(response.data.data[0]);
+        const labels = []
+        const data = []
+        keys.forEach(key => {
+                labels.push(key)
+                data.push(response.data.data[0][key])
+        });
+        newData.labels = labels
+        newData.datasets.push({ backgroundColor: generateRandomColors(keys.length), data: data })
+        piechartDataCatD.value = newData
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+
+}
 onMounted(async () => {
     await refreshTable()
+    await pieData()
+    await categoriesData()
+
 })
+
 </script>
  
 <template>
@@ -187,12 +274,12 @@ onMounted(async () => {
                 <h3>Order By:</h3>
                 <div class="checkbox-item">
                     <input type="radio" name="Order By" v-model="radioCheck" value="year" id="radioButtonYear"
-                        :class="{ checked: byYearChecked }" @click="refreshTable()" />
+                        :class="{ checked: byYearChecked }" @click="refreshTable();" />
                     <label for="byYearMonthCheckbox">By Year</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="radio" name="Order By" v-model="radioCheck" value="month" id="radioButtonMonth"
-                        :class="{ checked: byMonthChecked }" @click="refreshTable()" checked />
+                        :class="{ checked: byMonthChecked }" @click="refreshTable();" checked />
                     <label for="totalCheckbox">By Month</label>
                 </div>
             </div>
@@ -214,6 +301,17 @@ onMounted(async () => {
 
         <div class="graph-div-pie">
             <Pie :data="piechartDataC" :options="piechartOptions"></Pie>
+        </div>
+    </div>
+    <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+        with most money spent : <h4 style="margin-top: 20px;">
+            <bold>{{ categoryWithMostMoneySpent }} with a percentage of {{ percentageOfCategoryOfMostMoneySpent }} %</bold>
+        </h4>
+    </h2>
+    <div class="container">
+
+        <div class="graph-div-pie">
+            <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
         </div>
     </div>
 </template>
@@ -264,5 +362,4 @@ onMounted(async () => {
     justify-content: center;
     width: 80%;
     height: 100%;
-}
-</style>
+}</style>
