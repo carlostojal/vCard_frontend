@@ -1,5 +1,5 @@
 <script setup>
-
+import router from '../router';
 import FormatUtil from '../utils/FormatUtil';
 
 const props = defineProps({
@@ -44,7 +44,21 @@ const props = defineProps({
         type: String,
         required: true
     },
+    id: {
+        type: Number,
+        required: true
+    },
 });
+
+const data = {
+    type: props.type,
+    paymentType: props.paymentType,
+}
+
+const routeEditTrans = () => {
+    //router.push({ name: 'editTransaction', query: { data: JSON.stringify(props) } })
+    router.push({ name: 'editTransaction', params: { id: props.id } })
+}
 
 </script>
 <template>
@@ -75,6 +89,7 @@ const props = defineProps({
             <p class="details" v-else-if="props.type == 'D' && props.paymentType != 'VCARD'"> <b>To:</b> {{ props.reference }} </p>
             <p class="details" v-else-if="props.type == 'C' && props.paymentType != 'VCARD'"> <b>From:</b> {{ props.reference }} </p>
 
+            <button class="btn btn-outline-secondary" @click="routeEditTrans">Edit Category/Description</button>
         </div>
     </div>
 </template>

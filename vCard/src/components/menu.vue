@@ -18,7 +18,6 @@ const deleteOwnVcard = () => {
     }
 }
 
-
 </script>
 
 
