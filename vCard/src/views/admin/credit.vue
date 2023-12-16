@@ -26,14 +26,10 @@ const submit = async () => {
     }
         let response = "";
         let ref = reference.value
-        try {
-            if(payment_type.value == 'MB'){
-                ref = entity.value + '-' + ref
-            }
-            response = await transaction.creditVcard(phone.value, amount.value, payment_type.value, ref)
-        } catch(e) {
-            toast.error("Error sending money: " + e.message);
+        if(payment_type.value == 'MB'){
+            ref = entity.value + '-' + ref
         }
+        response = await transaction.creditVcard(phone.value, amount.value, payment_type.value, ref)
 
         if(response.status == 'success'){
             toast.success("Credit made with success")
