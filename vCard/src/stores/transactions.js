@@ -7,7 +7,6 @@ import { useNotificationsStore } from './notifications'
 import { useToast } from 'vue-toastification'
 import FormatUtil from '../utils/FormatUtil'
 import router from '../router';
-import { saveAs } from 'file-saver';
 
 export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
@@ -18,6 +17,7 @@ export const useTransactionsStore = defineStore('transactions', {
     lastPage: null,
     lastPage_myTrans: null,
     toast: useToast(),
+    transaction_edit: null,
   }),
   actions: {
     async getAll() {
@@ -93,6 +93,22 @@ export const useTransactionsStore = defineStore('transactions', {
           })
       } catch (e) {
         console.log(e)
+      }
+    },
+    async getTransaction(id) {
+      try {
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          
+          this.transaction_edit = response.data.data.transaction
+          
+      } catch (e) {
+        this.toast.error(e.response.data.message)
       }
     },
     //ALL TRANSACTIONS

@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import FormatUtil from '../utils/FormatUtil';
 import router from '../router';
 import { useToast } from 'vue-toastification';
+import { defineProps } from 'vue';
+import { useCategoriesStore } from '@/stores/categories'
 
 const props = defineProps({
     type: {
@@ -25,7 +27,7 @@ const props = defineProps({
         type: String,
         required: false
     },
-    category: {
+    category_id: {
         type: String,
         required: false
     },
@@ -34,6 +36,12 @@ const props = defineProps({
 const category = ref(props.category)
 const description = ref(props.description)
 const toast = useToast()
+const categoriesStore = useCategoriesStore()
+
+onMounted( async () => {
+    await categoriesStore.fetchMyCategories()
+    console.log("props", categoriesStore.myCategories)
+})
 
 const editTransaction = async () => {
     console.log("editTransaction", category.value, description.value)
@@ -60,12 +68,18 @@ const editTransaction = async () => {
                 <img v-if="props.paymentType == 'MB'" class="transaction-icon" src="/icons/credit-card.svg" />
             </div>
 
-            <p class="transaction-value"><b>{{ FormatUtil.formatBalance(props.value) }}</b></p>
-            <p class="transaction-date">{{ FormatUtil.formatDate(props.date) }}</p>
+            <p class="transaction-value"><b>{{ (props.value) }}</b></p>
+            <p class="transaction-date">{{ (props.date) }}</p>
+
+            <div class="margens">
+            
+            </div>
 
             <div class="margens">
                 <label>Category</label>
-                <input type="text" v-model="category" class="form-control" placeholder="Enter name">
+                <select v-model="category" class="form-control" id="type">
+                    <option v-for="cat in categoriesStore.myCategories" :value="cat.id" :selected="cat.id == props.category_id"> {{ cat.name }} </option>
+                </select>
             </div>
 
             <div class="margens">
@@ -110,5 +124,9 @@ const editTransaction = async () => {
 
 .transaction .transaction-value {
     font-size: 2rem;
+}
+.margens{
+    margin-bottom: 1rem;
+    min-width: 25rem;
 }
 </style>

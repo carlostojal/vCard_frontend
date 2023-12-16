@@ -1,7 +1,10 @@
 <script setup>
 import EditTransactionForm from '@/components/EditTransactionForm.vue'
 import Menu from '@/components/menu.vue'
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
+import { useTransactionsStore } from '@/stores/transactions'
+
+const transactionsStore = useTransactionsStore();
 
 const props = defineProps({
     id: {
@@ -9,8 +12,10 @@ const props = defineProps({
     },
 });
 
-
-
+onMounted( async () => {
+    await transactionsStore.getTransaction(props.id)
+    console.log("transactionsStore.transaction_edit", transactionsStore.transaction_edit)
+})
 
 </script>
 
@@ -18,10 +23,9 @@ const props = defineProps({
 <template>
 
     <Menu>  </Menu>
-    <a>{{ props.id }}</a>
     <h2 class="container mt-5 d-flex justify-content-center">Edit Transaction</h2>
     <div class="container mt-5 d-flex justify-content-center">
-            <!--<EditTransactionForm :type="props.data.type" :paymentType="props.data.paymentType" :value="props.data.value" :date="props.data.date" :description="props.data.description" :category="props.data.category"> </EditTransactionForm>-->
+           <EditTransactionForm v-if="transactionsStore.transaction_edit" :type="transactionsStore.transaction_edit.type" :paymentType="transactionsStore.transaction_edit.payment_type" :value="transactionsStore.transaction_edit.value" :date="transactionsStore.transaction_edit.date" :description="transactionsStore.transaction_edit.description" :category="transactionsStore.transaction_edit.category_id"> </EditTransactionForm>
     </div>
 
 
