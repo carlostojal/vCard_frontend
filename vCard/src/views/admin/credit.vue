@@ -1,76 +1,63 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import Menu from '../components/menu.vue'
+import Menu from '../../components/menu.vue'
 import { useUserStore } from '@/stores/user'
 import { useTransactionsStore} from '@/stores/transactions'
 import { useToast } from 'vue-toastification'
-import router from '../router'
+import router from '../../router'
 
 const toast = useToast()
 const user = useUserStore();
 const transaction = useTransactionsStore();
+const phone = ref('')
 const reference = ref('')
 const entity = ref('')
 const amount = ref('')
-const description = ref('')
-const pin = ref('')
-const isPin = ref(false)
-const payment_type_array = ref(["VCARD", "MBWAY", "PAYPAL", "IBAN", "MB", "VISA"])
-const payment_type = ref('VCARD')
+const payment_type_array = ref(["MBWAY", "PAYPAL", "IBAN", "MB", "VISA"])
+const payment_type = ref('MBWAY')
 
 const regexVerifyEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
 onMounted(() => {
-    fetchUser()
 })
 
-const fetchUser = async () => {
-    await transaction.fetch().catch((e) => {
-        console.error('Error getting user data: ' + e)
-    })
-}
-
-const validatePin = async () => {
+const submit = async () => {
     if(validationFields() == false){
         return false
     }
-    if(pin.value.length >= 3){
         let response = "";
         let ref = reference.value
         try {
             if(payment_type.value == 'MB'){
                 ref = entity.value + '-' + ref
             }
-            response = await transaction.sendMoneyTo(amount.value, ref, pin.value, payment_type.value, description.value)
+            response = await transaction.creditVcard(phone.value, amount.value, payment_type.value, ref)
         } catch(e) {
             toast.error("Error sending money: " + e.message);
         }
 
         if(response.status == 'success'){
-            toast.success("Money sent successfully")
-            fetchUser() //para carregar as novas transações do user para a home
-            router.replace('/home')
+            toast.success("Credit made with success")
+            router.replace('/admin/home')
         }
-    }else{
-       toast.warning("Pin must be 4 digits")
-        return false 
     }
-}
-
 
 const validationFields = () => {
     String.prototype.isNumber = function(){return /^\d+$/.test(this);}
+    phone.value = phone.value.toString()
     reference.value = reference.value.toString()
-
+    if(phone.value.length != 9){
+        toast.warning('Vcard must be a 9 long phone number, ')
+    }
     switch(payment_type.value) {
         case '':
             toast.warning("Payment type must be selected")
             return false 
-        case 'VCARD' || 'MBWAY':
+        case 'MBWAY':
             if(reference.value.length != 9){
                 toast.warning("Phone number must be 9 digits")
                 return false
             }
-            if(reference.value[0] != '9'){
+            if(reference.value[0] !== '9'){
                 toast.warning("Phone number must start with 9")
                 return false
             }
@@ -137,13 +124,7 @@ const validationFields = () => {
         toast.warning("Amount must be greater than 0")
         return false
     }
-
-    if(amount.value > user.balance){
-        toast.warning("Amount must be less than your balance")
-        return false 
-    }
-
-    isPin.value = true
+    return true
 }
 
 </script>
@@ -154,12 +135,16 @@ const validationFields = () => {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <h2 class="margens">Transfer Money</h2>
+                <h2 class="margens">Credit VCARD</h2>
 
-                <form @submit.prevent="validationFields">
-                    <div class="mb-3" v-if="payment_type == 'VCARD' || payment_type == 'MBWAY' || payment_type == ''">
+                <form @submit.prevent="submit">
+                    <div class="mb-3">
+                        <label for="vcard" class="form-label">VCARD Phone Number:</label>
+                        <input type="number" id="phone" v-model="phone" class="form-control" max="999999999" required>
+                    </div>
+                    <div class="mb-3" v-if="payment_type == 'MBWAY'">
                         <label for="reference" class="form-label">Phone Number:</label>
-                        <input type="number" id="reference" v-model="reference" class="form-control" required>
+                        <input type="number" id="reference" v-model="reference" class="form-control" max="999999999" required>
                     </div>
                     <div class="mb-3" v-if="payment_type == 'MB'">
                         <div class="row">
@@ -192,11 +177,6 @@ const validationFields = () => {
                     </div>
 
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description:</label>
-                        <input type="text" id="description" v-model="description" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
                         <label for="payment" class="form-label">Payment Type:</label>
                         <select v-model="payment_type" id="payment" class="form-control" @change="PaymentTypeChange">
                             <option v-for="p_type in payment_type_array" :key="p_type" :value="p_type">
@@ -205,22 +185,12 @@ const validationFields = () => {
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Transfer Money</button>
+                    <button type="submit" class="btn btn-primary">Make Credit</button>
                 </form>
 
-                <div style="margin-top: 2rem"> 
-                <form v-show="isPin" @submit.prevent="validatePin">
-                    <div class="mb-3">
-                        <label for="pin" class="form-label">Pin:</label>
-                        <input type="password" id="pin" v-model="pin" class="form-control" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Verify Pin</button>
-                </form>
             </div>
             </div>
         </div>
-  </div>
 </template>
 
 
