@@ -18,10 +18,10 @@ const flag_msgInvalid = ref(false)
 const userStore = useUserStore()
 
 onMounted(() => {
-  document.getElementById('loginForm').onsubmit = function (e) {
-    e.preventDefault() // prevent refreshing the page
-    login()
-  }
+    document.getElementById('loginForm').onsubmit = function (e) {
+        e.preventDefault() // prevent refreshing the page
+        login()
+    }
 
   const login = async () => {
     if (phone_number.value != '' || password.value != '') {

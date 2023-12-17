@@ -5,6 +5,7 @@ import Register from '../views/register.vue'
 import vCard from '../views/createVCard.vue'
 import Home from '../views/home.vue'
 import HomeAdmin from '../views/admin/home.vue'
+import CreditForm from '../views/admin/credit.vue'
 import Transfer from '../views/transfer.vue'
 import Profile from '../views/profile.vue'
 import Transactions from '../views/transactions_list.vue'
@@ -58,6 +59,12 @@ const router = createRouter({
         path: '/admin/home',
         name: 'admin/home',
         component: HomeAdmin,
+        meta: { requiredAdmin: true}
+    },
+    {
+        path: '/admin/credit',
+        name: 'admin/credit',
+        component: CreditForm,
         meta: { requiredAdmin: true}
     },
     {
