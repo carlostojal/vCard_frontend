@@ -30,6 +30,7 @@ onMounted( async () => {
       <CardAdminHome href="/allCategories" title="Categories" desc="List, Add and Delete Default Categories"></CardAdminHome>
       <CardAdminHome href="/addAdmin" title="Add Admin" desc="Create a new Administrator"></CardAdminHome>
       <CardAdminHome href="/addCategory" title="Add Category" desc="Create a new Default Category"></CardAdminHome>
+      <CardAdminHome href="/seeStatistics" title="See Statistics" desc="Watch the current web App statistics"></CardAdminHome>
       
     </div>
 
