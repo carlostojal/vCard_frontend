@@ -1,6 +1,7 @@
 <script setup>
-
+import router from '../router';
 import FormatUtil from '../utils/FormatUtil';
+import { useToast } from 'vue-toastification';
 
 const props = defineProps({
     entityName: {
@@ -44,7 +45,26 @@ const props = defineProps({
         type: String,
         required: true
     },
+    id: {
+        type: Number,
+        required: true
+    },
 });
+
+const toast = useToast()
+
+const data = {
+    type: props.type,
+    paymentType: props.paymentType,
+}
+
+const routeEditTrans = () => {
+    if(props.type == 'D'){
+        router.push({ name: 'editTransaction', params: { id: props.id } })
+    }else{
+        toast.error("You can not edit a credit transaction")
+    }
+}
 
 </script>
 <template>
@@ -75,6 +95,7 @@ const props = defineProps({
             <p class="details" v-else-if="props.type == 'D' && props.paymentType != 'VCARD'"> <b>To:</b> {{ props.reference }} </p>
             <p class="details" v-else-if="props.type == 'C' && props.paymentType != 'VCARD'"> <b>From:</b> {{ props.reference }} </p>
 
+            <button class="btn btn-outline-secondary" @click="routeEditTrans">Edit Category/Description</button>
         </div>
     </div>
 </template>

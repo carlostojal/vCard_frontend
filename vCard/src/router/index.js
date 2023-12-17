@@ -19,6 +19,7 @@ import AddCategory from '../views/admin/addCategory.vue'
 import MyCategories from '../views/myCategories.vue'
 import DeleteOwnVcard from '../views/deleteOwnVcard.vue'
 import AddCategoryVcard from '../views/addCategoryVcard.vue'
+import EditTransaction from '../views/editTransaction.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -141,9 +142,17 @@ const router = createRouter({
     },
     {
       path: '/addCategoryVcard',
-      name: AddCategoryVcard,
+      name: 'addCategoryVcard',
       component: AddCategoryVcard,
       meta: { requiredVcard: true},
+    },
+    {
+      path: '/editTransaction/:id',
+      name: 'editTransaction',
+      component: EditTransaction,
+      meta: { requiredVcard: true},
+      //props: route => ({ data: JSON.parse(route.query.data) }),
+      props: route => ({ id: route.params.id })
     }
   ]
 })
