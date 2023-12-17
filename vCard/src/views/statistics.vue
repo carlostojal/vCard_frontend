@@ -14,8 +14,6 @@ const years = [2020, 2021, 2022, 2023, 2024, 2025]
 
 const creditChecked = ref(true);
 const debitChecked = ref(true);
-const byYearChecked = ref(false);
-const byMonthChecked = ref(true);
 const radioCheck = ref('month');
 var categoryWithMostMoneySpent = ref('');
 var percentageOfCategoryOfMostMoneySpent = ref('');
@@ -297,12 +295,12 @@ onMounted(async () => {
                 <h3>Order By:</h3>
                 <div class="checkbox-item">
                     <input type="radio" name="Order By" v-model="radioCheck" value="year" id="radioButtonYear"
-                        :class="{ checked: byYearChecked }" @click="refreshTable();" />
+                        @click="refreshTable();" />
                     <label for="byYearMonthCheckbox">By Year</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="radio" name="Order By" v-model="radioCheck" value="month" id="radioButtonMonth"
-                        :class="{ checked: byMonthChecked }" @click="refreshTable();" checked />
+                        @click="refreshTable();" checked />
                     <label for="totalCheckbox">By Month</label>
                 </div>
             </div>
@@ -326,9 +324,9 @@ onMounted(async () => {
             <Pie :data="piechartDataC" :options="piechartOptions"></Pie>
         </div>
     </div>
-    <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+    <h2 v-if="percentageOfCategoryOfMostMoneySpent<0" style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
         with most money spent : <h4 style="margin-top: 20px;">
-            <bold><u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u></bold>
+            <u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u>
         </h4>
     </h2>
     <div class="container">
@@ -337,9 +335,9 @@ onMounted(async () => {
             <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
         </div>
     </div>
-    <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+    <h2 v-if="percentageOfCategoryOfMostMoneyReceived < 0" style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
         with most money Received : <h4 style="margin-top: 20px;">
-            <bold><u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u></bold>
+            <u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u>
         </h4>
     </h2>
     <div class="container">
