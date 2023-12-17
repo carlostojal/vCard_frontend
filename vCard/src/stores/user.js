@@ -59,7 +59,7 @@ export const useUserStore = defineStore('user', {
         async fetch() {
             try {
                 this.token = getToken()
-                const userData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/profile`, {
+                const userData = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/`, {
                     headers: {
                         Authorization: `Bearer ${this.token}`
                     }

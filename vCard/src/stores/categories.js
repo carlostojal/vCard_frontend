@@ -147,14 +147,14 @@ export const useCategoriesStore = defineStore('categories', {
       try{
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/mycategories`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/categories`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
             })
             .then((response) => {
               console.log(response)
-                this.myCategories = response.data.data.categories
+                this.myCategories = response.data.data.categories.data
                 console.log(this.myCategories)
             })
       }catch(e){

@@ -48,6 +48,7 @@ export const useTransactionsStore = defineStore('transactions', {
           return response.data
         } catch (e) {
             console.log(e)
+    
             this.toast.error(e.response.data.message);
             router.replace('/admin/home')
             return false
@@ -212,7 +213,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${query}?type=${type}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -236,7 +237,7 @@ export const useTransactionsStore = defineStore('transactions', {
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/myTransactions?type=${type}`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -260,12 +261,13 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/myTransactions?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}&page=${page}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
+            console.log(response);
             this.lastPage_myTrans = response.data.data.last
             this.myTransactions = response.data.data.transactions.data
 
@@ -280,13 +282,13 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async searchMyTransaction(query, type) {
-
+    console.log('clicked', query);
       try {
 
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/myTransactions/search/${query}?type=${type}`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?pair_vcard=${query}&type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -310,7 +312,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/myTransactions/search/${query}?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${query}?type=${type}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
