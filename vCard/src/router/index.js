@@ -17,6 +17,7 @@ import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
 import AddCategory from '../views/admin/addCategory.vue'
 import MyCategories from '../views/myCategories.vue'
+import AdminStatistics from '../views/admin/statistics.vue'
 import DeleteOwnVcard from '../views/deleteOwnVcard.vue'
 import AddCategoryVcard from '../views/addCategoryVcard.vue'
 import EditTransaction from '../views/editTransaction.vue'
@@ -133,6 +134,12 @@ const router = createRouter({
       name: 'myCategories',
       component: MyCategories,
       meta: { requiredVcard: true},
+    },
+    {
+      path: '/seeStatistics',
+      name: 'seeStatistics',
+      component: AdminStatistics,
+      meta: { requiredAdmin: true},
     },
     {
       path: '/deleteOwnVcard',
