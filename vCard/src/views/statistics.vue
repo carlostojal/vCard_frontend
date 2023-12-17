@@ -1,13 +1,12 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted} from 'vue'
 import { Bar, Pie } from 'vue-chartjs'
 import Menu from '../components/menu.vue'
 import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 import axios from 'axios'
-import { useTransactionsStore } from '@/stores/transactions'
 import ConfigUtil from '../utils/ConfigUtil';
 import { useUserStore } from '@/stores/user'
-const transactionsStore = useTransactionsStore();
+
 const userStore = useUserStore()
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
