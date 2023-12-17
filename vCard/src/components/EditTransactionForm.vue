@@ -3,32 +3,33 @@ import { onMounted, ref } from 'vue';
 import FormatUtil from '../utils/FormatUtil';
 import router from '../router';
 import { useToast } from 'vue-toastification';
-import { defineProps } from 'vue';
 import { useCategoriesStore } from '@/stores/categories'
+import { useTransactionsStore } from '@/stores/transactions'
+
 
 const props = defineProps({
+    id: {
+        required: true
+    },
     type: {
         type: String,
         required: true
     },
     paymentType: {
-        type: Number,
         required: true
     },
     value: {
-        type: Number,
         required: true
     },
     date: {
-        type: Date,
         required: true
     },
     description: {
         type: String,
-        required: false
+        required: false,
+        default: ""
     },
     category_id: {
-        type: String,
         required: false
     },
 });
@@ -37,17 +38,18 @@ const category = ref(props.category)
 const description = ref(props.description)
 const toast = useToast()
 const categoriesStore = useCategoriesStore()
+const transactionsStore = useTransactionsStore()
 
 onMounted( async () => {
-    await categoriesStore.fetchMyCategories()
-    console.log("props", categoriesStore.myCategories)
+    await categoriesStore.fetchMyTypeCategories("D")
+    description.value = props.description
 })
 
 const editTransaction = async () => {
-    console.log("editTransaction", category.value, description.value)
-
-        
+    console.log("editTransaction", category.value, description.value, props.id)
+    await transactionsStore.editTransaction(props.id, category.value, description.value)
 }
+
 
 
 </script>
@@ -74,7 +76,7 @@ const editTransaction = async () => {
             <div class="margens">
             
             </div>
-
+ 
             <div class="margens">
                 <label>Category</label>
                 <select v-model="category" class="form-control" id="type">
@@ -84,10 +86,15 @@ const editTransaction = async () => {
 
             <div class="margens">
                 <label>Description</label>
-                <input type="text" v-model="description" class="form-control" placeholder="Enter Description">
+                
+                <input v-id="props.description" type="text" v-model="description" class="form-control">
+                
             </div>
 
-            <button type="submit" class="btn btn-primary">Save</button>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            
             
         </div>
 

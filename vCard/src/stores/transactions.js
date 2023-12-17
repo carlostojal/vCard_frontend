@@ -99,7 +99,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${id}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${parseInt(id)}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -110,6 +110,31 @@ export const useTransactionsStore = defineStore('transactions', {
       } catch (e) {
         this.toast.error(e.response.data.message)
       }
+    },
+    async editTransaction(id, category, description){
+        try{
+
+            if(isNaN(id)){
+                this.toast.error("Invalid transaction id")
+                return
+            }
+
+            const token = getToken()
+            const data = {
+                category: category,
+                description: description
+            }
+
+            const response = await axios.put(`${ConfigUtil.getApiUrl()}/transactions/${parseInt(id)}`, data, {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              })
+              this.toast.success(response.data.message)
+              router.replace('/myTransactions')
+        }catch(e){
+            this.toast.error(e.response.data.message)
+        }
     },
     //ALL TRANSACTIONS
     async fetchAllTransactionType(type) {
