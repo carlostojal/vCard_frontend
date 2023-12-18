@@ -372,12 +372,16 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     //PDF
-    async extractPDF(month, year){
+    async extractPDF(month, year, vcard){
       try{
+
+          if(vcard == null){
+            vcard = ''
+          }
 
           const token = getToken()
 
-          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=${year}&month=${month}`, 
+          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=${year}&month=${month}&vcard=${vcard}`, 
           {
             headers: {
               Accept: 'application/pdf',
