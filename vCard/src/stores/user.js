@@ -150,7 +150,7 @@ export const useUserStore = defineStore('user', {
                         if(retval == 'users'){
                             this.isAdmin = true
                         }else {
-                            false
+                            this.isAdmin = false 
                         }
                     }
                 }).catch((error) => {
