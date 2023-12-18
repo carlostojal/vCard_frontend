@@ -36,7 +36,7 @@ onMounted(() => {
         if (response.data.status == 'success') {
           flag_msgInvalid.value = false
           userStore.setToken(response.data.data.access_token)
-          userStore.setPhone(phone_number.value);
+    console.log("userStore.token", userStore.token)
           router.replace(url_home.value)
         } else {
           msgInvalid.value = 'Invalid credentials, ' + response.data.message

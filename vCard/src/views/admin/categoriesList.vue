@@ -27,6 +27,10 @@ onMounted(async () => {
                 <h2 class="margens">Categories</h2>
             </div>
 
+            <div class="d-flex">
+                <router-link class="btn btn-outline-secondary" style="margin-bottom: 2rem; margin-top: 1rem;" to="/addCategory">Add Categorie </router-link>
+            </div>
+
             <div class="categories">
                 <div class="categories-list">
                     <table class="table table-hover">
