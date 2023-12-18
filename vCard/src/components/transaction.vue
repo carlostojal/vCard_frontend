@@ -1,6 +1,8 @@
 <script setup>
-
+import router from '../router';
 import FormatUtil from '../utils/FormatUtil';
+import { useToast } from 'vue-toastification';
+import { useUserStore } from '@/stores/user'
 
 const props = defineProps({
     entityName: {
@@ -32,10 +34,6 @@ const props = defineProps({
         type: String,
         required: false
     },
-    pair_vcard: {
-        type: String,
-        required: true
-    },
     old_balance: {
         type: String,
         required: true
@@ -44,7 +42,34 @@ const props = defineProps({
         type: String,
         required: true
     },
+    id: {
+        type: Number,
+        required: true
+    },
+    vcard: {
+        type: String,
+        required: false
+    },
+    category: {
+        required: false
+    },
 });
+
+const user = useUserStore();
+const toast = useToast()
+
+const data = {
+    type: props.type,
+    paymentType: props.paymentType,
+}
+
+const routeEditTrans = () => {
+    if(props.type == 'D'){
+        router.push({ name: 'editTransaction', params: { id: props.id } })
+    }else{
+        toast.error("You can not edit a credit transaction")
+    }
+}
 
 </script>
 <template>
@@ -64,17 +89,21 @@ const props = defineProps({
         <div v-if="props.isDetail">
             <p class="details" v-if="props.type == 'D'"> <b>Balance:</b> €{{ props.old_balance }} (-{{ props.value }})</p>
             <p class="details" v-else> <b>Balance:</b> €{{ props.old_balance }} (+{{ props.value }})</p>
-
+            
             <p v-if="props.description" class="details"> <b>Message:</b> {{ props.description }} </p>
 
-            <!-- If Vcard -->
-            <p class="details" v-if="props.type == 'D' && props.paymentType == 'VCARD'"> <b>To:</b> {{ props.pair_vcard }} </p>
-            <p class="details" v-else-if="props.type == 'C' && props.paymentType == 'VCARD'"> <b>From:</b> {{ props.pair_vcard }} </p>
+            <p v-if="props.category" class="details"> <b>Category:</b> {{ props.category }} </p>
 
-            <!-- If not Vcard -->
-            <p class="details" v-else-if="props.type == 'D' && props.paymentType != 'VCARD'"> <b>To:</b> {{ props.reference }} </p>
-            <p class="details" v-else-if="props.type == 'C' && props.paymentType != 'VCARD'"> <b>From:</b> {{ props.reference }} </p>
-
+            <div v-if="props.type == 'D'">
+                <p v-if="props.vcard" class="details"> <b>From:</b> {{ props.vcard }} </p>
+                <p class="details"> <b>To:</b> {{ props.reference }} </p>
+            </div>
+            <div v-else-if="props.type == 'C'">
+                <p class="details"> <b>From:</b> {{ props.reference }} </p>
+                <p v-if="props.vcard" class="details"> <b>To:</b> {{ props.vcard }} </p>
+            </div>
+            
+            <button v-if="!user.isAdmin" class="btn btn-outline-secondary" @click="routeEditTrans">Edit Category/Description</button>
         </div>
     </div>
 </template>

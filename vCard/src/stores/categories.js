@@ -168,6 +168,22 @@ export const useCategoriesStore = defineStore('categories', {
         this.toast.error("Error adding category");
       }
     },
+    async fetchMyTypeCategories(type){
+      try{
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/${type}/mycategories`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            })
+            .then((response) => {
+                this.myCategories = response.data.data.categories
+            })
+      }catch(e){
+          console.log(e)
+      }
+    },
     async fetchMyCategories(){
       try{
         const token = getToken()
@@ -178,9 +194,7 @@ export const useCategoriesStore = defineStore('categories', {
             }
             })
             .then((response) => {
-              console.log(response)
-                this.myCategories = response.data.data.categories.data
-                console.log(this.myCategories)
+                this.myCategories = response.data.data.categories
             })
       }catch(e){
           console.log(e)

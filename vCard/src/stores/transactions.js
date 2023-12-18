@@ -18,6 +18,7 @@ export const useTransactionsStore = defineStore('transactions', {
     lastPage: null,
     lastPage_myTrans: null,
     toast: useToast(),
+    transaction_edit: null,
   }),
   actions: {
     async getAll() {
@@ -122,6 +123,47 @@ export const useTransactionsStore = defineStore('transactions', {
       } catch (e) {
         console.log(e)
       }
+    },
+    async getTransaction(id) {
+      try {
+        const token = getToken()
+
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${parseInt(id)}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          
+          this.transaction_edit = response.data.data.transaction
+          
+      } catch (e) {
+        this.toast.error(e.response.data.message)
+      }
+    },
+    async editTransaction(id, category, description){
+        try{
+
+            if(isNaN(id)){
+                this.toast.error("Invalid transaction id")
+                return
+            }
+
+            const token = getToken()
+            const data = {
+                category: category,
+                description: description
+            }
+
+            const response = await axios.put(`${ConfigUtil.getApiUrl()}/transactions/${parseInt(id)}`, data, {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              })
+              this.toast.success(response.data.message)
+              router.replace('/myTransactions')
+        }catch(e){
+            this.toast.error(e.response.data.message)
+        }
     },
     //ALL TRANSACTIONS
     async fetchAllTransactionType(type) {
@@ -345,7 +387,7 @@ export const useTransactionsStore = defineStore('transactions', {
 
             const blob = new Blob([response.data], { type: 'application/pdf' });
             const pdfUrl = URL.createObjectURL(blob);
-            //window.open(pdfUrl);
+
             saveAs(blob, 'extract.pdf');
 
       }catch(e){

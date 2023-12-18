@@ -1,13 +1,12 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted} from 'vue'
 import { Bar, Pie } from 'vue-chartjs'
 import Menu from '../components/menu.vue'
 import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 import axios from 'axios'
-import { useTransactionsStore } from '@/stores/transactions'
 import ConfigUtil from '../utils/ConfigUtil';
 import { useUserStore } from '@/stores/user'
-const transactionsStore = useTransactionsStore();
+
 const userStore = useUserStore()
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -15,8 +14,6 @@ const years = [2020, 2021, 2022, 2023, 2024, 2025]
 
 const creditChecked = ref(true);
 const debitChecked = ref(true);
-const byYearChecked = ref(false);
-const byMonthChecked = ref(true);
 const radioCheck = ref('month');
 var categoryWithMostMoneySpent = ref('');
 var percentageOfCategoryOfMostMoneySpent = ref('');
@@ -298,12 +295,12 @@ onMounted(async () => {
                 <h3>Order By:</h3>
                 <div class="checkbox-item">
                     <input type="radio" name="Order By" v-model="radioCheck" value="year" id="radioButtonYear"
-                        :class="{ checked: byYearChecked }" @click="refreshTable();" />
+                        @click="refreshTable();" />
                     <label for="byYearMonthCheckbox">By Year</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="radio" name="Order By" v-model="radioCheck" value="month" id="radioButtonMonth"
-                        :class="{ checked: byMonthChecked }" @click="refreshTable();" checked />
+                        @click="refreshTable();" checked />
                     <label for="totalCheckbox">By Month</label>
                 </div>
             </div>
@@ -327,26 +324,30 @@ onMounted(async () => {
             <Pie :data="piechartDataC" :options="piechartOptions"></Pie>
         </div>
     </div>
-    <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
-        with most money spent : <h4 style="margin-top: 20px;">
-            <bold><u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u></bold>
-        </h4>
-    </h2>
-    <div class="container">
+    <div v-if="percentageOfCategoryOfMostMoneySpent<0">
+        <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+            with most money spent : <h4 style="margin-top: 20px;">
+                <u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u>
+            </h4>
+        </h2>
+        <div class="container">
 
-        <div class="graph-div-pie">
-            <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
+            <div class="graph-div-pie">
+                <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
+            </div>
         </div>
     </div>
-    <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
-        with most money Received : <h4 style="margin-top: 20px;">
-            <bold><u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u></bold>
-        </h4>
-    </h2>
-    <div class="container">
-        <div class="graph-div-pie">
-            <Pie :data="piechartDataCatC" :options="piechartOptions"></Pie>
-        </div>  
+    <div v-if="percentageOfCategoryOfMostMoneyReceived < 0">
+        <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+            with most money Received : <h4 style="margin-top: 20px;">
+                <u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u>
+            </h4>
+        </h2>
+        <div class="container">
+            <div class="graph-div-pie">
+                <Pie :data="piechartDataCatC" :options="piechartOptions"></Pie>
+            </div>  
+        </div>
     </div>
 </template>
   

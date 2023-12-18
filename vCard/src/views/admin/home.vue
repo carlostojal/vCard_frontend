@@ -32,6 +32,7 @@ onMounted( async () => {
       <CardAdminHome href="/addAdmin" title="Add Admin" desc="Create a new Administrator"></CardAdminHome>
       <CardAdminHome href="/addCategory" title="Add Category" desc="Create a new Default Category"></CardAdminHome>
       <CardAdminHome href="/admin/credit" title="Credit" desc="Make a credit to a vcard"></CardAdminHome>
+      <CardAdminHome href="/seeStatistics" title="See Statistics" desc="Watch the current web App statistics"></CardAdminHome>
       
     </div>
 </template>

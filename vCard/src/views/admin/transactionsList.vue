@@ -22,7 +22,7 @@ const selected_year = ref(null)
 const selected_month = ref(null)
 
 </script> 
-   
+
 
 <template>
 <Menu> </Menu>
@@ -30,17 +30,17 @@ const selected_month = ref(null)
 
     <div class="container">
         <div class="row justify-content-center">
-            <div style="margin-top:3rem" >
+            <div style="margin-top:3rem">
                 <h2 class="margens">All Transactions</h2>
 
                 <button @click="extractFlag = true" class="btn btn-outline-secondary" style="margin-top: 1rem;">
                   Extract PDF Monthly
                 </button>
             </div>
-   
+
             <div class="transactions">
                 <div class="transactions-list">
-                    <Transaction v-if="transactionsStore.allTransactions" v-for="transaction in transactionsStore.allTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance" :reference="transaction.payment_reference"/>
+                    <Transaction v-if="transactionsStore.allTransactions" v-for="transaction in transactionsStore.allTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :old_balance="transaction.old_balance" :reference="transaction.payment_reference" :vcard="transaction.vcard" :category="transaction.category_id"/>
                 </div>
             </div>
             <Paginate v-if="transactionsStore.lastPage" :type="'allTransactions'" :totalPages="transactionsStore.lastPage" :currentPage="1"> </Paginate>

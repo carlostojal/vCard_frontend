@@ -15,8 +15,12 @@ import Statistics from '../views/statistics.vue'
 import AllTransactions from '../views/admin/transactionsList.vue'
 import AddAdmin from '../views/admin/addAdmin.vue'
 import AllCategories from '../views/admin/categoriesList.vue'
-import AddCategory from '../views/admin/addCategorie.vue'
+import AddCategory from '../views/admin/addCategory.vue'
 import MyCategories from '../views/myCategories.vue'
+import AdminStatistics from '../views/admin/statistics.vue'
+import DeleteOwnVcard from '../views/deleteOwnVcard.vue'
+import AddCategoryVcard from '../views/addCategoryVcard.vue'
+import EditTransaction from '../views/editTransaction.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -131,6 +135,31 @@ const router = createRouter({
       component: MyCategories,
       meta: { requiredVcard: true},
     },
+    {
+      path: '/seeStatistics',
+      name: 'seeStatistics',
+      component: AdminStatistics,
+      meta: { requiredAdmin: true},
+    },
+    {
+      path: '/deleteOwnVcard',
+      name: 'deleteOwnVcard',
+      component: DeleteOwnVcard,
+      meta: { requiredVcard: true},
+    },
+    {
+      path: '/addCategoryVcard',
+      name: 'addCategoryVcard',
+      component: AddCategoryVcard,
+      meta: { requiredVcard: true},
+    },
+    {
+      path: '/editTransaction/:id',
+      name: 'editTransaction',
+      component: EditTransaction,
+      meta: { requiredVcard: true},
+      props: route => ({ id: route.params.id })
+    }
   ]
 })
 

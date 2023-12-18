@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { useUsersStore } from '@/stores/users'
 import router from '../router';
 import { useToast } from 'vue-toastification'

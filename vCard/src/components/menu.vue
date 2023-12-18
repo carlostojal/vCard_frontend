@@ -1,11 +1,22 @@
 <script setup>
+import router from '../router';
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user'
-import { useTransactionsStore } from '@/stores/transactions'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 const userStore = useUserStore();
-const transactionsStore = useTransactionsStore();
 const isAuthenticated = ref(false);
 isAuthenticated.value = userStore.token != null;
+
+const deleteOwnVcard = () => {
+    if(userStore.balance != 0){
+        toast.warning('You can only delete your vcard if your balance is 0');
+        return;
+    }else{
+        router.replace('/deleteOwnVcard')
+    }
+}
 
 </script>
 
@@ -13,7 +24,7 @@ isAuthenticated.value = userStore.token != null;
 <template>
     <nav v-show="!isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="./home">VCard</a>
+            <router-link class="navbar-brand" to="/home">VCard</router-link>
         </div>
     </nav>
 
@@ -31,7 +42,7 @@ isAuthenticated.value = userStore.token != null;
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <router-link v-if="userStore.isAdmin" class="nav-link" to="admin/home">Home</router-link>
-                        <router-link v-else class="nav-link" to="home">Home</router-link>
+                        <router-link v-else class="nav-link" to="/home">Home</router-link>
                     </li>
                     <li v-if="!userStore.isAdmin" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -53,8 +64,10 @@ isAuthenticated.value = userStore.token != null;
                         </a>
                         <!-- <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{FormatUtil.formatFirstLastName(userStore.name)}}</a> -->
                         <ul class="dropdown-menu" id="profileToggle" aria-labelledby="navbarDropdown">
-                             <router-link class="dropdown-item" to="profile">Change Profile</router-link> 
+                            <router-link class="dropdown-item" to="profile">Change Profile</router-link> 
                             <router-link to="/statistics" class="dropdown-item">Statistics</router-link>
+                            <button @click="deleteOwnVcard" class="dropdown-item">Delete Vcard</button>
+                            <!--<router-link to="/deleteOwnVcard" class="dropdown-item">Delete Vcard</router-link>-->
                             <button @:click="userStore.logout()" class="dropdown-item">Logout</button>
                         </ul>
                     </div>
