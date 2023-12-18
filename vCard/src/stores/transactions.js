@@ -15,6 +15,7 @@ export const useTransactionsStore = defineStore('transactions', {
     notificationsStore: useNotificationsStore(),
     myTransactions: null,
     allTransactions: null,
+    recentTransactions: null,
     lastPage: null,
     lastPage_myTrans: null,
     toast: useToast(),
@@ -49,20 +50,22 @@ export const useTransactionsStore = defineStore('transactions', {
           return response.data
         } catch (e) {
             console.log(e)
+    
             this.toast.error(e.response.data.message);
             router.replace('/admin/home')
             return false
         }
 
     },
-    async sendMoneyTo(amount, reference, confirmation_code, payment_type, description) {
+    async sendMoneyTo(amount, reference, confirmation_code, payment_type, description, cat_id) {
 
         const token = getToken()
         const data = {
           amount: parseFloat(amount),
           confirmation_code: confirmation_code,
           description: description,
-          payment_type: payment_type
+          payment_type: payment_type,
+          category_id: cat_id,
         };
 
         if (payment_type == 'VCARD') {
@@ -92,6 +95,8 @@ export const useTransactionsStore = defineStore('transactions', {
             console.error(error)
           }
           this.userStore.decrementBalance(amount)
+          this.recentTransactions = null;
+          this.fetch();
           return response.data
         } catch (e) {
             console.log(e)
@@ -105,7 +110,7 @@ export const useTransactionsStore = defineStore('transactions', {
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, { 
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -113,6 +118,9 @@ export const useTransactionsStore = defineStore('transactions', {
           .then((response) => {
             this.lastPage_myTrans = response.data.data.last
             this.myTransactions = response.data.data.transactions.data
+            if(this.recentTransactions == null){
+                this.recentTransactions = response.data.data.transactions.data.slice(0,3);
+            }
 
             this.myTransactions.forEach((transaction) => {
               transaction.value = parseFloat(transaction.value)
@@ -168,9 +176,8 @@ export const useTransactionsStore = defineStore('transactions', {
     async fetchAllTransactionType(type) {
       try {
         const token = getToken()
-
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}`, {
+          await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -196,7 +203,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions?type=${type}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -217,7 +224,6 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async searchAllTransaction(query, type) {
-      console.log("T3")
       try {
         if (type == 'debit') {
           type = 'D'
@@ -227,13 +233,14 @@ export const useTransactionsStore = defineStore('transactions', {
 
         const token = getToken()
 
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}`, {
+         await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions?vcard=${query}&type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
+              console.log(response);
             // this.allTransactions = response.data.data.data
             // this.lastPage = response.data.last
             this.allTransactions = response.data.data.transactions.data
@@ -254,7 +261,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${query}?type=${type}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -278,7 +285,7 @@ export const useTransactionsStore = defineStore('transactions', {
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/myTransactions?type=${type}`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -302,12 +309,13 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/myTransactions?type=${type}&page=${page}`, {
+          await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}&page=${page}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
+            console.log(response);
             this.lastPage_myTrans = response.data.data.last
             this.myTransactions = response.data.data.transactions.data
 
@@ -322,13 +330,12 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async searchMyTransaction(query, type) {
-
       try {
 
         const token = getToken()
 
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/myTransactions/search/${query}?type=${type}`, {
+         await axios
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?pair_vcard=${query}&type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -352,7 +359,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/myTransactions/search/${query}?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/${query}?type=${type}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -371,12 +378,16 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     //PDF
-    async extractPDF(month, year){
+    async extractPDF(month, year, vcard){
       try{
+
+          if(vcard == null){
+            vcard = ''
+          }
 
           const token = getToken()
 
-          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=${year}&month=${month}`, 
+          const response = await axios.get(`${ConfigUtil.getApiUrl()}/extract/pdf?year=${year}&month=${month}&vcard=${vcard}`, 
           {
             headers: {
               Accept: 'application/pdf',

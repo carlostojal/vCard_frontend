@@ -3,13 +3,12 @@ import { onMounted, ref } from 'vue';
 import { useUsersStore } from '@/stores/users'
 import Menu from '@/components/menu.vue'
 import User from '@/components/user.vue'
+import Paginate from '@/components/paginate.vue'
 
 const users = useUsersStore();
-const admins = ref(null)
 
 onMounted(async () => {
-    await users.fetchAdmins()
-    admins.value = users.admins
+    await users.fetchAdmins(null)
 })
 
 </script>
@@ -32,19 +31,22 @@ onMounted(async () => {
                         <thead>
                             <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Nome</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Criado</th>
-                            <th scope="col">Alterado</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Updated</th>
                             </tr>
                         </thead>
                         
-                        <User v-for="admin in admins" @getAdmins="admins = users.admins" :id="admin.id" :showButton="showButton" :name="admin.name" :email="admin.email" :created_at="admin.created_at.slice(0,10)" :updated_at="admin.updated_at.slice(0,10)"/>
+                        <User v-for="admin in users.admins" @getAdmins="admins = users.admins" :id="admin.id" :showButton="showButton" :name="admin.name" :email="admin.email" :created_at="admin.created_at.slice(0,10)" :updated_at="admin.updated_at.slice(0,10)"/>
                         
                     </table>
 
-                    <router-link class="btn btn-outline-secondary addAdmin" to="/addAdmin">Add Administrator </router-link>
+                    <Paginate v-if="users.lastPage > 1" :type="'admins'" :totalPages="users.lastPage" :currentPage="1"> </Paginate>
 
+                    <div class="d-flex justify-content-center">
+                        <router-link class="btn btn-outline-secondary addAdmin" to="/addAdmin">Add Administrator </router-link>
+                    </div>
                 </div>
             </div>
 

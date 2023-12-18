@@ -24,14 +24,15 @@ const deleteOwnVcard = () => {
 <template>
     <nav v-show="!isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <router-link class="navbar-brand" to="/home">VCard</router-link>
+            <a class="navbar-brand" >VCard</a>
         </div>
     </nav>
 
     <nav v-show="isAuthenticated" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="nav-item mx-2"></div>
         <div class="container-fluid">
-            <router-link class="navbar-brand" to="/home">VCard</router-link>
+            <router-link v-if="userStore.isAdmin" class="navbar-brand" to="/admin/home">VCard</router-link>
+            <router-link v-else class="navbar-brand" to="/home">VCard</router-link>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +41,7 @@ const deleteOwnVcard = () => {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <router-link v-if="userStore.isAdmin" class="nav-link" to="admin/home">Home</router-link>
+                        <router-link v-if="userStore.isAdmin == true" class="nav-link" to="/admin/home">Home</router-link>
                         <router-link v-else class="nav-link" to="/home">Home</router-link>
                     </li>
                     <li v-if="!userStore.isAdmin" class="nav-item dropdown">

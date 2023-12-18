@@ -12,117 +12,162 @@ export const useCategoriesStore = defineStore('categories', {
     myCategories: null,
   }),
   actions: {
-    async fetch() {
-        try{
-            const token = getToken()
-
-            const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-                })
-                .then((response) => {
-                    console.log(response)
-                    this.lastPage = response.data.lastPage
-                    this.allCategories = response.data.data.data
-                    console.log(this.allCategories, this.lastPage)
-                })
-        }catch(e){
-            console.log(e)
-        }
-    },
-    async paginate(page) {
+    async fetchAndFilter(name, type, page){
         try {
           const token = getToken()
-  
-          const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories?page=${page}`, {
+          let url = `${ConfigUtil.getApiUrl()}/default-categories`;
+          const response = await axios.get(url, {
             headers: {
               Authorization: `Bearer ${token}`
-            }
+            },
+            params: {
+                name: name,
+                type: type,
+                page: page
+            },
           })
-  
-          this.allCategories = response.data.data.data
+          this.allCategories = response.data.data.categories.data
+          this.lastPage = response.data.data.lastPage
           
         } catch (e) {
           console.log(e)
         }
     },
-    async fetchCategoriesType(type){
+    async fetchAndFilterVcardCategories(name, type, page){
         try {
-            const token = getToken()
-            
-            const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search?type=${type}`,{
-                  headers: {
-                    Authorization: `Bearer ${token}`
-                  }
-                }
-              )
-              .then((response) => {
-                this.lastPage = response.data.lastPage
-                this.allCategories = response.data.data.data
-              })
-          } catch (e) {
-            console.log(e)
-          }
-    },
-    async paginateType(page, type){
-      try {
-        const token = getToken()
-        
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search?type=${type}&page=${page}`,{
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
-          .then((response) => {
-            this.lastPage = response.data.lastPage
-            this.allCategories = response.data.data.data
+          const token = getToken()
+          let url = `${ConfigUtil.getApiUrl()}/vcards/categories`;
+          const response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            params: {
+                name: name,
+                type: type,
+                page: page
+            },
           })
-      } catch (e) {
-        console.log(e)
-      }
+          this.myCategories = response.data.data.categories.data
+          this.lastPage = response.data.data.lastPage
+          
+        } catch (e) {
+          console.log(e)
+        }
     },
-    async searchCategories(query, type){
-      try {
-        const token = getToken()
-        console.log(query, type)
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search/${query}?type=${type}`,{
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
-          .then((response) => {
-            this.lastPage = response.data.lastPage
-            this.allCategories = response.data.data.data
+      async fetchAndFilterVcardCategoriesAll(name, type){
+        try {
+          const token = getToken()
+          let url = `${ConfigUtil.getApiUrl()}/vcards/categories`;
+          const response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            params: {
+                name: name,
+                type: type,
+                page: 'all'
+            },
           })
-      }catch(e){
-        console.log(e)
-      }
+          this.myCategories = response.data.data.categories
+          
+        } catch (e) {
+          console.log(e)
+        }
     },
-    async paginateSearch(page, type, query){
-      try {
-        const token = getToken()
-        console.log(query, type)
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search/${query}?type=${type}&page=${page}`,{
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
-          .then((response) => {
-            this.lastPage = response.data.lastPage
-            this.allCategories = response.data.data.data
-          })
-      }catch(e){
-        console.log(e)
-      }
-    },
+  //   async paginate(page) {
+  //       try {
+  //         const token = getToken()
+  // 
+  //         const response = await axios.get(`${ConfigUtil.getApiUrl()}/default-categories?page=${page}`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`
+  //           }
+  //         })
+  // 
+  //         this.allCategories = response.data.data.categories.data
+  //         
+  //       } catch (e) {
+  //         console.log(e)
+  //       }
+  //   },
+  //   async fetchCategoriesType(type){
+  //       try {
+  //           const token = getToken()
+  //           
+  //           const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search?type=${type}`,{
+  //                 headers: {
+  //                   Authorization: `Bearer ${token}`
+  //                 }
+  //               }
+  //             )
+  //             .then((response) => {
+  //               this.lastPage = response.data.lastPage
+  //               this.allCategories = response.data.data.data
+  //             })
+  //         } catch (e) {
+  //           console.log(e)
+  //         }
+  //   },
+  //   async paginateType(page, type){
+  //       console.log('clicked');
+  //     try {
+  //       const token = getToken()
+  //       
+  //       const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories?type=${type}&page=${page}`,{
+  //             headers: {
+  //               Authorization: `Bearer ${token}`
+  //             }
+  //           }
+  //         )
+  //         .then((response) => {
+  //           this.lastPage = response.data.lastPage
+  //           this.allCategories = response.data.data.data
+  //         })
+  //     } catch (e) {
+  //       console.log(e)
+  //     }
+  //   },
+  //   async searchCategories(query, type){
+  //       console.log('clicked');
+  //     try {
+  //       const token = getToken()
+  //       console.log(query, type)
+  //       const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search/${query}?type=${type}`,{
+  //             headers: {
+  //               Authorization: `Bearer ${token}`
+  //             }
+  //           }
+  //         )
+  //         .then((response) => {
+  //           this.lastPage = response.data.lastPage
+  //           this.allCategories = response.data.data.data
+  //         })
+  //     }catch(e){
+  //       console.log(e)
+  //     }
+  //   },
+  //   async paginateSearch(page, type, query){
+  //     try {
+  //       const token = getToken()
+  //       console.log(query, type)
+  //       const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search/${query}?type=${type}&page=${page}`,{
+  //             headers: {
+  //               Authorization: `Bearer ${token}`
+  //             }
+  //           }
+  //         )
+  //         .then((response) => {
+  //           this.lastPage = response.data.lastPage
+  //           this.allCategories = response.data.data.data
+  //         })
+  //     }catch(e){
+  //       console.log(e)
+  //     }
+  //   },
     async addCategorie(name, type){
       try{
         const token = getToken()
-        const response = await axios.post(`${ConfigUtil.getApiUrl()}/categories`,{
+        const response = await axios.post(`${ConfigUtil.getApiUrl()}/default-categories`,{
           name: name,
           type: type
         },{
@@ -143,59 +188,29 @@ export const useCategoriesStore = defineStore('categories', {
         this.toast.error("Error adding category");
       }
     },
-    async fetchMyTypeCategories(type){
-      try{
-        const token = getToken()
-
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/${type}/mycategories`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-            })
-            .then((response) => {
-                this.myCategories = response.data.data.categories
-            })
-      }catch(e){
-          console.log(e)
-      }
-    },
-    async fetchMyCategories(){
-      try{
-        const token = getToken()
-
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/mycategories`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-            })
-            .then((response) => {
-                this.myCategories = response.data.data.categories
-            })
-      }catch(e){
-          console.log(e)
-      }
-    },
     async addMyCategorie(name, type){
       try{
         const token = getToken()
-        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/mycategories`,{
-          name: name,
-          type: type,
+        await axios.post(`${ConfigUtil.getApiUrl()}/vcards/categories`, {
+            name: name,
+            type: type,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
         .then((response) => {
           console.log(response)
-          this.myCategories = response.data.data.category
+          // this.myCategories = response.data.data.category
           if(response.data.status == "success"){
             this.toast.success("Categories added successfully");
           }
         })
       }catch(e){
+        console.log(e.response);
         this.toast.error("Error adding categories");
+
       }
     },
     async deleteCategorie(id){
@@ -215,10 +230,10 @@ export const useCategoriesStore = defineStore('categories', {
         this.toast.error("Error deleting category");
       }
     },
-    async deleteMyCategorie(id){
+    async deleteMyCategory(id){
       try{
         const token = getToken()
-        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/myCategories/${id}`,{
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/categories/${id}`,{
           headers: {
             Authorization: `Bearer ${token}`
           }

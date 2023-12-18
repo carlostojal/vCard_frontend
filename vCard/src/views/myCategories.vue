@@ -9,7 +9,8 @@ import Search from '@/components/search.vue'
 const categoriesStore = useCategoriesStore();
 
 onMounted(async () => {
-    await categoriesStore.fetchMyCategories()
+    // await categoriesStore.fetchMyCategories()
+    await categoriesStore.fetchAndFilterVcardCategories(null, null, null);
 })
 
 
@@ -25,7 +26,7 @@ onMounted(async () => {
             </div>
 
             <div style="margin-top: 2rem; margin-bottom: 2rem;" class="d-flex">
-                <router-link class="btn btn-outline-secondary" to="/addCategoryVcard">Add Categorie </router-link>
+                <router-link class="btn btn-outline-secondary" to="/addCategoryVcard">Add Category </router-link>
             </div>
 
             <div class="categories">
@@ -47,6 +48,7 @@ onMounted(async () => {
 
         </div>
     </div>
+            <Paginate v-if="categoriesStore.lastPage > 1" :type="'myCategories'" :totalPages="categoriesStore.lastPage" :currentPage="1"> </Paginate>
 </template>
 
 

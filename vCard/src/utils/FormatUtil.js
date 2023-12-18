@@ -15,6 +15,9 @@ export default class FormatUtil {
     }
 
     static formatFirstName(fullName) {
+        if(!fullName){
+            return '';
+        }
         const nameArray = fullName.split(' ');
         const firstName = nameArray[0];
         return firstName;
@@ -22,7 +25,7 @@ export default class FormatUtil {
 
     static formatDate(date) {
         const day = date.getDate();
-        const month = date.getDate();
+        const month = date.getMonth()+1;
         const year = date.getFullYear();
         const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 

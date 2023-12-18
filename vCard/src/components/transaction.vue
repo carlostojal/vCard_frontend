@@ -87,12 +87,6 @@ const routeEditTrans = () => {
         <p class="transaction-value"><b>{{ FormatUtil.formatBalance(props.value) }}</b></p>
         <p class="transaction-date">{{ FormatUtil.formatDate(props.date) }}</p>
         <div v-if="props.isDetail">
-            <p class="details" v-if="props.type == 'D'"> <b>Balance:</b> €{{ props.old_balance }} (-{{ props.value }})</p>
-            <p class="details" v-else> <b>Balance:</b> €{{ props.old_balance }} (+{{ props.value }})</p>
-            
-            <p v-if="props.description" class="details"> <b>Message:</b> {{ props.description }} </p>
-
-            <p v-if="props.category" class="details"> <b>Category:</b> {{ props.category }} </p>
 
             <div v-if="props.type == 'D'">
                 <p v-if="props.vcard" class="details"> <b>From:</b> {{ props.vcard }} </p>
@@ -102,6 +96,13 @@ const routeEditTrans = () => {
                 <p class="details"> <b>From:</b> {{ props.reference }} </p>
                 <p v-if="props.vcard" class="details"> <b>To:</b> {{ props.vcard }} </p>
             </div>
+
+            <p class="details" v-if="props.type == 'D'"> <b>Balance:</b> €{{ props.old_balance }} (-{{ props.value }})</p>
+            <p class="details" v-else> <b>Balance:</b> €{{ props.old_balance }} (+{{ props.value }})</p>
+            
+            <p v-if="props.description" class="details"> <b>Message:</b> {{ props.description }} </p>
+
+            <p v-if="props.category" class="details"> <b>Category:</b> {{ props.category }} </p>
             
             <button v-if="!user.isAdmin" class="btn btn-outline-secondary" @click="routeEditTrans">Edit Category/Description</button>
         </div>

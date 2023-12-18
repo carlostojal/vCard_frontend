@@ -22,11 +22,12 @@ const submit = async () => {
 
     switch(props.type) {
         case 'vcard':
-            if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
-                await vcardsStore.fetchVcardsBlock(paginateSearchStore.blocked) //get all -> apenas com o type (all ou block ou unblock)
-            }else{
-                await vcardsStore.searchVcards(paginateSearchStore.query, paginateSearchStore.blocked) //with filter -> com o type e query
-            }
+            // if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+            //     await vcardsStore.fetchVcardsBlock(paginateSearchStore.blocked) //get all -> apenas com o type (all ou block ou unblock)
+            // }else{
+            //     await vcardsStore.searchVcards(paginateSearchStore.query, paginateSearchStore.blocked) //with filter -> com o type e query
+            // }
+            await vcardsStore.fetchAndFilter(paginateSearchStore.query, paginateSearchStore.blocked, null);
             break;
         case 'transaction':
             if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
@@ -36,11 +37,12 @@ const submit = async () => {
             }
             break;
         case 'categories':
-            if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
-                await categoriesStore.fetchCategoriesType(paginateSearchStore.categorie_type) //get all -> apenas com o type (all ou D ou C)
-            }else{
-                await categoriesStore.searchCategories(paginateSearchStore.query, paginateSearchStore.categorie_type) //with filter -> com o type e query
-            }
+            // if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+            //     await categoriesStore.fetchCategoriesType(paginateSearchStore.categorie_type) //get all -> apenas com o type (all ou D ou C)
+            // }else{
+            //     await categoriesStore.searchCategories(paginateSearchStore.query, paginateSearchStore.categorie_type) //with filter -> com o type e query
+            // }
+            await categoriesStore.fetchAndFilter(paginateSearchStore.query, paginateSearchStore.categorie_type, null)
             break;
         case 'myTransaction':
             if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){

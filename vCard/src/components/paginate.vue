@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { defineProps } from 'vue';
 import { useVcardsStore } from '@/stores/vcards';
+import { useUsersStore } from '@/stores/users';
 import { useTransactionsStore } from '@/stores/transactions'
 import { useCategoriesStore } from '@/stores/categories'
 import { usePaginateSearchStore } from '../stores/paginateSearch';
@@ -12,6 +13,8 @@ const paginateSearchStore = usePaginateSearchStore();
 const categoriesStore = useCategoriesStore();
 const transactionStore = useTransactionsStore();
 const vcardStore = useVcardsStore();
+const adminStore = useUsersStore();
+
 const currentPage = ref();
 const totalPages = ref();
 
@@ -45,11 +48,12 @@ const goToPage = (page) => {
     if (page >= 1 && page <= totalPages.value) {
         switch(props.type){
             case 'vcard':
-                if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
-                    vcardStore.paginateType(page, paginateSearchStore.blocked) //vai buscar os dados da pagina com os filtros de type
-                }else{
-                    vcardStore.paginateSearch(page, paginateSearchStore.blocked, paginateSearchStore.query)
-                }
+                // if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                //     vcardStore.paginateType(page, paginateSearchStore.blocked) //vai buscar os dados da pagina com os filtros de type
+                // }else{
+                //     vcardStore.paginateSearch(page, paginateSearchStore.blocked, paginateSearchStore.query)
+                // }
+                vcardStore.fetchAndFilter(paginateSearchStore.query, paginateSearchStore.blocked, page);
                 break;
             case 'allTransactions':
                 if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
@@ -66,15 +70,18 @@ const goToPage = (page) => {
                 }
                 break;
             case 'categories':
-                if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
-                    //categoriesStore.paginate(page)
-                    categoriesStore.paginateType(page, paginateSearchStore.categorie_type)
-                }else{
-                    categoriesStore.paginateSearch(page, paginateSearchStore.categorie_type, paginateSearchStore.query)
-                }
+                // if(paginateSearchStore.query == null || paginateSearchStore.query == "" || paginateSearchStore.query == undefined){
+                //     categoriesStore.paginateType(page, paginateSearchStore.categorie_type)
+                // }else{
+                //     categoriesStore.paginateSearch(page, paginateSearchStore.categorie_type, paginateSearchStore.query)
+                // }
+                categoriesStore.fetchAndFilter(paginateSearchStore.query, paginateSearchStore.categorie_type, page);
                 break;
-            case 'myTransactions': 
-                transactionStore.paginate_myTransactions(page)
+            case 'myCategories':
+                categoriesStore.fetchAndFilterVcardCategories(paginateSearchStore.query, paginateSearchStore.categorie_type, page);
+                break;
+            case 'admins':
+                adminStore.fetchAdmins(page);
                 break;
             default:
               console.log("Invalid type")

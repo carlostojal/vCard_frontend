@@ -11,91 +11,36 @@ export const useVcardsStore = defineStore('vcards', {
     toast: useToast(),
   }),
   actions: {
-    async fetchVcardsBlock(blocked) {
-      try {
+      async fetchAndFilter(query, blocked, page){
+        try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-        )
-          .then((response) => {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              },
+              params: {
+                search: query,
+                blocked: blocked,
+                page: page,
+              }
+        }).then((response) => {
             this.lastPage = response.data.data.last
-            // this.data_vcard = response.data[0].data
             this.data_vcard = response.data.data.vcards.data
           })
       } catch (e) {
         console.log(e)
       }
     },
-    async paginateType(page, blocked) {
-      try {
-        const token = getToken()
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/search?blocked=${blocked}&page=${page}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-        )
-          .then((response) => {
-            // this.data_vcard = response.data[0].data
-            // this.lastPage = response.data.last
-            this.data_vcard = response.data.data.vcards.data
-            this.lastPage = response.data.data.last
-          })
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    async searchVcards(query, blocked) {
-      try {
-        const token = getToken()
-
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/search/${query}/?blocked=${blocked}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          .then((response) => {
-            this.data_vcard = response.data.data.vcards.data
-            this.lastPage = response.data.data.last
-            // this.data_vcard = response.data.data.data
-            // this.lastPage = response.data.last
-          })
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    async paginateSearch(page, blocked, query) { //This function is not even being used??
-      console.log("paginateSearch")
-      try {
-        const token = getToken()
-
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/search/${query}/?blocked=${blocked}&page=${page}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          .then((response) => {
-            this.data_vcard = response.data.data.data
-            this.lastPage = response.data.last
-          })
-      } catch (e) {
-        console.log(e)
-      }
-    },
+    
     async changeBlock(phone, block) {
       try {
 
         const token = getToken()
 
-        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/block/${phone}`,
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,
             {
-              block: block,
+              blocked: block,
             },
             {
               headers: {
@@ -137,7 +82,7 @@ export const useVcardsStore = defineStore('vcards', {
       try {
         const token = getToken()
 
-        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/maxDebit/${phone}`,
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,
           {
             max_debit: max_debit
           },
