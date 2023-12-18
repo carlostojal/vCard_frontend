@@ -15,6 +15,7 @@ export const useTransactionsStore = defineStore('transactions', {
     notificationsStore: useNotificationsStore(),
     myTransactions: null,
     allTransactions: null,
+    recentTransactions: null,
     lastPage: null,
     lastPage_myTrans: null,
     toast: useToast(),
@@ -94,6 +95,8 @@ export const useTransactionsStore = defineStore('transactions', {
             console.error(error)
           }
           this.userStore.decrementBalance(amount)
+          this.recentTransactions = null;
+          this.fetch();
           return response.data
         } catch (e) {
             console.log(e)
@@ -115,6 +118,9 @@ export const useTransactionsStore = defineStore('transactions', {
           .then((response) => {
             this.lastPage_myTrans = response.data.data.last
             this.myTransactions = response.data.data.transactions.data
+            if(this.recentTransactions == null){
+                this.recentTransactions = response.data.data.transactions.data.slice(0,3);
+            }
 
             this.myTransactions.forEach((transaction) => {
               transaction.value = parseFloat(transaction.value)

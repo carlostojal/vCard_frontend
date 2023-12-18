@@ -26,7 +26,7 @@ onMounted(async () => {
             </div>
 
             <div style="margin-top: 2rem; margin-bottom: 2rem;" class="d-flex">
-                <router-link class="btn btn-outline-secondary" to="/addCategoryVcard">Add Categorie </router-link>
+                <router-link class="btn btn-outline-secondary" to="/addCategoryVcard">Add Category </router-link>
             </div>
 
             <div class="categories">

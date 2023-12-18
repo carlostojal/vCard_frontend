@@ -188,43 +188,29 @@ export const useCategoriesStore = defineStore('categories', {
         this.toast.error("Error adding category");
       }
     },
-    // async fetchMyCategories(){
-    //   try{
-    //     const token = getToken()
-    //
-    //     const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/categories`, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //         })
-    //         .then((response) => {
-    //             this.myCategories = response.data.data.categories.data
-    //         })
-    //   }catch(e){
-    //       console.log(e)
-    //   }
-    // },
     async addMyCategorie(name, type){
       try{
         const token = getToken()
-        const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/mycategories`,{
-          name: name,
-          type: type,
+        await axios.post(`${ConfigUtil.getApiUrl()}/vcards/categories`, {
+            name: name,
+            type: type,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
         .then((response) => {
           console.log(response)
-          this.myCategories = response.data.data.category
+          // this.myCategories = response.data.data.category
           if(response.data.status == "success"){
             this.toast.success("Categories added successfully");
           }
         })
       }catch(e){
+        console.log(e.response);
         this.toast.error("Error adding categories");
+
       }
     },
     async deleteCategorie(id){
@@ -244,10 +230,10 @@ export const useCategoriesStore = defineStore('categories', {
         this.toast.error("Error deleting category");
       }
     },
-    async deleteMyCategorie(id){
+    async deleteMyCategory(id){
       try{
         const token = getToken()
-        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/myCategories/${id}`,{
+        const response = await axios.delete(`${ConfigUtil.getApiUrl()}/categories/${id}`,{
           headers: {
             Authorization: `Bearer ${token}`
           }
