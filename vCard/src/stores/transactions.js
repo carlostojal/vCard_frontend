@@ -374,7 +374,7 @@ export const useTransactionsStore = defineStore('transactions', {
     //PDF
     async extractPDF(month, year, vcard){
       try{
-
+        console.log(month, year, vcard)
           if(vcard == null){
             vcard = ''
           }
