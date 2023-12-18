@@ -24,10 +24,10 @@ const props = defineProps({
 
 const categoryDelete = async (id) => {
     if(props.isDefaultCategory){
-        await categoriesStore.deleteCategorie(id)
+        await categoriesStore.deleteDefaultCategory(id)
         await categoriesStore.fetch()
     }else{
-        await categoriesStore.deleteMyCategorie(id)
+        await categoriesStore.deleteMyCategory(id)
         await categoriesStore.fetchMyCategories()
     }
 }

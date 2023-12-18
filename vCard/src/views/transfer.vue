@@ -24,7 +24,7 @@ const category_id = ref(null)
 const regexVerifyEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
 onMounted(() => {
     fetchUser()
-    categoryStore.fetchMyCategories()
+    categoryStore.fetchAndFilterVcardCategoriesAll(null, null);
 })
 
 const fetchUser = async () => {

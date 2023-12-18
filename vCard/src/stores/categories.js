@@ -54,6 +54,26 @@ export const useCategoriesStore = defineStore('categories', {
           console.log(e)
         }
     },
+      async fetchAndFilterVcardCategoriesAll(name, type){
+        try {
+          const token = getToken()
+          let url = `${ConfigUtil.getApiUrl()}/vcards/categories`;
+          const response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            params: {
+                name: name,
+                type: type,
+                page: 'all'
+            },
+          })
+          this.myCategories = response.data.data.categories
+          
+        } catch (e) {
+          console.log(e)
+        }
+    },
   //   async paginate(page) {
   //       try {
   //         const token = getToken()
@@ -145,7 +165,6 @@ export const useCategoriesStore = defineStore('categories', {
   //     }
   //   },
     async addCategorie(name, type){
-        console.log('clicked');
       try{
         const token = getToken()
         const response = await axios.post(`${ConfigUtil.getApiUrl()}/default-categories`,{
