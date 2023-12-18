@@ -106,7 +106,7 @@ export const useTransactionsStore = defineStore('transactions', {
         const token = getToken()
 
         const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, {
+          .get(`${ConfigUtil.getApiUrl()}/vcards/transactions`, { 
             headers: {
               Authorization: `Bearer ${token}`
             }

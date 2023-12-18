@@ -42,7 +42,7 @@ const download = async () => {
 
             <div class="transactions">
                 <div class="transactions-list">
-                    <Transaction v-if="transactionsStore.myTransactions" v-for="transaction in transactionsStore.myTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance" :reference="transaction.payment_reference" :id="transaction.id" :category="transaction.category_id"/>
+                    <Transaction v-if="transactionsStore.myTransactions" v-for="transaction in transactionsStore.myTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :key="transaction.id" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :pair_vcard="transaction.pair_vcard" :old_balance="transaction.old_balance" :reference="transaction.payment_reference" :id="transaction.id" :category="transaction.name"/>
                 </div>
             </div>
             <Paginate v-if="transactionsStore.lastPage_myTrans > 1" :type="'myTransactions'" :totalPages="transactionsStore.lastPage_myTrans" :currentPage="1"> </Paginate>

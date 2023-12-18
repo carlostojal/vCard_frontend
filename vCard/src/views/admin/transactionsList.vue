@@ -40,7 +40,7 @@ const selected_month = ref(null)
 
             <div class="transactions">
                 <div class="transactions-list">
-                    <Transaction v-if="transactionsStore.allTransactions" v-for="transaction in transactionsStore.allTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :old_balance="transaction.old_balance" :reference="transaction.payment_reference" :vcard="transaction.vcard" :category="transaction.category_id"/>
+                    <Transaction v-if="transactionsStore.allTransactions" v-for="transaction in transactionsStore.allTransactions" @click="transaction.detail = !transaction.detail" :isDetail="transaction.detail" :type="transaction.type" :paymentType="transaction.payment_type" :value="transaction.value" :date="transaction.date" :description="transaction.description" :old_balance="transaction.old_balance" :reference="transaction.payment_reference" :vcard="transaction.vcard" :category="transaction.name"/>
                 </div>
             </div>
             <Paginate v-if="transactionsStore.lastPage" :type="'allTransactions'" :totalPages="transactionsStore.lastPage" :currentPage="1"> </Paginate>
