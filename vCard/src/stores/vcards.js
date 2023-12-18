@@ -38,9 +38,9 @@ export const useVcardsStore = defineStore('vcards', {
 
         const token = getToken()
 
-        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/block/${phone}`,
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,
             {
-              block: block,
+              blocked: block,
             },
             {
               headers: {
@@ -82,7 +82,7 @@ export const useVcardsStore = defineStore('vcards', {
       try {
         const token = getToken()
 
-        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/maxDebit/${phone}`,
+        const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${phone}`,
           {
             max_debit: max_debit
           },

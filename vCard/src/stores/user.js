@@ -147,6 +147,11 @@ export const useUserStore = defineStore('user', {
                 }).then((response) => {
                     if (response.data.status == 'success') {
                         retval = response.data.message
+                        if(retval == 'users'){
+                            this.isAdmin = true
+                        }else {
+                            false
+                        }
                     }
                 }).catch((error) => {
                     return null

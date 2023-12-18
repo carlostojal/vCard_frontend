@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { defineProps } from 'vue';
 import { useVcardsStore } from '@/stores/vcards';
+import { useUsersStore } from '@/stores/users';
 import { useTransactionsStore } from '@/stores/transactions'
 import { useCategoriesStore } from '@/stores/categories'
 import { usePaginateSearchStore } from '../stores/paginateSearch';
@@ -12,6 +13,7 @@ const paginateSearchStore = usePaginateSearchStore();
 const categoriesStore = useCategoriesStore();
 const transactionStore = useTransactionsStore();
 const vcardStore = useVcardsStore();
+const adminStore = useUsersStore();
 
 const currentPage = ref();
 const totalPages = ref();
@@ -77,6 +79,9 @@ const goToPage = (page) => {
                 break;
             case 'myCategories':
                 categoriesStore.fetchAndFilterVcardCategories(paginateSearchStore.query, paginateSearchStore.categorie_type, page);
+                break;
+            case 'admins':
+                adminStore.fetchAdmins(page);
                 break;
             default:
               console.log("Invalid type")

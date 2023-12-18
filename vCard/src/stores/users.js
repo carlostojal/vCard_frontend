@@ -7,21 +7,25 @@ import { useToast } from 'vue-toastification'
 export const useUsersStore = defineStore('users', {
     state: () => ({
         admins: null,
+        lastPage: null,
         toast: useToast(),
     }),
     actions: {
-        async fetchAdmins() {
+        async fetchAdmins(page) {
             try{
                 const token = getToken()
 
-                const adminsData = await axios.get(`${ConfigUtil.getApiUrl()}/users/`, {
+                const adminsData = await axios.get(`${ConfigUtil.getApiUrl()}/users`, {
                     headers: {
                         Authorization: `Bearer ${token}`
-                    }
+                    },
+                    params: {
+                        page: page,
+                  }
                 });
-        
-                this.admins = adminsData.data.data;
-                return 
+                this.admins = adminsData.data.data.users.data;
+                this.lastPage = adminsData.data.data.last;
+                
             }catch(e){
                 console.log(e);
             }
