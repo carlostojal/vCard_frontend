@@ -21,6 +21,7 @@ import AdminStatistics from '../views/admin/statistics.vue'
 import DeleteOwnVcard from '../views/deleteOwnVcard.vue'
 import AddCategoryVcard from '../views/addCategoryVcard.vue'
 import EditTransaction from '../views/editTransaction.vue'
+import Donate from '../views/charity.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -151,6 +152,12 @@ const router = createRouter({
       path: '/addCategoryVcard',
       name: 'addCategoryVcard',
       component: AddCategoryVcard,
+      meta: { requiredVcard: true},
+    },
+    {
+      path: '/donate',
+      name: 'donate',
+      component: Donate,
       meta: { requiredVcard: true},
     },
     {

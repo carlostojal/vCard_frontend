@@ -51,6 +51,7 @@ const deleteOwnVcard = () => {
                             <router-link to="/transfer" class="dropdown-item">Transfer Money</router-link>
                             <router-link to="/myTransactions" class="dropdown-item">Transactions List</router-link>
                             <router-link to="/myCategories" class="dropdown-item">My categories</router-link>
+                            <router-link to="/donate" class="dropdown-item">Donate</router-link>
                         </ul>
                     </li>
 
