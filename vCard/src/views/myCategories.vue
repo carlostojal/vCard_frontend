@@ -9,7 +9,8 @@ import Search from '@/components/search.vue'
 const categoriesStore = useCategoriesStore();
 
 onMounted(async () => {
-    await categoriesStore.fetchMyCategories()
+    // await categoriesStore.fetchMyCategories()
+    await categoriesStore.fetchAndFilterVcardCategories(null, null, null);
 })
 
 
@@ -47,6 +48,7 @@ onMounted(async () => {
 
         </div>
     </div>
+            <Paginate v-if="categoriesStore.lastPage > 1" :type="'myCategories'" :totalPages="categoriesStore.lastPage" :currentPage="1"> </Paginate>
 </template>
 
 

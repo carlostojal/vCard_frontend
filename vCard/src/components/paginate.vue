@@ -75,6 +75,9 @@ const goToPage = (page) => {
                 // }
                 categoriesStore.fetchAndFilter(paginateSearchStore.query, paginateSearchStore.categorie_type, page);
                 break;
+            case 'myCategories':
+                categoriesStore.fetchAndFilterVcardCategories(paginateSearchStore.query, paginateSearchStore.categorie_type, page);
+                break;
             default:
               console.log("Invalid type")
         }

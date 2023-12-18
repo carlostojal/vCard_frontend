@@ -9,7 +9,6 @@ import Search from '@/components/search.vue'
 const categoriesStore = useCategoriesStore();
 
 onMounted(async () => {
-    // await categoriesStore.fetchAndFilter(null, null, null)
     await categoriesStore.fetchAndFilter(null, null, null)
 })
 
@@ -39,14 +38,14 @@ onMounted(async () => {
                             </tr>
                         </thead>
                         
-                        <Categorie v-for="categorie in categoriesStore.allCategories" :id="categorie.id" :name="categorie.name" :type="categorie.type" :isDefaultCategory="true"/>
+                        <Categorie v-for="category in categoriesStore.allCategories" :id="category.id" :name="category.name" :type="category.type" :isDefaultCategory="true"/>
                         
                     </table>
 
                     <Paginate v-if="categoriesStore.lastPage > 1" :type="'categories'" :totalPages="categoriesStore.lastPage" :currentPage="1"> </Paginate>
 
                     <div class="d-flex justify-content-center">
-                        <router-link class="btn btn-outline-secondary" to="/addCategorie">Add Categorie </router-link>
+                        <router-link class="btn btn-outline-secondary" to="/addCategory">Add Category </router-link>
                     </div>
                 </div>
             </div>

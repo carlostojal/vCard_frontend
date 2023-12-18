@@ -15,6 +15,9 @@ export default class FormatUtil {
     }
 
     static formatFirstName(fullName) {
+        if(!fullName){
+            return '';
+        }
         const nameArray = fullName.split(' ');
         const firstName = nameArray[0];
         return firstName;

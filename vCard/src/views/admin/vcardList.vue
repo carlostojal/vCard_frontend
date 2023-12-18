@@ -9,7 +9,7 @@ import Paginate from '@/components/paginate.vue'
 const vcardsStore = useVcardsStore();
 
 onMounted(async () => {
-    await vcardsStore.fetchAndFilter(null);
+    await vcardsStore.fetchAndFilter(null, null);
 })
 
 </script>
