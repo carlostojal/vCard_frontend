@@ -158,7 +158,6 @@ const router = createRouter({
       name: 'editTransaction',
       component: EditTransaction,
       meta: { requiredVcard: true},
-      //props: route => ({ data: JSON.parse(route.query.data) }),
       props: route => ({ id: route.params.id })
     }
   ]

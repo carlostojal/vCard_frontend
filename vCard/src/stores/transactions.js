@@ -7,6 +7,7 @@ import { useNotificationsStore } from './notifications'
 import { useToast } from 'vue-toastification'
 import FormatUtil from '../utils/FormatUtil'
 import router from '../router';
+import { saveAs } from 'file-saver';
 
 export const useTransactionsStore = defineStore('transactions', {
   state: () => ({
@@ -384,12 +385,9 @@ export const useTransactionsStore = defineStore('transactions', {
             responseType: 'arraybuffer',
           })
 
-          console.log(response.data)
-
-            console.log(response.data)
             const blob = new Blob([response.data], { type: 'application/pdf' });
             const pdfUrl = URL.createObjectURL(blob);
-            //window.open(pdfUrl);
+
             saveAs(blob, 'extract.pdf');
 
       }catch(e){

@@ -324,26 +324,30 @@ onMounted(async () => {
             <Pie :data="piechartDataC" :options="piechartOptions"></Pie>
         </div>
     </div>
-    <h2 v-if="percentageOfCategoryOfMostMoneySpent<0" style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
-        with most money spent : <h4 style="margin-top: 20px;">
-            <u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u>
-        </h4>
-    </h2>
-    <div class="container">
+    <div v-if="percentageOfCategoryOfMostMoneySpent<0">
+        <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+            with most money spent : <h4 style="margin-top: 20px;">
+                <u>{{ categoryWithMostMoneySpent }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneySpent }} %</u>
+            </h4>
+        </h2>
+        <div class="container">
 
-        <div class="graph-div-pie">
-            <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
+            <div class="graph-div-pie">
+                <Pie :data="piechartDataCatD" :options="piechartOptions"></Pie>
+            </div>
         </div>
     </div>
-    <h2 v-if="percentageOfCategoryOfMostMoneyReceived < 0" style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
-        with most money Received : <h4 style="margin-top: 20px;">
-            <u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u>
-        </h4>
-    </h2>
-    <div class="container">
-        <div class="graph-div-pie">
-            <Pie :data="piechartDataCatC" :options="piechartOptions"></Pie>
-        </div>  
+    <div v-if="percentageOfCategoryOfMostMoneyReceived < 0">
+        <h2 style="justify-content: left; text-align: left;margin-top: 50px;margin-bottom: 100px;margin-left: 20px;">Category
+            with most money Received : <h4 style="margin-top: 20px;">
+                <u>{{ categoryWithMostMoneyReceived }}</u> with a percentage of <u>{{ percentageOfCategoryOfMostMoneyReceived }} %</u>
+            </h4>
+        </h2>
+        <div class="container">
+            <div class="graph-div-pie">
+                <Pie :data="piechartDataCatC" :options="piechartOptions"></Pie>
+            </div>  
+        </div>
     </div>
 </template>
   
