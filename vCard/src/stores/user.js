@@ -193,6 +193,7 @@ export const useUserStore = defineStore('user', {
         },
         async verifyPassword(password_vcard){
             try{
+                console.log("password",password_vcard)
                 this.token = getToken()
 
                 const response = await axios.post(`${ConfigUtil.getApiUrl()}/vcards/verifyPassword`, 
@@ -209,6 +210,24 @@ export const useUserStore = defineStore('user', {
                 
             }catch(e){
                 this.toast.error(e.response.data.message)
+            }
+        },
+        async updatePassword(vcard ,new_password, current_password){
+            try{
+                this.token = getToken()
+
+                const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${vcard}?password=${new_password}&current_password=${current_password}`, 
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                this.toast.success(response.data.message)
+                
+            }catch(e){
+                //this.toast.error(e.response.data.message)
+                console.log(e)
             }
         },
         async verifyPin(pin){
@@ -231,6 +250,23 @@ export const useUserStore = defineStore('user', {
                 this.toast.error(e.response.data.message)
             }
         },
+        async updatePin(vcard, authorization_code, current_authorization_code){
+            try{
+                this.token = getToken()
+
+                const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${vcard}?confirmation_code=${authorization_code}&current_confirmation_code=${current_authorization_code}`, 
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                this.toast.success(response.data.message)
+                
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
         async deleteOwnVcard(password_vcard, pin){
             try{
                 this.token = getToken()
@@ -243,6 +279,46 @@ export const useUserStore = defineStore('user', {
                 })
                 this.toast.success(response.data.message)
                 return response.data.status
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
+        async changeName(vcard, name) {
+            try{
+
+                this.token = getToken()
+
+                const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${vcard}?name=${name}`, 
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                console.log(response)
+                this.toast.success(response.data.message)
+                return response.data.status
+
+            }catch(e){
+                this.toast.error(e.response.data.message)
+            }
+        },
+        async changeEmail(vcard, email) {
+            try{
+
+                this.token = getToken()
+
+                const response = await axios.patch(`${ConfigUtil.getApiUrl()}/vcards/${vcard}?email=${email}`, 
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    }
+                })
+                console.log(response)
+                this.toast.success(response.data.message)
+                return response.data.status
+
             }catch(e){
                 this.toast.error(e.response.data.message)
             }

@@ -1,15 +1,14 @@
 <script setup>
-import { ref, Transition } from 'vue';
+import { ref, onMounted } from 'vue';
 import Menu from '../components/menu.vue'
 import { useUserStore } from '@/stores/user';
 import FormatUtil from '../utils/FormatUtil';
+import router from '../router';
+import { useToast } from 'vue-toastification'
 
 const user = useUserStore();
 
-const showPasswordField = ref(false);
-const showPinField = ref(false);
-const newPassword = ref("");
-const newPin = ref("");
+
 
 const showDropdown = ref(false);
 
@@ -17,49 +16,82 @@ const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value;
 };
 
-const editPhoneNumber = ref(false);
+const toast = useToast();
 const editEmail = ref(false);
 const editName = ref(false);
+const newPhoneNumber = ref("");
+const newEmail = ref("");
+const newName = ref("");
 
-const toggleEditPhoneNumber = () => {
-  editPhoneNumber.value = !editPhoneNumber.value;
+const oldPassword = ref("");
+const oldPin = ref("");
+const newPassword = ref("");
+const newPin = ref("");
+
+onMounted(() => {
+    newName.value = user.name;
+    newPhoneNumber.value = user.phone;
+    newEmail.value = user.email;
+});
+
+const save_newName = async () => {
+  console.log("New Name:", newName.value);
+
+  await user.changeName(user.phone, newName.value);
+  editName.value = !editName.value;
 };
 
-const toggleEditEmail = () => {
+const save_newEmail = async () => {
+  console.log("New Email:", newEmail.value);
+
+  await user.changeEmail(user.phone, newEmail.value);
   editEmail.value = !editEmail.value;
 };
 
+const verifyOldPassword = async () => {
+  
+  const response = await user.verifyPassword(oldPassword.value);
 
-const changePassword = () => {
-  // Logic for changing the password goes here
-  // For now, let's just log the new password to the console
-  console.log("New Password:", newPassword.value);
-  // Optionally, you can reset the password field and hide it after changing the password
-  newPassword.value = "";
-  showPasswordField.value = false;
+  if(newPassword.value == ''){
+    toast.error("Please enter new password");
+  }else{
+    if(response){
+    user.updatePassword(user.phone, newPassword.value, oldPassword.value);
+    router.replace('/home');
+    }
+  }
+  
 };
-const changePin = () => {
-  // Logic for changing the password goes here
-  // For now, let's just log the new password to the console
-  console.log("New Password:", newPin.value);
-  // Optionally, you can reset the password field and hide it after changing the password
-  newPin.value = "";
-  showPinField.value = false;
+
+const verifyOldPin = async () => {
+
+  const response = await user.verifyPin(oldPin.value);
+  console.log(newPin.value)
+  if(newPin.value == ''){
+    toast.error("Please enter new password");
+  }else{
+    if(response){
+      user.updatePin(user.phone ,newPassword.value, oldPassword.value);
+    }
+  }
 };
+
 </script>
 <template>
   <Menu />
   <div class="user-profile">
     <div class="editable-field">
         <h3><label for="Name">Name:</label></h3>
+
         <div v-if="!editName">
-          <span>{{ user.name }}</span>
+          <span>{{ newName }}</span>
           <span class="edit-icon" @click="editName = !editName">&#9998;</span>
         </div>
         <div v-else>
-          <input type="text" id="phoneNumber" v-model="user.name" placeholder="Enter Name" />
-          <span class="edit-icon" @click="editName = !editName">&#10004;</span>
+          <input type="text" id="phoneNumber" v-model="newName" placeholder="Enter Name" />
+          <span class="edit-icon" @click="save_newName">&#10004;</span>
         </div>
+
       </div>
     <div class="dropdown" v-show="showDropdown">
       <ul>
@@ -68,45 +100,46 @@ const changePin = () => {
       </ul>
     </div>
     <div class="profile-details">
-      <div class="editable-field">
-        <h3><label for="phoneNumber">Phone Number:</label></h3>
-        <div v-if="!editPhoneNumber">
-          <span>{{ user.phone }}</span>
-          <span class="edit-icon" @click="toggleEditPhoneNumber">&#9998;</span>
-        </div>
-        <div v-else>
-          <input type="number" id="phoneNumber" v-model="user.phone" placeholder="Enter phone number" />
-          <span class="edit-icon" @click="toggleEditPhoneNumber">&#10004;</span>
-        </div>
-      </div>
+
       <div class="editable-field">
         <h3><label for="email">Email:</label></h3>
+
         <div v-if="!editEmail">
-          <span>{{ user.email }}</span>
-          <span class="edit-icon" @click="toggleEditEmail">&#9998;</span>
+          <span>{{ newEmail }}</span>
+          <span class="edit-icon" @click="editEmail = !editEmail;">&#9998;</span>
         </div>
         <div v-else>
-          <input type="email" id="email" v-model="user.email" placeholder="Enter email" />
-          <span class="edit-icon" @click="toggleEditEmail">&#10004;</span>
+          <input type="email" id="email" v-model="newEmail" placeholder="Enter email" />
+          <span class="edit-icon" @click="save_newEmail">&#10004;</span>
         </div>
+        
       </div>
-      <div class="password-change">
-        <button class="button1" @click="showPasswordField = !showPasswordField">Change Password</button>
-        <div :class="{ 'show': showPasswordField }" class="password-field-container">
-          <label for="newPassword">New Password:</label>
-          <input type="password" id="newPassword" v-model="newPassword" class="password-input"
-            placeholder="Enter new password" />
-          <button class="button1" @click="changePassword">Save</button>
-        </div>
+
+      <div class="password-change" style="margin-top:2rem">
+            <h3><label>Change Password</label></h3>
+          
+            <label>Old Password:</label>
+            <input type="password" v-model="oldPassword" class="password-input" placeholder="Enter old password" />
+          
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" v-model="newPassword" class="password-input" placeholder="Enter new password" />
+
+            <button class="button1" @click="verifyOldPassword">Save</button>
+          
       </div>
-      <div class="pin-change">
-        <button class="button1" @click="showPinField = !showPinField">Change Pin</button>
-        <div :class="{ 'show': showPinField }" class="password-field-container">
-          <label for="newPin">New Password:</label>
-          <input type="password" id="newPin" v-model="newPin" class="password-input" placeholder="Enter new password" />
-          <button class="button1" @click="changePin">Save</button>
-        </div>
+
+      <div class="pin-change" style="margin-top:2rem">
+          <h3><label>Change Pin</label></h3>
+
+          <label>Old Pin:</label>
+          <input type="password" v-model="oldPin" class="password-input" placeholder="Enter old pin" />
+
+          <label for="newPin">New Pin:</label>
+          <input type="password" id="newPin" v-model="newPin" class="password-input" placeholder="Enter new pin" />
+
+          <button class="button1" @click="verifyOldPin">Save</button>
       </div>
+
     </div>
   </div>
 </template>
