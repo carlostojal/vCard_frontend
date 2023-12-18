@@ -119,7 +119,7 @@ const saveChanges = () => {
         <td>€{{ props.max_debit }}</td>
 
         <td style="text-align: center; vertical-align: middle;"> 
-            <button class="btn btn-second" @click="editFlag = true"> <img src="public/icons/edit.png" alt="Edit" width="32" height="32"> </button>
+            <button class="btn btn-second" @click="editFlag = true"> <img src="/public/icons/edit.png" alt="Edit" width="32" height="32"> </button>
         </td>
         
         <td v-if="isChange"> <button class="btn btn-second" @:click="applyChanges(props.phone, atual_block)"> Apply </button> </td>
