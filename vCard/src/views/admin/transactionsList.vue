@@ -13,13 +13,14 @@ onMounted( async () => {
 })
 
 const download = async () => {
-    await transactionsStore.extractPDF(selected_month.value, selected_year.value);
+    await transactionsStore.extractPDF(selected_month.value, selected_year.value, selected_phone.value);
 }
 
 const extractFlag = ref(false)
 const months = ref(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])
 const selected_year = ref(null)
 const selected_month = ref(null)
+const selected_phone = ref(null)
 
 </script> 
 
@@ -62,10 +63,10 @@ const selected_month = ref(null)
             </select>
             
             <label style="margin-top: 0.9rem;">Year</label>
-            <input v-model="selected_year" type="number" class="form-control" id="yearInput" placeholder="Year">
+            <input v-model="selected_year" type="number" class="form-control" placeholder="Year">
 
             <label >Vcard</label>
-            <input v-model="selected_phone" type="number" class="form-control" id="yearInput" placeholder="Phone Number">
+            <input v-model="selected_phone" type="number" class="form-control" placeholder="All">
 
             <button style="margin-bottom: 1rem; margin-top: 1rem;" @click="download">Download</button>
             <button @click="extractFlag = false">Cancel</button>

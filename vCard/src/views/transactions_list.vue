@@ -5,7 +5,9 @@ import Transaction from '../components/transaction.vue'
 import Paginate from '@/components/paginate.vue'
 import { useTransactionsStore } from '@/stores/transactions'
 import { onMounted, ref } from 'vue'
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore()
 const transactionsStore = useTransactionsStore();
 const extractFlag = ref(false)
 const months = ref(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])
@@ -17,7 +19,7 @@ onMounted( async () => {
 })
 
 const download = async () => {
-    await transactionsStore.extractPDF(selected_month.value, selected_year.value);
+    await transactionsStore.extractPDF(selected_month.value, selected_year.value, userStore.phone);
 }
 
 </script>
