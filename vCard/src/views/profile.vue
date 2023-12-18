@@ -71,7 +71,8 @@ const verifyOldPin = async () => {
     toast.error("Please enter new password");
   }else{
     if(response){
-      user.updatePin(user.phone ,newPassword.value, oldPassword.value);
+      user.updatePin(user.phone ,newPin.value, oldPin.value);
+      router.replace('/home');
     }
   }
 };
