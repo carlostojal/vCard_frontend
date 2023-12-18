@@ -5,8 +5,13 @@ import {ref} from 'vue';
 import FormatUtil from '@/utils/FormatUtil'
 import { useTransactionsStore} from '@/stores/transactions'
 import { useToast } from 'vue-toastification'
+import router from '../router'
+
 const user = useUserStore()
 const amount = ref('')
+const isPin = ref('')
+const pin = ref('')
+console.log(isPin.value)
 const sendmoney = async () => {
     const userStore = useUserStore();
     const useTransactions = useTransactionsStore()
@@ -14,23 +19,24 @@ const sendmoney = async () => {
     try {
         
         const reference = ref('')
-            if(payment_type.value == 'Banco Alimentar'){
+            if(institution.value == 'Banco Alimentar'){
                 reference.value = '999999997'
             }
-            if(payment_type.value == 'Cruz Vermelha'){
+            if(institution.value == 'Cruz Vermelha'){
                 reference.value = '999999998'
             }
             if(institution.value == 'Instituição Frederico Mendonça'){
                 reference.value = '999999999'
             }
-            response = await useTransactions.sendMoneyTo(amount.value, reference.value, user.pin,'VCARD', 'Donation')
+            const response = await useTransactions.sendMoneyTo(amount.value, reference.value, pin.value,'VCARD', 'Donation')
+            toast.success("Send Money Successuly")
+            router.replace("/home")
         } catch(e) {
             console.log(user.pin)
             toast.error("Error sending money: " + e.message);
         }
 
 }
-
 const institution = ref('');
 
 </script>
@@ -58,7 +64,15 @@ const institution = ref('');
         <h3><p>Amount: </p></h3><input type="number" v-model="amount">
     </div>
     <div style="justify-content: center; text-align: center;margin-top: 20px;">
-        <button @click="sendmoney()" class="styled-button">Donate</button>
+        <button @click="isPin = !isPin" class="styled-button">Donate</button>
+    </div>
+    <div v-show="isPin">
+        <div style="justify-content: center; text-align: center;margin-top: 20px;">
+            <h3><p>Pin: </p></h3><input type="password" v-model="pin">
+        </div>
+        <div style="justify-content: center; text-align: center;margin-top: 20px;">
+            <button @click="sendmoney()" class="styled-button">Confirm</button>
+        </div>
     </div>
 </template>
 
