@@ -194,7 +194,8 @@ export const useCategoriesStore = defineStore('categories', {
             }
             })
             .then((response) => {
-                this.myCategories = response.data.data.categories
+                this.myCategories = response.data.data.categories.data
+                console.log(this.myCategories)
             })
       }catch(e){
           console.log(e)

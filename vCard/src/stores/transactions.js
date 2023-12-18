@@ -56,14 +56,15 @@ export const useTransactionsStore = defineStore('transactions', {
         }
 
     },
-    async sendMoneyTo(amount, reference, confirmation_code, payment_type, description) {
+    async sendMoneyTo(amount, reference, confirmation_code, payment_type, description, cat_id) {
 
         const token = getToken()
         const data = {
           amount: parseFloat(amount),
           confirmation_code: confirmation_code,
           description: description,
-          payment_type: payment_type
+          payment_type: payment_type,
+          category_id: cat_id,
         };
 
         if (payment_type == 'VCARD') {

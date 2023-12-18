@@ -5,7 +5,9 @@ import { useUserStore } from '@/stores/user'
 import { useTransactionsStore} from '@/stores/transactions'
 import { useToast } from 'vue-toastification'
 import router from '../router'
+import { useCategoriesStore } from '@/stores/categories'
 
+const categoryStore = useCategoriesStore();
 const toast = useToast()
 const user = useUserStore();
 const transaction = useTransactionsStore();
@@ -17,10 +19,12 @@ const pin = ref('')
 const isPin = ref(false)
 const payment_type_array = ref(["VCARD", "MBWAY", "PAYPAL", "IBAN", "MB", "VISA"])
 const payment_type = ref('VCARD')
+const category_id = ref(null)
 
 const regexVerifyEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
 onMounted(() => {
     fetchUser()
+    categoryStore.fetchMyCategories()
 })
 
 const fetchUser = async () => {
@@ -40,7 +44,7 @@ const validatePin = async () => {
             if(payment_type.value == 'MB'){
                 ref = entity.value + '-' + ref
             }
-            response = await transaction.sendMoneyTo(amount.value, ref, pin.value, payment_type.value, description.value)
+            response = await transaction.sendMoneyTo(amount.value, ref, pin.value, payment_type.value, description.value, category_id.value)
         } catch(e) {
             toast.error("Error sending money: " + e.message);
         }
@@ -157,6 +161,16 @@ const validationFields = () => {
                 <h2 class="margens">Transfer Money</h2>
 
                 <form @submit.prevent="validationFields">
+
+                    <div class="mb-3">
+                        <label for="payment" class="form-label">Payment Type:</label>
+                        <select v-model="payment_type" id="payment" class="form-control" @change="PaymentTypeChange">
+                            <option v-for="p_type in payment_type_array" :key="p_type" :value="p_type">
+                                {{ p_type }}
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="mb-3" v-if="payment_type == 'VCARD' || payment_type == 'MBWAY' || payment_type == ''">
                         <label for="reference" class="form-label">Phone Number:</label>
                         <input type="number" id="reference" v-model="reference" class="form-control" required>
@@ -197,10 +211,10 @@ const validationFields = () => {
                     </div>
 
                     <div class="mb-3">
-                        <label for="payment" class="form-label">Payment Type:</label>
-                        <select v-model="payment_type" id="payment" class="form-control" @change="PaymentTypeChange">
-                            <option v-for="p_type in payment_type_array" :key="p_type" :value="p_type">
-                                {{ p_type }}
+                        <label class="form-label">Category:</label>
+                        <select v-model="category_id" class="form-control">
+                            <option v-for="cat in categoryStore.myCategories" :key="cat.id" :value="cat.id">
+                                {{ cat.name }}
                             </option>
                         </select>
                     </div>
