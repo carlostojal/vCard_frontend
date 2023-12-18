@@ -9,7 +9,8 @@ import Search from '@/components/search.vue'
 const categoriesStore = useCategoriesStore();
 
 onMounted(async () => {
-    await categoriesStore.fetch()
+    // await categoriesStore.fetchAndFilter(null, null, null)
+    await categoriesStore.fetchAndFilter(null, null, null)
 })
 
 

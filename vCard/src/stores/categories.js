@@ -16,32 +16,54 @@ export const useCategoriesStore = defineStore('categories', {
         try{
             const token = getToken()
 
-            const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories`, {
+            await axios.get(`${ConfigUtil.getApiUrl()}/default-categories`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
                 })
                 .then((response) => {
-                    console.log(response)
-                    this.lastPage = response.data.lastPage
-                    this.allCategories = response.data.data.data
-                    console.log(this.allCategories, this.lastPage)
+                    // console.log(response)
+                    this.lastPage = response.data.data.lastPage
+                    this.allCategories = response.data.data.categories.data
+                    // console.log(this.allCategories, this.lastPage)
                 })
         }catch(e){
             console.log(e)
+        }
+    },
+    async fetchAndFilter(name, type, page){
+        try {
+          const token = getToken()
+          let url = `${ConfigUtil.getApiUrl()}/default-categories`;
+          const response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            params: {
+                name: name,
+                type: type,
+                page: page
+            },
+          })
+  
+          this.allCategories = response.data.data.categories.data
+          this.lastPage = response.data.data.lastPage
+          
+        } catch (e) {
+          console.log(e)
         }
     },
     async paginate(page) {
         try {
           const token = getToken()
   
-          const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories?page=${page}`, {
+          const response = await axios.get(`${ConfigUtil.getApiUrl()}/default-categories?page=${page}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
   
-          this.allCategories = response.data.data.data
+          this.allCategories = response.data.data.categories.data
           
         } catch (e) {
           console.log(e)
@@ -66,10 +88,11 @@ export const useCategoriesStore = defineStore('categories', {
           }
     },
     async paginateType(page, type){
+        console.log('clicked');
       try {
         const token = getToken()
         
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories/search?type=${type}&page=${page}`,{
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/categories?type=${type}&page=${page}`,{
               headers: {
                 Authorization: `Bearer ${token}`
               }
@@ -84,6 +107,7 @@ export const useCategoriesStore = defineStore('categories', {
       }
     },
     async searchCategories(query, type){
+        console.log('clicked');
       try {
         const token = getToken()
         console.log(query, type)
@@ -120,6 +144,7 @@ export const useCategoriesStore = defineStore('categories', {
       }
     },
     async addCategorie(name, type){
+        console.log('clicked');
       try{
         const token = getToken()
         const response = await axios.post(`${ConfigUtil.getApiUrl()}/categories`,{

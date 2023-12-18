@@ -90,6 +90,7 @@ export const useUserStore = defineStore('user', {
                     this.notifications.init();
                 
             } catch (err) {
+                console.log(err);
             }
         },
         async fetchAdmin() {
@@ -100,9 +101,11 @@ export const useUserStore = defineStore('user', {
                         Authorization: `Bearer ${this.token}`
                     }
                 })
-                this.name = userData.data.data.name
-                this.email = userData.data.data.name
-                this.isAdmin = true;
+                if(userData.data.status == 'success'){
+                    this.name = userData.data.data.name
+                    this.email = userData.data.data.email
+                    this.isAdmin = true;
+                }
             } catch (err) {
                 this.token = null;
                 router.push('/admin');

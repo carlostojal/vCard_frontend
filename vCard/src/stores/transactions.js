@@ -127,9 +127,8 @@ export const useTransactionsStore = defineStore('transactions', {
     async fetchAllTransactionType(type) {
       try {
         const token = getToken()
-
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}`, {
+          await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions?type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -155,7 +154,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions/search?type=${type}&page=${page}`, {
+        const response = await axios.get(`${ConfigUtil.getApiUrl()}/transactions?type=${type}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -176,7 +175,6 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async searchAllTransaction(query, type) {
-      console.log("T3")
       try {
         if (type == 'debit') {
           type = 'D'
@@ -186,13 +184,14 @@ export const useTransactionsStore = defineStore('transactions', {
 
         const token = getToken()
 
-        const response = await axios
-          .get(`${ConfigUtil.getApiUrl()}/transactions/search/${query}?type=${type}`, {
+         await axios
+          .get(`${ConfigUtil.getApiUrl()}/transactions?vcard=${query}&type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
           .then((response) => {
+              console.log(response);
             // this.allTransactions = response.data.data.data
             // this.lastPage = response.data.last
             this.allTransactions = response.data.data.transactions.data
@@ -261,7 +260,7 @@ export const useTransactionsStore = defineStore('transactions', {
       try {
         const token = getToken()
 
-        const response = await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}&page=${page}`, {
+          await axios.get(`${ConfigUtil.getApiUrl()}/vcards/transactions?type=${type}&page=${page}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -282,12 +281,11 @@ export const useTransactionsStore = defineStore('transactions', {
       }
     },
     async searchMyTransaction(query, type) {
-    console.log('clicked', query);
       try {
 
         const token = getToken()
 
-        const response = await axios
+         await axios
           .get(`${ConfigUtil.getApiUrl()}/vcards/transactions?pair_vcard=${query}&type=${type}`, {
             headers: {
               Authorization: `Bearer ${token}`
@@ -345,9 +343,6 @@ export const useTransactionsStore = defineStore('transactions', {
             responseType: 'arraybuffer',
           })
 
-          console.log(response.data)
-
-            console.log(response.data)
             const blob = new Blob([response.data], { type: 'application/pdf' });
             const pdfUrl = URL.createObjectURL(blob);
             //window.open(pdfUrl);

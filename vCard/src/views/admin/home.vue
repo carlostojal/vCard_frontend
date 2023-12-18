@@ -6,6 +6,7 @@ import { onMounted} from 'vue'
 import CardAdminHome from '../../components/cardAdminHome.vue'
 
 const user = useUserStore();
+
 onMounted( async () => {
     await user.fetchAdmin()
 })

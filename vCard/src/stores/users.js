@@ -14,7 +14,7 @@ export const useUsersStore = defineStore('users', {
             try{
                 const token = getToken()
 
-                const adminsData = await axios.get(`${ConfigUtil.getApiUrl()}/admins`, {
+                const adminsData = await axios.get(`${ConfigUtil.getApiUrl()}/users/`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
