@@ -264,7 +264,8 @@ export const useUserStore = defineStore('user', {
                 this.toast.success(response.data.message)
                 
             }catch(e){
-                this.toast.error(e.response.data.message)
+                //this.toast.error(e.response.data.message)
+                console.log(e)
             }
         },
         async deleteOwnVcard(password_vcard, pin){
