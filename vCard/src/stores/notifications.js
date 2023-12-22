@@ -20,8 +20,9 @@ export const useNotificationsStore = defineStore('notifications', {
 
             // initialize the websocket
             try {
-                this.ws = io(ConfigUtil.getNotificationUrl(), {
-                    query: "client_id="+this.userStore.phone
+                this.ws = io(ConfigUtil.getNotificationUrl(),{
+                    query: "client_id="+this.userStore.phone,
+                    transports: ["websocket"]
                 });
             } catch(e) {
                 this.ws = null;
